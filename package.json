@@ -1,0 +1,17 @@
+{
+  "name": "mkapp",
+  "version": "0.0.0",
+  "description": "An opinionated command line build tool for React apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "cli",
+    "build-tool",
+    "app"
+  ],
+  "author": "Ethan Ferrari <ethan@ethanferrari.com>",
+  "license": "MIT"
+}
