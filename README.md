@@ -1,6 +1,6 @@
 #mkapp
 
-##An opinionated command line build tool for React Apps
+##An opinionated command line build tool for React
 
 ### Installation
 
