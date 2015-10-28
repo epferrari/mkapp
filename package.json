@@ -1,6 +1,6 @@
 {
 	"name": "mkapp",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "An opinionated command line build tool for React apps",
 	"main": "index.js",
 	"scripts": {
