@@ -13,7 +13,7 @@
 
 #### Create a new app
 
-`mkapp init`
+`mkapp new`
 
 - Scaffolds out a new app and copy boilerplate into your project.
 - Make sure to run from your project root where __node_modules__ directory is located
@@ -22,7 +22,7 @@
 		
 #### Develop
 
-`mkapp dev <port>`
+`mkapp go [port=3030]`
 
 - transpiles your client and server app into `dev/` using **babel**
 - bundles your client app into `dev/client`
@@ -33,6 +33,7 @@
 - starts a live reload server for `src/client` and reloads `localhost:<port>/app` when files change
 - starts a live reload server for `src/admin` and reloads `localhost:<port>/admin` when files change
 - starts a `nodeamon` process to restart the server when api files, middleware files, or index.js are changed
+- connects a reflux-nexus to the admin app and the client app
 
 #### Build
 

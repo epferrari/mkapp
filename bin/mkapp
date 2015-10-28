@@ -1,0 +1,305 @@
+#!/bin/sh
+
+SRC='./src'
+DEV='./dev'
+DIST='./dist'
+NODE_MODULES='./node_modules'
+PATH=$PATH:$NODE_MODULES/.bin
+
+green=`tput setaf 2`
+mag=`tput setaf 5`
+reset=`tput sgr0`
+
+function lint () {
+	echo "${mag}Linting${reset}"
+	eslint ./src --ext .js,.jsx
+}
+
+scaffold () {
+	echo "${mag}scaffolding new application${reset}";
+	mkdir -p ./src && cd ./src
+	touch index.js
+	mkdir -p ./api/v1.0 admin client constants middleware modules utils
+	cd ./api/v1.0 && touch index.js
+	cd ../../client
+	touch index.jsx index-dev.jsx app.jsx
+	mkdir -p ./styles ./assets/img ./assets/fonts
+	mkdir views components contexts actions datastores constants reflux-nexus
+	cd ./styles && touch styles.less mkapp-theme.js
+	cd ../../admin
+	touch index.jsx index-dev.jsx app.jsx
+	mkdir -p ./styles ./assets/img ./assets/fonts
+	mkdir views components contexts actions datastores constants reflux-nexus
+	cd ./styles && touch styles.less mkapp-theme.js
+	cd ../../../
+}
+
+boilerplate () {
+	echo 'copying boilerplate code into project'
+	cp -a ./node_modules/mkapp/boilerplate/. ./src
+	echo "${green}Ready to begin development!${reset}";
+}
+
+#client app dev build
+dev_build_html () {
+	echo "${green}copying index.html...";
+	cp $SRC/$1/index.html $DEV/$1/index.html
+	echo "${green}copied${reset}";
+}
+
+dev_build_styles () {
+	echo "${green}compiling less files for: " $1
+	lessc $SRC/$1/styles/styles.less | postcss -u autoprefixer -o $DEV/$1/assets/styles/styles.css
+	echo "${green}less successfully compiled${reset}";
+}
+
+dev_build_img () {
+	echo "${green}copying src images for: " $1;
+	cp -a $SRC/$1/assets/img/. $DEV/$1/assets/img
+	echo "${green}images transferred${reset}";
+}
+
+dev_build_fonts () {
+	echo "${green}copying src fonts for: " $1;
+	cp -a $SRC/$1/assets/fonts/. $DEV/$1/assets/fonts
+	echo "copying font awesome fonts...";
+	cp -a $NODE_MODULES/font-awesome/fonts/. $DEV/$1/assets/fonts
+	echo "${green}fonts transferred{reset}";
+}
+
+dev_build_js () {
+	echo "${green}bundling javascript for:" $1;
+	browserify $SRC/$1/index-dev.jsx > $DEV/$1/bundle.js
+	echo "${green}bundle complete${reset}";
+}
+
+dev_build_client () {
+	#clean
+	echo "${green}cleaning client dev enviroment${reset}";
+	rm -rf $DEV/client
+	mkdir -p $DEV/client/assets
+	cd $DEV/client/assets && mkdir fonts styles img
+	cd ../../../
+	#copy statics
+	dev_build_html client
+	dev_build_img client
+	dev_build_fonts client
+	# compile less
+	dev_build_styles client
+	# browserify
+	dev_build_js client
+	echo "${green}$(tput bold)client app built${reset}";
+}
+
+dev_build_admin () {
+	#clean
+	echo 'cleaning admin dev enviroment';
+	rm -rf $DEV/admin
+	mkdir -p $DEV/admin/assets
+	cd $DEV/admin/assets && mkdir fonts styles img
+	cd ../../../
+	#copy statics
+	dev_build_html admin
+	dev_build_img admin
+	dev_build_fonts admin
+	# compile less
+	dev_build_styles admin
+	# browserify
+	dev_build_js admin
+	echo "${green}$(tput bold)admin app built";
+}
+
+
+dev_transpile () {
+	#transpile es6 syntax in server code
+	echo 'babeling es6';
+	babel $SRC/api --out-dir $DEV/api
+	babel $SRC/middleware --out-dir $DEV/middleware
+	babel $SRC/utils --out-dir $DEV/utils
+	babel $SRC/index.js -o $DEV/index.js
+	echo "${green}$(tput bold)transpiling complete${reset}";
+}
+
+dev_watch () {
+
+	# watch server app changes
+	onchange './src/index.js' -- babel $SRC/index.js -o $DEV/index.js &
+	watch 'babel ./src/api --out-dir ./dev/api' $SRC/api &
+	watch 'babel ./src/middleware --out-dir ./dev/middleware' $SRC/middleware &
+	watch 'babel ./src/utils --out-dir ./dev/utils' $SRC/utils &
+	onchange './dev/index.js' -- eslint ./src --ext .js &
+
+	# watch client app changes
+	onchange './src/client/index.html' -- cp $SRC/client/index.html $DEV/client/index.html &
+	watch 'lessc ./src/client/styles/styles.less | postcss -u autoprefixer -o ./dev/client/assets/styles/styles.css' ./src/client/styles &
+	watch 'cp -a ./src/client/assets/img/. ./dev/client/assets/img' $SRC/client/assets/img &
+	watch 'cp -a ./src/client/assets/fonts/. ./dev/client/assets/fonts' $SRC/client/assets/fonts &
+	watchify $SRC/client/index-dev.jsx -o $DEV/client/bundle.js &
+	onchange './dev/client/bundle.js' -- eslint ./src/client --ext .js,.jsx
+
+	# watch admin app changes
+	onchange './src/admin/index.html' -- cp $SRC/admin/index.html $DEV/admin/index.html &
+	watch 'lessc ./src/admin/styles/styles.less | postcss -u autoprefixer -o ./dev/admin/assets/styles/styles.css' ./src/admin/styles &
+	watch 'cp -a ./src/admin/assets/img/. ./dev/admin/assets/img' $SRC/admin/assets/img &
+	watch 'cp -a ./src/admin/assets/fonts/. ./dev/admin/assets/fonts' $SRC/admin/assets/fonts &
+	watchify $SRC/admin/index-dev.jsx -o $DEV/admin/bundle.js &
+	onchange './dev/admin/bundle.js' -- eslint ./src/admin --ext .js,.jsx
+
+}
+
+open_browser () {
+	sleep 8 && opener http://localhost:$1/app && opener http://localhost:$1/admin
+}
+
+start_server () {
+	nodemon --watch $DEV/index.js --watch $DEV/api --watch $DEV/middleware --watch $DEV/utils $DEV/index.js
+}
+
+dev () {
+	export PORT=$1
+	lint
+	dev_build_client &
+	dev_build_admin
+	wait
+	dev_transpile
+	wait
+	dev_watch &
+	livereload ./dev/client &
+	open_browser $1 &
+	start_server $1
+}
+
+stop () {
+	killall node
+}
+
+# minified production app
+build () {
+	lint;
+
+	echo 'cleaning dist directory'
+	rm -rf ./dist
+
+	echo 'scaffolding...'
+	mkdir -p ./dist/api/v1.0 ./dist/utilities ./dist/middleware ./dist/client/assets
+	cd ./dist/client/assets
+	mkdir styles img fonts
+	cd ../../../
+
+	echo 'setting NODE_ENV to production'
+	NODE_ENV=production
+
+	echo 'transpiling es6 with babel'
+	babel $SRC/api --out-dir $DIST/api
+	babel $SRC/middleware --out-dir $DIST/middleware
+	babel $SRC/utils --out-dir $DIST/utils
+	babel $SRC/index.js -o $DIST/index.js
+
+	echo 'transferring static files'
+	cp $SRC/client/index.html $DIST/client/index.html
+	cp -a $SRC/client/assets/img/. $DIST/client/assets/img
+	cp -a $SRC/client/assets/fonts/. $DIST/client/assets/fonts
+	cp -a $NODE_MODULES/font-awesome/fonts/. $DIST/client/assets/fonts
+
+	echo 'compiling and minifying stylesheets...'
+	lessc --clean-css $SRC/client/styles/styles.less | postcss -u autoprefixer -o $DIST/client/assets/styles/styles.css
+	echo 'stylesheets minified! \r\n ...'
+	echo 'bundling and minifying javascript...'
+	echo 'please be patient, this may take a minute...'
+	browserify ./src/client/index.jsx | uglifyjs --compress warnings=false --mangle -o $DIST/client/bundle.js &&
+	echo "${green}$(tput bold)Scripts bundled and minified, ready to distribute!${reset}";
+	tput bel
+}
+
+
+dist () {
+	build &&
+	if [ $1 ]
+		then
+			case "$1" in
+				-m)
+					if [ $2 ]
+						then
+							echo 'commiting, pushing to origin development'
+							git add .
+							git commit -m "$2"
+							git push origin development
+					else
+						echo 'ERROR! No commit message specified. Could not commit.'
+					fi
+				;;
+				*)
+					echo 'Usage: mkapp dist -m <commit message>';
+					echo 'See mkapp help'
+				;;
+			esac
+	fi
+}
+
+
+help () {
+	echo 'Usage:';
+	echo ' mkapp new';
+	echo '	Creates the application scaffold. Run this when';
+	echo '	you pull down the package along with npm install';
+	echo ' mkapp go [port]';
+	echo '  Alias for mkapp dev';
+	echo ' mkapp dev [port]';
+	echo '	Create a development environment and run unminified app.';
+	echo '	- opens a browser window at localhost:<port>';
+	echo '	- background loads stylesheets, images, and fonts'
+	echo '	- reloads browser when client app files change';
+	echo '	- restarts server when node app files change';
+	echo ' mkapp stop';
+	echo '  kills all node processes started by mkapp';
+	echo ' mkapp build';
+	echo '	Builds a minified production app to "dist" directory';
+	echo ' mkapp dist -m <commit message>';
+	echo '	build production app and automatically commit';
+	echo '	to development branch when built with <commit message>';
+}
+
+if [ $1 ]
+then
+	case "$1" in
+		new)
+			scaffold && boilerplate;
+		;;
+		lint)
+			lint;
+		;;
+		dev)
+			if [ $2 ]
+				then
+					dev $2
+				else
+					dev 3030
+			fi
+		;;
+		go)
+			if [ $2 ]
+				then
+					dev $2
+				else
+					dev 3030
+			fi
+		;;
+		build)
+			build;
+		;;
+		watch)
+			dev_watch;
+		;;
+		dist)
+			dist $2 $3
+		;;
+		stop)
+			stop;
+		;;
+		*)
+			help;
+		;;
+	esac
+else
+	help
+fi

@@ -1,0 +1,37 @@
+.list-view-appear{
+	opacity: 0;
+	transform: translateY(20%);
+}
+.list-view-appear.list-view-appear-active{
+	opacity: 1;
+	transform: translateY(0%);
+	transition:
+		opacity 0.3s ease-in,
+		transform 0.3s ease-in;
+}
+
+.list-view-enter{
+	opacity: 0;
+	transform: translateY(20%);
+}
+
+.list-view-enter.list-view-enter-active{
+	opacity: 1;
+	transform: translateY(0%);
+	transition:
+		opacity 0.3s ease-in,
+		transform 0.3s ease-in;
+}
+
+.list-view-leave{
+	opacity: 1;
+	transform: translateY(0%);
+}
+
+.list-view-leave.list-view-leave-active{
+	opacity: 0;
+	transform: translateY(20%);
+	transition:
+		opacity 0.2s ease-in,
+		transform 0.2s ease-in;
+}
