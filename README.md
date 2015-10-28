@@ -1,6 +1,6 @@
-#mkapp
+# mkapp
 
-##An opinionated command line build tool for React
+## An opinionated command line build tool for React
 
 ### Installation
 
@@ -19,7 +19,7 @@
 - Make sure to run from your project root where __node_modules__ directory is located
 
 
-		
+
 #### Develop
 
 `mkapp go [port=3030]`
@@ -35,21 +35,21 @@
 - starts a `nodeamon` process to restart the server when api files, middleware files, or index.js are changed
 - connects a reflux-nexus to the admin app and the client app
 
-* **NOTE:** if you change the default port from 3030, you'll need to use the [envify](https://github.com/hughsk/envify) transform for Browserify in order to assign the correct port to the reflux-nexus-client. 
+* **NOTE:** if you change the default port from 3030, you'll need to use the [envify](https://github.com/hughsk/envify) transform for Browserify in order to assign the correct port to the reflux-nexus-client.
 
 
 #### Build
 
 `mkapp dist`
 
-- transpiles your client and server app into `dist/` using **babel** 
+- transpiles your client and server app into `dist/` using **babel**
 - bundles and minifies your client app into `dist/client`
 - bundles your minifies admin dashboard app into `dist/admin`
 
 
 ===
 
-###Scaffold
+### Scaffold
 
 ###### App root structure
 
@@ -72,7 +72,7 @@
 		|-- middleware/
 		|-- modules/
 			(code packages around a single purpose with files for client, admin, and server)
-		
+
 
 ###### /client and /admin directory structure
 
@@ -106,13 +106,3 @@
 		|-- frequencies/
 	|-- views/
 		|-- Home.jsx		
-			
-				
-				
-				
-				
-					
-					
-					
- 
-

@@ -16,7 +16,7 @@ api.get('/demo',(req,res) => {
 		}
 	];
 	//res.send(JSON.stringify(data));
-	res.send('Demo GET api/v1.0/demo')
+	res.send('Demo GET api/v1.0/demo');
 });
 
 
