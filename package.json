@@ -19,6 +19,7 @@
 			"envify"
 		]
 	},
+	"repository":"https://github.com/epferrari/mkapp.git",
 	"author": "Ethan Ferrari <ethan@ethanferrari.com>",
 	"license": "MIT",
 	"dependencies": {
