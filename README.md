@@ -35,6 +35,9 @@
 - starts a `nodeamon` process to restart the server when api files, middleware files, or index.js are changed
 - connects a reflux-nexus to the admin app and the client app
 
+* **NOTE:** if you change the default port from 3030, you'll need to use the [envify](https://github.com/hughsk/envify) transform for Browserify in order to assign the correct port to the reflux-nexus-client. 
+
+
 #### Build
 
 `mkapp dist`
