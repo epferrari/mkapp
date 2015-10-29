@@ -3,8 +3,25 @@
 SRC='./src'
 DEV='./dev'
 DIST='./dist'
-NODE_MODULES='./node_modules'
+NODE_MODULES='./node_modules/'
 PATH=$PATH:$NODE_MODULES/.bin
+DEPS='./node_modules/mkapp/node_modules'
+
+
+alias _babel="node ${DEPS}/babel/bin/babel.js"
+alias _browserify="node ${DEPS}/browserify/bin/cmd.js"
+alias _envify="node ${DEPS}/envify/bin/envify"
+alias _eslint="node ${DEPS}/eslint/bin/eslint.js"
+alias _lessc="node ${DEPS}/less/bin/lessc"
+alias _livereload="node ${DEPS}/livereload/bin/livereload.js"
+alias _nodemon="node ${DEPS}/nodemon/bin/nodemon.js"
+alias _onchange="node ${DEPS}/onchange/cli.js"
+alias _opener="node ${DEPS}/opener/opener.js"
+alias _postcss="node ${DEPS}/postcss-cli/bin/postcss"
+alias _uglify="node ${DEPS}/uglifyjs/bin/uglify.js"
+alias _watch="node ${DEPS}/watch/cli.js"
+alias _watchify="node ${DEPS}/watchify/bin/cmd.js"
+
 
 green=`tput setaf 2`
 mag=`tput setaf 5`
@@ -49,7 +66,7 @@ dev_build_html () {
 
 dev_build_styles () {
 	echo "${green}compiling less files for: " $1
-	lessc $SRC/$1/styles/styles.less | postcss -u autoprefixer -o $DEV/$1/assets/styles/styles.css
+	_lessc $SRC/$1/styles/styles.less | _postcss -u autoprefixer -o $DEV/$1/assets/styles/styles.css
 	echo "${green}less successfully compiled${reset}";
 }
 
@@ -64,12 +81,12 @@ dev_build_fonts () {
 	cp -a $SRC/$1/assets/fonts/. $DEV/$1/assets/fonts
 	echo "copying font awesome fonts...";
 	cp -a $NODE_MODULES/font-awesome/fonts/. $DEV/$1/assets/fonts
-	echo "${green}fonts transferred{reset}";
+	echo "${green}fonts transferred${reset}";
 }
 
 dev_build_js () {
 	echo "${green}bundling javascript for:" $1;
-	browserify $SRC/$1/index-dev.jsx > $DEV/$1/bundle.js
+	_browserify $SRC/$1/index-dev.jsx > $DEV/$1/bundle.js
 	echo "${green}bundle complete${reset}";
 }
 
@@ -112,47 +129,59 @@ dev_build_admin () {
 
 dev_transpile () {
 	#transpile es6 syntax in server code
-	echo 'babeling es6';
-	babel $SRC/api --out-dir $DEV/api
-	babel $SRC/middleware --out-dir $DEV/middleware
-	babel $SRC/utils --out-dir $DEV/utils
-	babel $SRC/index.js -o $DEV/index.js
-	echo "${green}$(tput bold)transpiling complete${reset}";
+	#echo 'babeling es6';
+	_babel $SRC/api --out-dir $DEV/api
+	_babel $SRC/middleware --out-dir $DEV/middleware
+	_babel $SRC/utils --out-dir $DEV/utils
+	_babel $SRC/index.js -o $DEV/index.js
+	#echo "${green}$(tput bold)transpiling complete${reset}";
 }
 
-dev_watch () {
 
+dev_watch_server () {
 	# watch server app changes
-	onchange './src/index.js' -- babel $SRC/index.js -o $DEV/index.js &
-	watch 'babel ./src/api --out-dir ./dev/api' $SRC/api &
-	watch 'babel ./src/middleware --out-dir ./dev/middleware' $SRC/middleware &
-	watch 'babel ./src/utils --out-dir ./dev/utils' $SRC/utils &
-	onchange './dev/index.js' -- eslint ./src --ext .js &
+	_onchange './src/index.js' -- _babel $SRC/index.js -o $DEV/index.js &
+	_watch $(dev_transpile) $SRC/api &
+	_watch $(dev_transpile) $SRC/middleware &
+	_watch $(dev_transpile) $SRC/utils &
+	#_onchange './src/api/**/*.js' -- _babel $SRC/api --out-dir $DEV/api &
+	#_watch "$(_babel ./src/middleware --out-dir ./dev/middleware)" $SRC/middleware &
+	#_onchange './src/middleware/**/*.js' -- _babel $SRC/middleware --out-dir $DEV/middleware &
+	#_watch "$(_babel ./src/utils --out-dir ./dev/utils)" $SRC/utils &
+	#_onchange './src/utils/**/*.js' -- _babel $SRC/utils --out-dir $DEV/utils &
+	_onchange './dev/index.js' -- _eslint ./src --ext .js
+}
 
+dev_watch_client () {
 	# watch client app changes
-	onchange './src/client/index.html' -- cp $SRC/client/index.html $DEV/client/index.html &
-	watch 'lessc ./src/client/styles/styles.less | postcss -u autoprefixer -o ./dev/client/assets/styles/styles.css' ./src/client/styles &
-	watch 'cp -a ./src/client/assets/img/. ./dev/client/assets/img' $SRC/client/assets/img &
-	watch 'cp -a ./src/client/assets/fonts/. ./dev/client/assets/fonts' $SRC/client/assets/fonts &
-	watchify $SRC/client/index-dev.jsx -o $DEV/client/bundle.js &
-	onchange './dev/client/bundle.js' -- eslint ./src/client --ext .js,.jsx
+	_onchange './src/client/index.html' -- cp $SRC/client/index.html $DEV/client/index.html &
+	#_watch $(_lessc ./src/client/styles/styles.less | _postcss  -u autoprefixer -o ./dev/client/assets/styles/styles.css) ./src/client/styles &
+	_onchange "$SRC/client/styles" -- $(_lessc ./src/client/styles/styles.less | _postcss  -u autoprefixer -o ./dev/client/assets/styles/styles.css) &
+	_watch 'cp -a ./src/client/assets/img/. ./dev/client/assets/img' $SRC/client/assets/img &
+	_watch 'cp -a ./src/client/assets/fonts/. ./dev/client/assets/fonts' $SRC/client/assets/fonts &
+	_watchify $SRC/client/index-dev.jsx -o $DEV/client/bundle.js &
+	_onchange './dev/client/bundle.js' -- $(_eslint ./src/client --ext .js,.jsx)
 
+}
+
+dev_watch_admin () {
 	# watch admin app changes
-	onchange './src/admin/index.html' -- cp $SRC/admin/index.html $DEV/admin/index.html &
-	watch 'lessc ./src/admin/styles/styles.less | postcss -u autoprefixer -o ./dev/admin/assets/styles/styles.css' ./src/admin/styles &
-	watch 'cp -a ./src/admin/assets/img/. ./dev/admin/assets/img' $SRC/admin/assets/img &
-	watch 'cp -a ./src/admin/assets/fonts/. ./dev/admin/assets/fonts' $SRC/admin/assets/fonts &
-	watchify $SRC/admin/index-dev.jsx -o $DEV/admin/bundle.js &
-	onchange './dev/admin/bundle.js' -- eslint ./src/admin --ext .js,.jsx
+	_onchange './src/admin/index.html' -- cp $SRC/admin/index.html $DEV/admin/index.html &
+	#_watch $(_lessc ./src/admin/styles/styles.less | _postcss -u autoprefixer -o ./dev/admin/assets/styles/styles.css) ./src/admin/styles &
+	_onchange "$SRC/admin/styles/*" -- $(_lessc ./src/admin/styles/styles.less | _postcss -u autoprefixer -o ./dev/admin/assets/styles/styles.css) &
+	_watch 'cp -a ./src/admin/assets/img/. ./dev/admin/assets/img' $SRC/admin/assets/img &
+	_watch 'cp -a ./src/admin/assets/fonts/. ./dev/admin/assets/fonts' $SRC/admin/assets/fonts &
+	_watchify $SRC/admin/index-dev.jsx -o $DEV/admin/bundle.js &
+	_onchange './dev/admin/bundle.js' -- $(_eslint ./src/admin --ext .js,.jsx)
 
 }
 
 open_browser () {
-	sleep 8 && opener http://localhost:$1/app && opener http://localhost:$1/admin
+	sleep 8 && _opener http://localhost:$1/app && _opener http://localhost:$1/admin
 }
 
 start_server () {
-	nodemon --watch $DEV/index.js --watch $DEV/api --watch $DEV/middleware --watch $DEV/utils $DEV/index.js
+	_nodemon --watch $DEV/index.js --watch $DEV/api --watch $DEV/middleware --watch $DEV/utils $DEV/index.js
 }
 
 dev () {
@@ -163,7 +192,8 @@ dev () {
 	wait
 	dev_transpile
 	wait
-	dev_watch &
+	#dev_watch &
+	dev_watch_server &
 	livereload ./dev/client &
 	open_browser $1 &
 	start_server $1
@@ -190,10 +220,10 @@ build () {
 	NODE_ENV=production
 
 	echo 'transpiling es6 with babel'
-	babel $SRC/api --out-dir $DIST/api
-	babel $SRC/middleware --out-dir $DIST/middleware
-	babel $SRC/utils --out-dir $DIST/utils
-	babel $SRC/index.js -o $DIST/index.js
+	_babel $SRC/api --out-dir $DIST/api
+	_babel $SRC/middleware --out-dir $DIST/middleware
+	_babel $SRC/utils --out-dir $DIST/utils
+	_babel $SRC/index.js -o $DIST/index.js
 
 	echo 'transferring static files'
 	cp $SRC/client/index.html $DIST/client/index.html
@@ -202,11 +232,11 @@ build () {
 	cp -a $NODE_MODULES/font-awesome/fonts/. $DIST/client/assets/fonts
 
 	echo 'compiling and minifying stylesheets...'
-	lessc --clean-css $SRC/client/styles/styles.less | postcss -u autoprefixer -o $DIST/client/assets/styles/styles.css
+	_lessc --clean-css $SRC/client/styles/styles.less | _postcss -u autoprefixer -o $DIST/client/assets/styles/styles.css
 	echo 'stylesheets minified! \r\n ...'
 	echo 'bundling and minifying javascript...'
 	echo 'please be patient, this may take a minute...'
-	browserify ./src/client/index.jsx | uglifyjs --compress warnings=false --mangle -o $DIST/client/bundle.js &&
+	_browserify ./src/client/index.jsx | _uglifyjs --compress warnings=false --mangle -o $DIST/client/bundle.js &&
 	echo "${green}$(tput bold)Scripts bundled and minified, ready to distribute!${reset}";
 	tput bel
 }
