@@ -2,14 +2,10 @@
 
 var Promise = require('bluebird');
 var clc = require('cli-color');
-var opener = require('opener');
 var mkapp = require('commander');
 
 var scaffold = require('../lib/scaffold.js');
-var lint = require('../lib/lint.js');
-var startNodemon = require('../lib/startNodemon.js');
-var watchJS = require('../lib/watchJS.js');
-var transpile = require('../lib/transpile.js');
+var go = require('../lib/mkapp-go.js');
 var pkg = require('../package.json');
 
 mkapp.version(pkg.version);
@@ -17,9 +13,7 @@ mkapp.version(pkg.version);
 mkapp
 	.command('new')
 	.description('Create a new application with a boilerplate scaffold.')
-	.action(function(){
-		scaffold();
-	});
+	.action(scaffold);
 
 mkapp
 	.command('go [port]')
@@ -28,22 +22,23 @@ mkapp
 		go(port||3030);
 	});
 
-mkapp.parse(process.argv);
-
-
-function go(port){
-	lint("./src")
-	.then(watchJS)
-	.then(function(){
-		return transpile('dev');
-	})
-	.then(startNodemon)
-	.then(function(){
-		opener('http://localhost:'+port+'/admin');
-		opener('http://localhost:'+port+'/app');
-	})
-	.catch(function(err){
-		console.log(clc.red.bold('Erroneous!'));
-		console.log(clc.red(err));
+mkapp
+	.command('build')
+	.description('Build a minified distribution bundle of your app.')
+	.action(function(){
+		console.log('build command coming soon!')
 	});
-}
+
+mkapp.command('dist <message> [branch]')
+	.description('build, commit, and push your app to <branch> '+
+		'of your repository. If <branch> is left blank, the bundle '+
+		'will be commited to `origin development`')
+	.action(function(message,branch){
+		if(!message){
+			console.log(clc.red('Must specify a commit message'));
+		}else{
+			console.log('dist command coming soon!');
+		}
+	});
+
+mkapp.parse(process.argv);
