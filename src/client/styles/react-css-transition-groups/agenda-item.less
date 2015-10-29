@@ -1,0 +1,37 @@
+.agenda-item-appear{
+	opacity: 0;
+	//transform: translateX(-50%);
+}
+.agenda-item-appear.agenda-item-appear-active{
+	opacity: 1;
+	//transform: translateX(0%);
+	transition:
+		opacity 0.3s ease-in,
+		transform 0.3s ease-in;
+}
+
+.agenda-item-enter{
+	opacity: 0;
+	transform: translateX(-50%);
+}
+
+.agenda-item-enter.agenda-item-enter-active{
+	opacity: 1;
+	//transform: translateX(0%);
+	transition:
+		opacity 3s ease-in,
+		transform 3s ease-in;
+}
+
+.agenda-item-leave{
+	opacity: 1;
+	transform: translateX(0%);
+}
+
+.agenda-item-leave.agenda-item-leave-active{
+	opacity: 0;
+	//transform: translateX(50%);
+	transition:
+		opacity 0.2s ease-in,
+		transform 0.2s ease-in;
+}
