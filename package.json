@@ -39,6 +39,7 @@
     "fs-extra": "^0.26.0",
     "glob": "^5.0.15",
     "less": "^2.5.3",
+    "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-clean-css": "^1.5.1",
     "livereload": "^0.4.0",
     "livereload-js": "^2.2.2",

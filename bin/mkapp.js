@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 var clc = require('cli-color');
 var mkapp = require('commander');
 
-var scaffold = require('../lib/scaffold.js');
+var init = require('../lib/mkapp-new.js');
 var go = require('../lib/mkapp-go.js');
 var clean = require('../lib/mkapp-clean.js');
 var pkg = require('../package.json');
@@ -14,7 +14,7 @@ mkapp.version(pkg.version);
 mkapp
 	.command('new')
 	.description('Create a new application with a boilerplate scaffold.')
-	.action(scaffold);
+	.action(init);
 
 mkapp
 	.command('clean <dir>')
