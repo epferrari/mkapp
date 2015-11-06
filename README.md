@@ -4,7 +4,7 @@
 
 ### Installation
 
-	npm install mkapp
+	npm install mkapp -g
 	sudo alias mkapp=node_modules/mkapp/bin/mkapp
 
 ===
@@ -22,7 +22,7 @@
 
 #### Develop
 
-`mkapp go [port=3030]`
+`mkapp go`
 
 - transpiles your client and server app into `dev/` using **babel**
 - bundles your client app into `dev/client`
@@ -35,7 +35,7 @@
 - starts a `nodeamon` process to restart the server when api files, middleware files, or index.js are changed
 - connects a reflux-nexus to the admin app and the client app
 
-* **NOTE:** if you change the default port from 3030, you'll need to use the [envify](https://github.com/hughsk/envify) transform for Browserify in order to assign the correct port to the reflux-nexus-client.
+* **NOTE:** default port is 3030, override with `export PORT=<port>`. This will override your config.PORT as well, and flow down through the app
 
 
 #### Build
@@ -61,17 +61,19 @@
 	|-- dist/ (compiled and compressed app files, tracked in git)
 	|-- dev/ (compiled app files, not tracked in git)
 	|-- src/
-		|-- index.js
-		|-- api/
-			|-- v1.0/
-				|-- index.js			
+		|-- config.js
+		|-- server/
+			|-- index.js
+			|-- middleware/
+			|-- api/
+				|-- v1.0/
+					|-- index.js			
 		|-- client/
 			* See Below *
 		|-- admin/
 			* See Below
-		|-- middleware/
 		|-- modules/
-			(code packages around a single purpose with files for client, admin, and server)
+			(code packages tightly coupled around a single concern with files for client, admin, and server)
 
 
 ###### /client and /admin directory structure
@@ -84,6 +86,8 @@
 	|-- assets/
 		|-- img/
 		|-- fonts/
+			|-- Roboto fonts
+			|-- Font-Awesome fonts
 	|-- components/ (ex. ComponentA.jsx, ComponentB.jsx)
 	|-- constants/
 		|-- appConstants.js
