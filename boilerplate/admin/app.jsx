@@ -119,18 +119,3 @@ ReactDOM.render((
 
 
 export default App;
-
-/*
-<Route path="about" component={About}/>
-<Route path="services" component={Services}/>
-<Route path="doctors" component={Doctors}/>
-<Route path="facilities" component={Facilities}/>
-<Route path="research" component={Research}/>
-<Route path="growth" component={Growth}/>
-<Route path="contact" component={Contact}/>
-<Route path="journal" component={Journal}/>
-<Route path="experiences" component={ExperienceDashboard}>
-	<Route path="viewer" component={ARviewer}/>
-	<Route path="models/:name" component={ModelViewer}/>
-</Route>
-*/

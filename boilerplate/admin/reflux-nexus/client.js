@@ -7,7 +7,8 @@ import {SET_CONNECTION_STATUS}
 import nexusStatus
 	from './constants.js';
 
-import servers from '../constants/servers.js';
+import {NEXUS_SERVER,PORT}
+	from '../../config.js';
 
 
 var persistenceOptions = {
@@ -32,8 +33,6 @@ var persistenceOptions = {
 	}
 };
 
-var server = servers.LOCAL;
-var port = process.env.PORT || 3030;
-var nexus = new ClientNexus("http://" + server + ":" + port + "/reflux-nexus",persistenceOptions);
+var nexus = new ClientNexus("http://" + NEXUS_SERVER + ":" + PORT + "/reflux-nexus",persistenceOptions);
 
 export {nexus as default};
