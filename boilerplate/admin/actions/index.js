@@ -1,6 +1,6 @@
 import {createActions} from 'reflux';
 
-var appActions = createActions([
+const appActions = createActions([
 	'DID_NAVIGATE',
 	'SET_CONNECTION_STATUS',
 	'ENTER_LOADING_STATE',
@@ -10,4 +10,4 @@ var appActions = createActions([
 	'SHOW_NAVBAR_TITLE'
 ]);
 
-export default appActions;
+module.exports = appActions;

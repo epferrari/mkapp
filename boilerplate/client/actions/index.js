@@ -10,4 +10,4 @@ var appActions = createActions([
 	'SHOW_NAVBAR_TITLE'
 ]);
 
-export default appActions;
+module.exports = appActions;

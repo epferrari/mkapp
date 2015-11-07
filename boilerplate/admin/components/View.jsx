@@ -11,7 +11,7 @@ import {Grid}
 	from 'react-bootstrap';
 
 import actions
-	from '../actions/appActions.js';
+	from '../actions';
 
 
 var styles = {

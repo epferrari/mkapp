@@ -3,5 +3,4 @@ if(process.env.NODE_ENV !== 'production'){
 	require('livereload-js');
 }
 
-import React from 'react';
 import App from './app.jsx';

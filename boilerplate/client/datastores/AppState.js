@@ -1,5 +1,5 @@
 import Reflux from 'reflux';
-import appActions from '../actions/appActions.js';
+import appActions from '../actions';
 import {merge,contains} from 'lodash';
 import nexusStatus from '../reflux-nexus/constants.js';
 import nexus from '../reflux-nexus/client.js';
