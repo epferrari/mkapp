@@ -2,7 +2,7 @@ import express from 'express';
 import {reduce} from 'lodash';
 import apiV1 from './api/v1.0';
 import path from 'path';
-import RefluxNexus from 'reflux-nexus';
+import Condux from 'condux';
 import {PORT} from '../config.js';
 
 var app = express();
@@ -21,15 +21,15 @@ var server = app.listen(port,hostname,() => {
 });
 
 if(process.env.NODE_ENV !== 'production'){
-	var $exts = ['js','jsx','css','png','jpg'];
+	var exts = ['js','jsx','css','png','jpg'];
 	var livereload = require('livereload');
 	var clientDevServer = livereload.createServer({
-		exts:$exts,
+		exts: exts,
 		port: 35728,
 		applyJSLive: true
 	});
 	var adminDevServer = livereload.createServer({
-		exts:$exts,
+		exts: exts,
 		port: 35729,
 		applyJSLive: true
 	})
@@ -38,5 +38,16 @@ if(process.env.NODE_ENV !== 'production'){
 	adminDevServer.watch(path.resolve(__dirname,'../admin'));
 }
 
-var nexus = new RefluxNexus();
-nexus.attach(server);
+var x = new Condux();
+
+var b = x.createAction('actionB');
+x.createStore('/demoStore',{
+	init(){
+		this.listenTo(b,() => console.log('action B triggered'));
+	},
+	listenables: [x.createActions(['actionA'])],
+	onActionA(){
+		console.log('action A triggered');
+	}
+});
+x.attach(server);

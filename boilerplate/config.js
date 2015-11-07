@@ -6,7 +6,7 @@ var servers = {
 };
 
 module.exports = {
-	NEXUS_SERVER: servers.LOCAL,
+	CONDUX_SERVER: servers.LOCAL,
 	API_SERVER: servers.LOCAL,
 	PORT: process.env.PORT || 3030
 };

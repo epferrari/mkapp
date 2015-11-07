@@ -1,9 +1,9 @@
 import Reflux from 'reflux';
 import appActions from '../actions';
 import {merge,contains} from 'lodash';
-import nexusStatus from '../reflux-nexus/constants.js';
-import nexus from '../reflux-nexus/client.js';
-import {typeOf} from '../../utils/utils.js';
+import ConduxClient from 'condux-client';
+import condux from '../condux/client.js';
+import {typeOf} from '@epferrari/js-utils';
 
 var appState = {
 	currentPath: 'home',
@@ -25,22 +25,22 @@ var StateStore = Reflux.createStore({
 	onSET_CONNECTION_STATUS(status){
 
 		var ns = [
-			nexusStatus.CONNECTED,
-			nexusStatus.CONNECTING,
-			nexusStatus.DISCONNECTED
+			ConduxClient.CONNECTED,
+			ConduxClient.CONNECTING,
+			ConduxClient.DISCONNECTED
 		];
 
 		if(ns.indexOf(status) !== -1){
 			setState({
 				wsConnection: status,
-				inLoadingState: (status === nexusStatus.CONNECTING)
+				inLoadingState: (status === ConduxClient.CONNECTING)
 			});
 		}
 	},
 
 	onDID_NAVIGATE(payload){
 		if(payload.path !== appState.currentPath){
-			if(!nexus.connected && !nexus.connecting) nexus.reconnect();
+			if(!condux.connected && !condux.connecting) condux.reconnect();
 			setState({
 				currentPath: payload.path,
 				viewTitle: payload.viewTitle,
@@ -56,7 +56,7 @@ var StateStore = Reflux.createStore({
 	},
 
 	onEXIT_LOADING_STATE(){
-		if(appState.inLoadingState && !appState.wsConnection === nexusStatus.CONNECTING){
+		if(appState.inLoadingState && !appState.wsConnection === ConduxClient.CONNECTING){
 			setState({inLoadingState: false});
 		}
 	},
