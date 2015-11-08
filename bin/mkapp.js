@@ -4,7 +4,8 @@ var Promise = require('bluebird');
 var clc = require('cli-color');
 var mkapp = require('commander');
 
-var init = require('../lib/mkapp-new.js');
+var init = require('../lib/mkapp-init.js');
+var install = require('../lib/mkapp-install.js');
 var go = require('../lib/mkapp-go.js');
 var clean = require('../lib/mkapp-clean.js');
 var transpile = require('../lib/mkapp-transpile.js');
@@ -14,8 +15,13 @@ mkapp.version(pkg.version);
 
 mkapp
 	.command('new')
-	.description('Create a new application with a boilerplate scaffold.')
+	.description('Create a new application with a directory scaffold.')
 	.action(init);
+
+mkapp
+	.command('install')
+	.description('Copy boilerplate project and install recommended dependencies.')
+	.action(install);
 
 mkapp
 	.command('clean <dir>')
@@ -26,7 +32,7 @@ mkapp
 
 mkapp
 	.command('transpile')
-	.description('Transpile ES6 modules on the server')
+	.description('Transpile ES6 modules in your server app')
 	.action(transpile);
 
 mkapp
