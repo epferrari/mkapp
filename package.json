@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "@epferrari/js-utils": "^1.0.0",
+    "adm-zip": "^0.4.7",
     "autoprefixer": "^6.1.0",
     "babel": "^6.0.15",
     "babel-core": "^6.1.2",
@@ -33,6 +34,7 @@
     "envify": "^3.4.0",
     "eslint": "^1.9.0",
     "fs-extra": "^0.26.2",
+    "github-download": "^0.4.0",
     "glob": "^5.0.15",
     "less": "^2.5.3",
     "less-plugin-autoprefix": "^1.5.1",
@@ -44,6 +46,7 @@
     "prompt": "^0.2.14",
     "react-context-utility": "git+https://github.com/epferrari/react-context-utility.git",
     "react-fa-icon": "git+https://github.com/epferrari/react-fa-icon.git",
+    "request": "^2.65.0",
     "shelljs": "^0.5.3",
     "tarball-extract": "0.0.3",
     "terminal-kit": "^0.15.10",

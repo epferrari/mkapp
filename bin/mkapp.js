@@ -5,7 +5,6 @@ var clc = require('cli-color');
 var mkapp = require('commander');
 
 var init = require('../lib/mkapp-init.js');
-var install = require('../lib/mkapp-install.js');
 var go = require('../lib/mkapp-go.js');
 var clean = require('../lib/mkapp-clean.js');
 var transpile = require('../lib/mkapp-transpile.js');
@@ -15,13 +14,10 @@ mkapp.version(pkg.version);
 
 mkapp
 	.command('new')
-	.description('Create a new application with a directory scaffold.')
-	.action(init);
-
-mkapp
-	.command('install')
-	.description('Copy boilerplate project and install recommended dependencies.')
-	.action(install);
+	.description('Create a new application with a directory scaffold, download boilerplate project, and install dependencies.')
+	.action(function(){
+		init(pkg.version);
+	});
 
 mkapp
 	.command('clean <dir>')

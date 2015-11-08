@@ -1,3 +1,5 @@
+tmp/*
+tmp.zip
 node_modules/*
 src/*
 dev/*
