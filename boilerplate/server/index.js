@@ -3,7 +3,7 @@ import {reduce} from 'lodash';
 import apiV1 from './api/v1.0';
 import path from 'path';
 import Condux from 'condux';
-import {PORT} from '../config.js';
+import {PORT} from '../../config.js';
 
 var app = express();
 
