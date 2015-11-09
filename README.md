@@ -5,7 +5,6 @@
 ### Installation
 
 	npm install mkapp -g
-	sudo alias mkapp=node_modules/mkapp/bin/mkapp
 
 ===
 
@@ -15,8 +14,7 @@
 
 `mkapp new`
 
-- Scaffolds out a new app and copy boilerplate into your project.
-- Make sure to run from your project root where __node_modules__ directory is located
+- Walks through installation of `mkapp` dependencies and boilerplate files to create a new project
 
 
 
@@ -35,13 +33,14 @@
 - starts a `nodeamon` process to restart the server when api files, middleware files, or index.js are changed
 - connects a reflux-nexus to the admin app and the client app
 
-* **NOTE:** default port is 3030, override with `export PORT=<port>`. This will override your config.PORT as well, and flow down through the app
+* **NOTE:** default port is 3030, override with `export PORT=<port>`. This will override your config.PORT as well (in config.js), and flows down through the app
 
 
 #### Build
 
 `mkapp dist`
 
+- **Not written yet**
 - transpiles your client and server app into `dist/` using **babel**
 - bundles and minifies your client app into `dist/client`
 - bundles your minifies admin dashboard app into `dist/admin`
@@ -55,6 +54,7 @@
 
 	root/
 	|-- package.json
+	|-- config.js
 	|-- .gitignore
 	|-- .eslintrc
 	|-- node_modules/
