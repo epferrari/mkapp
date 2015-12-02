@@ -1,5 +1,17 @@
 #!/usr/bin/env node
 
+var resolve = require('resolve');
+console.log( resolve.sync('bluebird',{basedir: process.cwd()}) );
+console.log( resolve.sync('babel',{basedir: process.cwd()}) );
+try {
+	console.log( resolve.sync('cli-color',{basedir: process.cwd()}) );
+	console.log( resolve.sync('mkapp',{basedir: process.cwd()}) );
+}
+catch(ex){
+	console.log('error finding modules');
+}
+
+
 var Promise = require('bluebird');
 var clc = require('cli-color');
 var mkapp = require('commander');
@@ -11,6 +23,7 @@ var transpile = require('../lib/mkapp-transpile.js');
 var pkg = require('../package.json');
 
 mkapp.version(pkg.version);
+
 
 mkapp
 	.command('new')
