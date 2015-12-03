@@ -69,12 +69,12 @@ const App = React.createClass({
 		};
 	},
 
-	componentDidMount(){
-		this.listenTo(AppStateStore,appState => this.setState(appState));
-	},
-
 	getInitialState(){
 		return AppStateStore.getState();
+	},
+
+	componentDidMount(){
+		this.listenTo(AppStateStore,s => this.setState(s));
 	},
 
 	getStyles(){
