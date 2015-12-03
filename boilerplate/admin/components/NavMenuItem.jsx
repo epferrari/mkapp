@@ -2,7 +2,7 @@ import React from 'react';
 import {map,merge,reduce} from 'lodash';
 
 import FontIcon
-	from 'react-fa-icon';
+	from '@epferrari/react-fa-icon';
 
 import MuiIcon from './MuiIcon.jsx';
 import Router from 'react-router';

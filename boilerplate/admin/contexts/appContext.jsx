@@ -1,4 +1,4 @@
-import Context from 'react-context-utility';
+import Context from '@epferrari/react-context-utility';
 import mui from 'material-ui';
 import theme from '../styles/theme.js';
 import Promise from 'bluebird';
@@ -15,17 +15,7 @@ var customPalette = {
 	primary3Color:"#747C76"
 };
 
-var customComponentThemes = {
-	toggle:{
-		thumbOnColor: '#ffcc00',
-		trackOnColor: 'rgba(255, 200, 0, 0.71)'
-	},
-	slider:{
-		handleColorZero: 'rgba(255, 200, 0, 0.71)',
-		handleFillColor: 'rgba(255, 200, 0, 0.71)',
-		selectionColor: '#ffcc00'
-	}
-};
+var customComponentThemes = {};
 
 var customTheme,
 		muiTheme,

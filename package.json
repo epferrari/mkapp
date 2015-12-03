@@ -5,6 +5,7 @@
   "bin": {
     "mkapp": "./bin/mkapp.js"
   },
+  "main": "./lib/mkapp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,13 +13,19 @@
     "react",
     "cli",
     "build-tool",
-    "app"
+    "app",
+    "condux"
   ],
-  "repository": "https://github.com/epferrari/mkapp.git",
+  "repository": {
+    "type":"git",
+    "url":"https://github.com/epferrari/mkapp.git"
+  },
   "author": "Ethan Ferrari <ethan@ethanferrari.com>",
   "license": "MIT",
   "dependencies": {
     "@epferrari/js-utils": "^1.0.0",
+    "@epferrari/react-context-utility": "^1.0.2",
+    "@epferrari/react-fa-icon": "^1.0.1",
     "adm-zip": "^0.4.7",
     "autoprefixer": "^6.1.0",
     "babel": "^6.0.15",
@@ -26,7 +33,7 @@
     "babel-eslint": "^4.1.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.1.3",
     "babel-preset-es2015": "^6.1.2",
-    "babel-preset-react": "^6.1.2",
+    "babel-preset-react": "^6.1.18",
     "babelify": "^7.2.0",
     "bluebird": "^3.0.5",
     "bootstrap": "^3.3.5",
@@ -34,7 +41,7 @@
     "cli-color": "^1.1.0",
     "commander": "^2.9.0",
     "condux": "^0.4.0",
-    "condux-client": "^0.4.0",
+    "condux-client": "^0.4.1",
     "envify": "^3.4.0",
     "eslint": "^1.9.0",
     "express": "^4.13.3",
@@ -61,14 +68,13 @@
     "react-addons-transition-group": "^0.14.2",
     "react-addons-update": "^0.14.2",
     "react-bootstrap": "^0.27.3",
-    "react-context-utility": "git+https://github.com/epferrari/react-context-utility.git",
     "react-dom": "^0.14.2",
-    "react-fa-icon": "git+https://github.com/epferrari/react-fa-icon.git",
-    "react-router": "^1.0.0-rc4",
+    "react-router": "^1.0.0",
     "react-tap-event-plugin": "^0.2.1",
     "reactify": "^1.1.1",
     "reflux": "^0.3.0",
     "request": "^2.65.0",
+    "resolve": "^1.1.6",
     "shelljs": "^0.5.3",
     "tarball-extract": "0.0.3",
     "terminal-kit": "^0.15.10",

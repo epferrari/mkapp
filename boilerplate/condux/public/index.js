@@ -1,8 +1,10 @@
+/* Condux client service for public app */
+
 import ConduxClient
 	from 'condux-client';
 
 import {SET_CONNECTION_STATUS}
-	from '../actions';
+	from '../../public/actions';
 
 import {CONDUX_SERVER,PORT}
 	from '../../../config.js';
@@ -29,6 +31,4 @@ var persistenceOptions = {
 	}
 };
 
-var conduxApp = new ConduxClient("http://" + CONDUX_SERVER + ":" + PORT + "/condux",persistenceOptions);
-
-module.exports = conduxApp;
+module.exports = new ConduxClient("http://" + CONDUX_SERVER + ":" + PORT + "/condux",persistenceOptions);

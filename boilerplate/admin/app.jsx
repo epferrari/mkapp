@@ -22,8 +22,6 @@ require('react-tap-event-plugin')();
 //React.initializeTouchEvents(true);
 
 
-
-
 /* utilities
 /*************************************************/
 import {merge}
@@ -57,7 +55,6 @@ import AppStateStore
 /**************************************************/
 
 
-
 /* container for credentialed application views */
 const App = React.createClass({
 	mixins: [AppContext.Mixin,Reflux.ListenerMixin],
@@ -72,12 +69,12 @@ const App = React.createClass({
 		};
 	},
 
-	componentDidMount(){
-		this.listenTo(AppStateStore,appState => this.setState(appState));
-	},
-
 	getInitialState(){
 		return AppStateStore.getState();
+	},
+
+	componentDidMount(){
+		this.listenTo(AppStateStore,s => this.setState(s));
 	},
 
 	getStyles(){
