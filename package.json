@@ -13,9 +13,13 @@
     "react",
     "cli",
     "build-tool",
-    "app"
+    "app",
+    "condux"
   ],
-  "repository": "https://github.com/epferrari/mkapp.git",
+  "repository": {
+    "type":"git",
+    "url":"https://github.com/epferrari/mkapp.git"
+  },
   "author": "Ethan Ferrari <ethan@ethanferrari.com>",
   "license": "MIT",
   "dependencies": {
@@ -37,7 +41,7 @@
     "cli-color": "^1.1.0",
     "commander": "^2.9.0",
     "condux": "^0.4.0",
-    "condux-client": "^0.4.0",
+    "condux-client": "^0.4.1",
     "envify": "^3.4.0",
     "eslint": "^1.9.0",
     "express": "^4.13.3",
