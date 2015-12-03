@@ -76,7 +76,7 @@ var Home = React.createClass({
 				<Row>
 					<Col xs={12}>
 						<h2>Log (last 15)</h2>
-						{this.renderLog()}</Row>
+						{this.renderLog()}
 					</Col>
 				</Row>
 			</View>
