@@ -39,7 +39,8 @@ var GoogleMap = React.createClass({
 			lng: React.PropTypes.number
 		}),
 		locations: React.PropTypes.array,
-		mapDidMount: React.PropTypes.func
+		mapDidMount: React.PropTypes.func,
+		onMarkerClick: React.PropTypes.func
 	},
 
 	getInitialState(){
@@ -61,7 +62,7 @@ var GoogleMap = React.createClass({
 	},
 
 	componentDidMount(){
-		var canvas = React.findDOMNode(this.refs.canvas);
+		var canvas = this.refs.canvas;
 		var mapOptions = merge({},this.props);
 		delete mapOptions.locations;
 		mapsApi.then( (google) => {
@@ -116,8 +117,12 @@ var GoogleMap = React.createClass({
 			});
 
 			google.maps.event.addListener(marker,'click',() => {
-				this.triggerDialog();
-				this.setState({selectedLoc: location});
+				if(this.props.onMarkerClick){
+					this.props.onMarkerClick(location);
+				} else {
+					this.triggerDialog();
+				}
+				if(this.isMounted()) this.setState({selectedLoc: location});
 			});
 
 			this.setState({
