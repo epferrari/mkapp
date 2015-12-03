@@ -1,6 +1,6 @@
 {
   "name": "mkapp",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A CLI build tool for React + Condux",
   "bin": {
     "mkapp": "./bin/mkapp.js"
@@ -17,8 +17,8 @@
     "condux"
   ],
   "repository": {
-    "type":"git",
-    "url":"https://github.com/epferrari/mkapp.git"
+    "type": "git",
+    "url": "https://github.com/epferrari/mkapp.git"
   },
   "author": "Ethan Ferrari <ethan@ethanferrari.com>",
   "license": "MIT",
