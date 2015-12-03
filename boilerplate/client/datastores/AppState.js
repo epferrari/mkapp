@@ -5,7 +5,7 @@ import ConduxClient from 'condux-client';
 import condux from '../condux/client.js';
 import {typeOf} from '@epferrari/js-utils';
 
-var appState = {
+var initialState = {
 	currentPath: 'home',
 	wsConnection: ConduxClient.DISCONNECTED,
 	inLoadingState: false,
@@ -13,10 +13,12 @@ var appState = {
 	showNavbarTitle: false
 };
 
+var $state = {};
+
 
 function setState(newState){
-	appState = merge({},appState,newState);
-	StateStore.trigger(appState);
+	$state = merge({},$state,newState);
+	StateStore.trigger($state);
 }
 
 
@@ -39,7 +41,7 @@ var StateStore = Reflux.createStore({
 	},
 
 	onDID_NAVIGATE(payload){
-		if(payload.path !== appState.currentPath){
+		if(payload.path !== $state.currentPath){
 			if(!condux.connected && !condux.connecting) condux.reconnect();
 			setState({
 				currentPath: payload.path,
@@ -50,58 +52,59 @@ var StateStore = Reflux.createStore({
 	},
 
 	onENTER_LOADING_STATE(){
-		if(!appState.inLoadingState){
+		if(!$state.inLoadingState){
 			setState({inLoadingState: true});
 		}
 	},
 
 	onEXIT_LOADING_STATE(){
-		if(appState.inLoadingState && !appState.wsConnection === ConduxClient.CONNECTING){
+		if($state.inLoadingState && !$state.wsConnection === ConduxClient.CONNECTING){
 			setState({inLoadingState: false});
 		}
 	},
 
 	onSET_NAVBAR_COLOR(color){
-		if(appState.navbarColor !== color){
+		if($state.navbarColor !== color){
 			setState({navbarColor: color});
 		}
 	},
 
 	onSHOW_NAVBAR_TITLE(){
-		if(!appState.showNavbarTitle) setState({showNavbarTitle: true});
+		if(!$state.showNavbarTitle) setState({showNavbarTitle: true});
 	},
 
 	onHIDE_NAVBAR_TITLE(){
-		if(appState.showNavbarTitle) setState({showNavbarTitle: false});
+		if($state.showNavbarTitle) setState({showNavbarTitle: false});
 	},
 
 	getState(filter){
 		if(!arguments.length){
-			return merge({},appState);
+			return merge({},$state);
 		}else{
 			var keys = [];
 			if(typeOf(filter) === 'string'){
 				keys = [].slice.call(arguments,0);
 				// return the single value
-				if(keys.length === 1) return appState[filter];
+				if(keys.length === 1) return $state[filter];
 			}else if(typeOf(filter) === 'array'){
 				keys = filter;
 			}else if(typeOf(filter) === 'object'){
 				keys = Object.keys(filter);
 			}
 			if(keys.length){
-				// return reduced appState object with only keys/values of arguments passed to getState
+				// return reduced $state object with only keys/values of arguments passed to getState
 				return keys.reduce((r,k) => {
-					r[k] = appState[k];
+					r[k] = $state[k];
 					return r;
 				},{});
 			}else{
-				// default to returning a merged copy of the entire appState
-				return merge({},appState);
+				// default to returning a merged copy of the entire $state
+				return merge({},$state);
 			}
 		}
 	}
 });
 
-global.stateStore = StateStore;
+setState(initialState);
+
 export default StateStore;
