@@ -3,7 +3,7 @@ import {reduce} from 'lodash';
 import apiV1 from './api/v1.0';
 import path from 'path';
 
-import {PORT} from '../../config.js';
+import {PORT} from '../../mkapp_config.js';
 
 var app = express();
 
@@ -32,7 +32,7 @@ if(process.env.NODE_ENV !== 'production'){
 		exts: exts,
 		port: 35729,
 		applyJSLive: true
-	});
+	})
 
 	publicDevServer.watch(path.resolve(__dirname,'../public'));
 	adminDevServer.watch(path.resolve(__dirname,'../admin'));

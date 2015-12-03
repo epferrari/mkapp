@@ -1,21 +1,19 @@
 import React from 'react';
 import {Row,Col} from 'react-bootstrap';
 import View from '../components/View.jsx';
+import {chain} from 'lodash';
 
 import {ReactConnectMixin} from 'condux-client';
 import conduxActions from '../../condux/admin/actions.js';
 import demoHz from '../../condux/admin/frequencies/demo.js';
-import {chain} from 'lodash';
 
 var ActionTrigger = React.createClass({
 	handleClick(){
-		if(this.props.action) this.props.action(this.props.payload);
+		if(this.props.action) this.props.action(this.props.payload)
 	},
 	render(){
 		return(
-			<div style={{padding:10}}>
-				<button onClick={this.handleClick}>Trigger Action</button>
-			</div>
+			<div style={{padding:10}}><button onClick={this.handleClick}>Trigger Action</button></div>
 		);
 	}
 });
@@ -58,32 +56,27 @@ var Home = React.createClass({
 					<label>Action A</label>
 						<ActionTrigger
 							action={conduxActions.ACTION_A}
-							message="Triggered Action A"
 							payload="A"/>
 
 					<label>Action B</label>
 						<ActionTrigger
 							action={conduxActions.ACTION_B}
-							message="Triggered Action B"
 							payload="B"/>
 
 					<label>Action C</label>
 						<ActionTrigger
 							action={conduxActions.ACTION_C}
-							message="Triggered Action C"
 							payload="C"/>
 
 					<label>Action D</label>
 						<ActionTrigger
 							action={conduxActions.ACTION_D}
-							message="Triggered Action D"
 							payload="D"/>
 				</Row>
-				<hr/>
 				<Row>
 					<Col xs={12}>
-						<h2>Log (15 most recent)</h2>
-						{this.renderLog()}
+						<h2>Log (last 15)</h2>
+						{this.renderLog()}</Row>
 					</Col>
 				</Row>
 			</View>

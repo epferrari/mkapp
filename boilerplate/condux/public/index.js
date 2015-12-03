@@ -7,7 +7,7 @@ import {SET_CONNECTION_STATUS}
 	from '../../public/actions';
 
 import {CONDUX_SERVER,PORT}
-	from '../../../config.js';
+	from '../../../mkapp_config.js';
 
 var persistenceOptions = {
 	enabled: true,
