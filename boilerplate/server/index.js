@@ -32,7 +32,7 @@ if(process.env.NODE_ENV !== 'production'){
 		exts: exts,
 		port: 35729,
 		applyJSLive: true
-	})
+	});
 
 	publicDevServer.watch(path.resolve(__dirname,'../public'));
 	adminDevServer.watch(path.resolve(__dirname,'../admin'));

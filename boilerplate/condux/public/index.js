@@ -4,10 +4,10 @@ import ConduxClient
 	from 'condux-client';
 
 import {SET_CONNECTION_STATUS}
-	from './actions.js';
+	from '../../public/actions';
 
 import {CONDUX_SERVER,PORT}
-	from '../../config.js';
+	from '../../../config.js';
 
 var persistenceOptions = {
 	enabled: true,

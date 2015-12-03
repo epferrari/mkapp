@@ -1,8 +1,10 @@
-import conduxService from '../admin';
+import conduxService from '../';
 
 module.exports = conduxService.Hz('/demo',{
+  getInitialData(bootstrap){
+    return bootstrap || [];
+  },
   updateData(data){
-    console.log(data);
     return data;
   }
 });

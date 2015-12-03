@@ -4,10 +4,10 @@ import ConduxClient
 	from 'condux-client';
 
 import {SET_CONNECTION_STATUS}
-	from './actions.js';
+	from '../../admin/actions';
 
 import {CONDUX_SERVER,PORT}
-	from '../../config.js';
+	from '../../../config.js';
 
 var persistenceOptions = {
 	enabled: true,
@@ -31,4 +31,6 @@ var persistenceOptions = {
 	}
 };
 
-module.exports = new ConduxClient("http://" + CONDUX_SERVER + ":" + PORT + "/condux",persistenceOptions);
+var condux = new ConduxClient("http://" + CONDUX_SERVER + ":" + PORT + "/condux",persistenceOptions);
+
+module.exports = condux;

@@ -5,7 +5,6 @@ import {typeOf} from '@epferrari/js-utils';
 
 import ConduxClient from 'condux-client';
 import conduxService from '../../condux/public';
-import conduxActions from '../../condux/public/actions.js';
 
 
 var initialState = {
@@ -26,7 +25,7 @@ function setState(newState){
 
 
 var stateStore = Reflux.createStore({
-	listenables: [appActions,conduxActions],
+	listenables: [appActions],
 	onSET_CONNECTION_STATUS(status){
 
 		var ns = [

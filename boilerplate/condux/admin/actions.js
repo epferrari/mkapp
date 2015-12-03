@@ -1,4 +1,4 @@
 import constants from './constants.js';
-import Reflux from 'reflux';
+import condux from './';
 
-module.exports = Reflux.createActions( Object.keys(constants) );
+module.exports = condux.createActions( Object.keys(constants) );
