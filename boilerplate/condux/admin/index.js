@@ -1,11 +1,13 @@
+/* Condux client service for admin app */
+
 import ConduxClient
 	from 'condux-client';
 
 import {SET_CONNECTION_STATUS}
-	from '../actions';
+	from './actions.js';
 
 import {CONDUX_SERVER,PORT}
-	from '../../../config.js';
+	from '../../config.js';
 
 var persistenceOptions = {
 	enabled: true,
@@ -29,6 +31,4 @@ var persistenceOptions = {
 	}
 };
 
-var conduxAdminClient = new ConduxClient("http://" + CONDUX_SERVER + ":" + PORT + "/condux",persistenceOptions);
-
-module.exports = conduxAdminClient;
+module.exports = new ConduxClient("http://" + CONDUX_SERVER + ":" + PORT + "/condux",persistenceOptions);

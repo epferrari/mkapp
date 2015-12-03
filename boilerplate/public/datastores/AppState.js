@@ -1,13 +1,16 @@
 import Reflux from 'reflux';
 import appActions from '../actions';
 import {merge,contains} from 'lodash';
-import ConduxClient from 'condux-client';
-import condux from '../condux/client.js';
 import {typeOf} from '@epferrari/js-utils';
+
+import ConduxClient from 'condux-client';
+import conduxService from '../../condux/public';
+import conduxActions from '../../condux/public/actions.js';
+
 
 var initialState = {
 	currentPath: 'home',
-	wsConnection: ConduxClient.DISCONNECTED,
+	wsConnection: 0,
 	inLoadingState: false,
 	navbarColor: 'transparent',
 	showNavbarTitle: false
@@ -18,12 +21,12 @@ var $state = {};
 
 function setState(newState){
 	$state = merge({},$state,newState);
-	StateStore.trigger($state);
+	stateStore.trigger($state);
 }
 
 
-var StateStore = Reflux.createStore({
-	listenables: appActions,
+var stateStore = Reflux.createStore({
+	listenables: [appActions,conduxActions],
 	onSET_CONNECTION_STATUS(status){
 
 		var ns = [
@@ -42,7 +45,7 @@ var StateStore = Reflux.createStore({
 
 	onDID_NAVIGATE(payload){
 		if(payload.path !== $state.currentPath){
-			if(!condux.connected && !condux.connecting) condux.reconnect();
+			if(!conduxService.connected && !conduxService.connecting) conduxService.reconnect();
 			setState({
 				currentPath: payload.path,
 				viewTitle: payload.viewTitle,
@@ -107,4 +110,4 @@ var StateStore = Reflux.createStore({
 
 setState(initialState);
 
-export default StateStore;
+export default stateStore;

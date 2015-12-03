@@ -1,7 +1,9 @@
 import React from 'react';
+import {Row} from 'react-bootstrap';
 import View from '../components/View.jsx';
-import getLorem from '../../utils/generateLorem.js';
-import actions from '../condux/actions.js';
+
+import {ReactConnectMixin} from 'condux-client';
+import conduxActions from '../../condux/admin/actions.js';
 
 var ActionTrigger = React.createClass({
 	getInitialState(){
@@ -25,31 +27,59 @@ var ActionTrigger = React.createClass({
 });
 
 var Home = React.createClass({
+	mixins:[ReactConnectMixin],
+
+	componentDidMount(){
+		this.tuneInto('/demoChannel',{
+			connection(data){
+				this.setState({
+					log: data
+				});
+			},
+			message(entry){
+				this.setState( prevState => {
+					log: prevState.log.push(entry);
+				});
+			}
+		});
+	},
+
+	getInitialState(){
+		return {log: []};
+	},
+
+	renderLog(){
+		return this.state.log.map( line => <p>{line}</p> );
+	},
+
 	render(){
 		return (
-			<View title="Admin Demo" navbarColor="rgb(0,0,0)" hideNavbarTitle={false}>
+			<View title="Admin Boilerplate" navbarColor="rgb(0,0,0)" hideNavbarTitle={false}>
 				<label>Action A</label>
 					<ActionTrigger
-						action={actions.actionA}
-						message="Triggered Action A"/>
+						action={conduxActions.ACTION_A}
+						message="Triggered Action A"
+						payload="A"/>
 
 				<label>Action B</label>
 					<ActionTrigger
-						action={actions.actionB}
+						action={conduxActions.ACTION_B}
 						message="Triggered Action B"
-						payload="eggs"/>
+						payload="B"/>
 
 				<label>Action C</label>
 					<ActionTrigger
-						action={actions.actionC}
+						action={conduxActions.ACTION_C}
 						message="Triggered Action C"
-						payload="eggs"/>
+						payload="C"/>
 
 				<label>Action D</label>
 					<ActionTrigger
-						action={actions.actionD}
+						action={conduxActions.ACTION_D}
 						message="Triggered Action D"
-						payload="eggs"/>
+						payload="D"/>
+
+				<Row>{this.renderLog()}</Row>
 			</View>
 		);
 	}
