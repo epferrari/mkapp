@@ -473,7 +473,7 @@ var AppNav = React.createClass({
 		};
 
 		// theme styles can be overridden at component level with props `navbarColor` and `menuStyle`
-		let navbarColor = {backgroundColor: (this.props.navbarColor || this.getThemeStyles('navbar').bgColor || this.getThemeStyles('navbar').backgroundColor || rgb(0,0,0)')};
+		let navbarColor = {backgroundColor: (this.props.navbarColor || this.getThemeStyles('navbar').bgColor || this.getThemeStyles('navbar').backgroundColor || 'rgb(0,0,0)')};
 		let themeMenuStyles = this.getThemeStyles('mainMenu');
 
 		let themeMenuBg = {
