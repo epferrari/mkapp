@@ -83,5 +83,9 @@
     "velocity-ui-pack": "^1.2.2",
     "watch": "^0.16.0",
     "watchify": "^3.6.0"
+  },
+  "engines":{
+    "node":"^4.0.0",
+    "npm":"^3.3.7"
   }
 }
