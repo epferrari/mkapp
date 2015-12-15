@@ -1,0 +1,5 @@
+{
+	"CONDUX_SERVER": "localhost",
+	"API_SERVER": "localhost",
+	"PORT": "3030"
+}
