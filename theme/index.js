@@ -100,9 +100,9 @@ function Theme(palette,typekit,getComponentStyles){
 	};
 
 	this.setComponentStyles = function(newStyles){
-		if(typeOf(newStyles === 'function')){
+		if(typeOf(newStyles) === 'function'){
 			componentStyles = merge({},componentStyles,newStyles(palette,typekit));
-		}else if(typeOf(newStyles === 'object')){
+		}else if(typeOf(newStyles) === 'object'){
 			componentStyles = merge({},componentStyles,newStyles);
 		}
 	};
