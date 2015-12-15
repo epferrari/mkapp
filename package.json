@@ -1,6 +1,6 @@
 {
   "name": "mkapp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A CLI build tool for React + Condux",
   "bin": {
     "mkapp": "./bin/mkapp.js"
@@ -12,9 +12,14 @@
     "lint": "eslint ./_components/* --ext ,js,.jsx",
     "prebuild": "npm run lint"
   },
-  "babel":{
-    "plugins":["transform-es2015-modules-commonjs"],
-    "presets":["react","es2015"]
+  "babel": {
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ],
+    "presets": [
+      "react",
+      "es2015"
+    ]
   },
   "keywords": [
     "react",
@@ -91,8 +96,8 @@
     "watch": "^0.16.0",
     "watchify": "^3.6.0"
   },
-  "engines":{
-    "node":"^4.0.0",
-    "npm":"^3.3.7"
+  "engines": {
+    "node": "^4.0.0",
+    "npm": "^3.3.7"
   }
 }
