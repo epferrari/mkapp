@@ -3,7 +3,7 @@ import {reduce} from 'lodash';
 import apiV1 from './api/v1.0';
 import path from 'path';
 
-import {PORT} from '../../mkapp_config.js';
+import {PORT} from '../../mkapp_config.json';
 
 var app = express();
 

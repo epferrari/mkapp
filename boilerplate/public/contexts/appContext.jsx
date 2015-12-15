@@ -1,6 +1,5 @@
 import Context from '@epferrari/react-context-utility';
 import mui from 'material-ui';
-import theme from '../styles/theme.js';
 import Promise from 'bluebird';
 import {merge} from 'lodash';
 
@@ -25,7 +24,8 @@ muiTheme = ThemeManager.getMuiTheme(DarkRawTheme);
 customTheme = ThemeManager.modifyRawThemePalette(muiTheme,customPalette);
 customTheme = merge({},customTheme,customComponentThemes);
 
-
+import MkappTheme from 'mkapp/theme';
+var mkappTheme = new MkappTheme();
 
 
 
@@ -72,8 +72,9 @@ var cordovaEnv = {
 
 const appContext = new Context({
 	muiTheme: [customTheme,"object"],
-	appTheme: [theme,"object"],
-	cordovaEnv: [cordovaEnv,"object"]
+	mkappTheme: [mkappTheme,"object"],
+	cordovaEnv: [cordovaEnv,"object"],
+
 });
 
 

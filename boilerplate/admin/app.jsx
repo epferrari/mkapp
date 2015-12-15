@@ -36,10 +36,10 @@ import {merge}
 import Router,{Route,History,IndexRoute}
 	from 'react-router';
 
-import AppNav
-	from './components/AppNav.jsx';
+//import AppNav from './components/AppNav.jsx';
 
-
+import CustomAppBar from './components/CustomAppBar.jsx';
+import AndroidNav from 'mkapp/lib/AndroidNav';
 
 
 /* contexts & state
@@ -80,7 +80,7 @@ const App = React.createClass({
 	getStyles(){
 		return {
 			viewContainer:{
-				marginTop:40,
+				//marginTop:40,
 				zIndex:0,
 				position:"relative",
 				minHeight: (global.screen.height - 30),
@@ -92,11 +92,12 @@ const App = React.createClass({
 	render(){
 		return (
 			<div >
-				<AppNav
+				<AndroidNav
 					{...this.state}
-					connectionStatus={this.state.wsConnection}
-					isLoading={this.state.inLoadingState}/>
-				<div style={this.getStyles().viewContainer} {...this.state}>
+					title={this.state.viewTitle}
+					showLoading={this.state.inLoadingState}
+					style={{backgroundColor: this.state.navbarColor}}/>
+				<div  {...this.state}>
 					{this.props.children}
 				</div>
 			</div>

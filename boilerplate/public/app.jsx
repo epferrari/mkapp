@@ -36,10 +36,16 @@ import {merge}
 import Router,{Route,History,IndexRoute}
 	from 'react-router';
 
-import AppNav
-	from './components/AppNav.jsx';
+//import AppleAppNav
+//	from 'mkapp/components/appnav/Apple';
+import AppleNav from 'mkapp/lib/AppleNav';
+import AndroidNav from 'mkapp/lib/AndroidNav';
 
-
+	var menuItems = [
+		{title:"Home",path:"/"},
+		{title:"View 1",path:"/view1"},
+		{title:"View 2",path:"/view2"}
+	];
 
 
 /* contexts & state
@@ -77,26 +83,17 @@ const App = React.createClass({
 		this.listenTo(AppStateStore,s => this.setState(s));
 	},
 
-	getStyles(){
-		return {
-			viewContainer:{
-				marginTop:40,
-				zIndex:0,
-				position:"relative",
-				minHeight: (global.screen.height - 30),
-				WebkitOverflowScrolling:"touch"
-			}
-		};
-	},
-
 	render(){
+		var AppNav = (this.state.materialNav) ? AndroidNav : AppleNav;
 		return (
 			<div >
 				<AppNav
 					{...this.state}
+					title={this.state.viewTitle}
 					connectionStatus={this.state.wsConnection}
-					isLoading={this.state.inLoadingState}/>
-				<div style={this.getStyles().viewContainer} {...this.state}>
+					isLoading={this.state.inLoadingState}
+					menuItems={menuItems}/>
+				<div id="view-container" {...this.state}>
 					{this.props.children}
 				</div>
 			</div>

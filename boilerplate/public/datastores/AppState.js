@@ -12,7 +12,8 @@ var initialState = {
 	wsConnection: 0,
 	inLoadingState: false,
 	navbarColor: 'transparent',
-	showNavbarTitle: false
+	showNavbarTitle: false,
+	materialNav: false
 };
 
 var $state = {};
@@ -51,6 +52,10 @@ var stateStore = Reflux.createStore({
 				backButtonLink: payload.backButtonLink
 			});
 		}
+	},
+
+	onTOGGLE_NAVBAR_TYPE(){
+		setState({materialNav: !$state.materialNav})
 	},
 
 	onENTER_LOADING_STATE(){

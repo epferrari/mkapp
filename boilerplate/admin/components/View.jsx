@@ -1,37 +1,17 @@
 import React
 	from 'react';
-
 import Reflux
 	from 'reflux';
-
 import Router
 	from 'react-router';
-
-import {Grid}
-	from 'react-bootstrap';
-
 import actions
 	from '../actions';
-
-
-var styles = {
-	viewbox: {
-		width:"100%",
-		minHeight: (global.screen.height - 30),
-		overflowY:"scroll",
-		zIndex:0,
-		WebkitOverflowScrolling: "touch",
-		//background: 'url(./assets/img/main-BG-hexagons.png)',
-		backgroundSize: '100% auto',
-		backgroundRepeat: 'repeat'
-	}
-};
+import View
+	from 'mkapp/lib/View';
 
 /**
-* @name View
+* @name AdminView
 * @desc A view wrapper that can enforce certain behaviors for full screen views
-* For now, it implements a required title property that is emitted out when the
-* component mounts. Also provides a Bootstrap Grid for children to render into.
 *
 * @param {string} title - Required
 * @param {string|boolean} backButtonLink- set the url for the nav bar's back button,
@@ -39,7 +19,7 @@ var styles = {
 * will set the back arrow link to that url, and setting as false or leaving undefined
 * will not render the back button at all
 */
-const View = React.createClass({
+const AdminView = React.createClass({
 	mixins: [Reflux.ListenerMixin],
 	propTypes: {
 		title: React.PropTypes.string.isRequired,
@@ -64,14 +44,8 @@ const View = React.createClass({
 		}
 	},
 	render(){
-		return (
-			<div style={styles.viewbox} ref="view">
-				<Grid key={0}>
-					{this.props.children}
-				</Grid>
-			</div>
-		);
+		return <View {...this.props}/>
 	}
 });
 
-export default View;
+export default AdminView;

@@ -53,25 +53,27 @@ var Home = React.createClass({
 		return (
 			<View title="Admin Boilerplate" navbarColor="rgb(0,0,0)" hideNavbarTitle={false}>
 				<Row>
-					<label>Action A</label>
-						<ActionTrigger
-							action={conduxActions.ACTION_A}
-							payload="A"/>
+					<Col xs={12}>
+						<label>Action A</label>
+							<ActionTrigger
+								action={conduxActions.ACTION_A}
+								payload="A"/>
 
-					<label>Action B</label>
-						<ActionTrigger
-							action={conduxActions.ACTION_B}
-							payload="B"/>
+						<label>Action B</label>
+							<ActionTrigger
+								action={conduxActions.ACTION_B}
+								payload="B"/>
 
-					<label>Action C</label>
-						<ActionTrigger
-							action={conduxActions.ACTION_C}
-							payload="C"/>
+						<label>Action C</label>
+							<ActionTrigger
+								action={conduxActions.ACTION_C}
+								payload="C"/>
 
-					<label>Action D</label>
-						<ActionTrigger
-							action={conduxActions.ACTION_D}
-							payload="D"/>
+						<label>Action D</label>
+							<ActionTrigger
+								action={conduxActions.ACTION_D}
+								payload="D"/>
+					</Col>
 				</Row>
 				<hr/>
 				<Row>
