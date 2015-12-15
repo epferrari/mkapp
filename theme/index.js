@@ -96,7 +96,11 @@ function Theme(palette,typekit,getComponentStyles){
 	};
 
 	this.getComponentStyles = function(component){
-		return merge({},componentStyles[component]);
+		if(component !== undefined){
+			return merge({},componentStyles[component]);
+		}else{
+			return merge({},componentStyles);
+		}
 	};
 
 	this.setComponentStyles = function(newStyles){
