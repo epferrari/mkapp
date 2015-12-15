@@ -7,7 +7,14 @@
   },
   "main": "./lib/mkapp.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf ./lib/* && babel _components --out-dir lib",
+    "lint": "eslint ./_components/* --ext ,js,.jsx",
+    "prebuild": "npm run lint"
+  },
+  "babel":{
+    "plugins":["transform-es2015-modules-commonjs"],
+    "presets":["react","es2015"]
   },
   "keywords": [
     "react",
