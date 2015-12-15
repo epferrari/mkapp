@@ -5,7 +5,7 @@
   "bin": {
     "mkapp": "./bin/mkapp.js"
   },
-  "main": "./lib/mkapp.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf ./lib/* && babel _components --out-dir lib",
