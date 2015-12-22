@@ -17,7 +17,7 @@ var styles = {
 		minHeight: (global.screen.height - 40)
 	},
 	grid: {
-		zIndex: 1,
+		//zIndex: 1,
 		overflowX: 'hidden',
 		overflowY: "scroll"
 	},
