@@ -27,25 +27,21 @@ require('react-tap-event-plugin')();
 import {merge}
 	from 'lodash';
 
-//import './lib/google-analytics.js';
-
-
-
 /* Routes and Navigation
 /**************************************************/
 import Router,{Route,History,IndexRoute}
 	from 'react-router';
 
-//import AppleAppNav
-//	from 'mkapp/components/appnav/Apple';
-import AppleNav from 'mkapp/lib/AppleNav';
-import AndroidNav from 'mkapp/lib/AndroidNav';
+import AppleNav
+	from 'mkapp/lib/AppleNav';
+import AndroidNav
+	from 'mkapp/lib/AndroidNav';
 
-	var menuItems = [
-		{title:"Home",path:"/"},
-		{title:"View 1",path:"/view1"},
-		{title:"View 2",path:"/view2"}
-	];
+var menuItems = [
+	{title:"Home",path:"/"},
+	{title:"View 1",path:"/view1"},
+	{title:"View 2",path:"/view2"}
+];
 
 
 /* contexts & state
@@ -86,16 +82,14 @@ const App = React.createClass({
 	render(){
 		var AppNav = (this.state.materialNav) ? AndroidNav : AppleNav;
 		return (
-			<div >
+			<div>
 				<AppNav
 					{...this.state}
 					title={this.state.viewTitle}
 					connectionStatus={this.state.wsConnection}
 					isLoading={this.state.inLoadingState}
 					menuItems={menuItems}/>
-				<div id="view-container" {...this.state}>
 					{this.props.children}
-				</div>
 			</div>
 		);
 	}
