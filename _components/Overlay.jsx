@@ -17,7 +17,7 @@ var styles = {
 		backgroundColor: 'rgba(0,0,0,0.8)'
 	},
 	overlay_immutable:{
-		position:"absolute",
+		position:"fixed",
 		overflowX:"hidden",
 		overflowY:"scroll",
 		backgroundSize:"cover"
@@ -25,7 +25,7 @@ var styles = {
 	overlay_initial:{
 		visibility:"hidden",
 		opacity:0,
-		zIndex:1
+		zIndex:10
 	},
 	overlay_animating: {
 		visibility: "visible",
@@ -35,6 +35,19 @@ var styles = {
 	overlay_active: {
 		zIndex: 999999999999,
 		opacity:1
+	},
+	overlay_container: {
+		zIndex: -10
+	},
+	overlay_container_active: {
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		position: "fixed",
+		width: "100%",
+		height: "100%",
+		zIndex: 999999999999
 	}
 };
 
@@ -71,8 +84,12 @@ const Overlay = React.createClass({
 			// in app.jsx
 			return new Promise(resolve => {
 				Velocity(node,this.getActiveStyle(),{
-					duration: 300,
-					complete: resolve
+					duration: 350,
+					complete: resolve,
+					progress: function(elements){
+						// hackosaurus rex for keeping the fixed position during transformation
+						elements.forEach(el => el.style.transform = "");
+					}
 				});
 			})
 			.then(() => {
@@ -95,21 +112,29 @@ const Overlay = React.createClass({
 			return new Promise((resolve,reject) => {
 				Velocity(node,this.getInitialStyle(),{
 					duration:300,
-					complete: resolve
-				});
-			})
-			.then(() => {
-				this.isAnimating = false;
-				this.props.onExit();
-				this.setState({
-					shouldAnimate: false,
-					didAnimate: true,
-					active: false
+					complete: resolve,
+					progress: function(elements){
+						// hackosaurus rex for keeping the fixed position during transformation
+						elements.forEach(el => el.style.transform = "");
+					}
+				})
+				.then(() => {
+					this.isAnimating = false;
+					this.props.onExit();
+					this.setState({
+						shouldAnimate: false,
+						didAnimate: true,
+						active: false
+					});
 				});
 			});
 		} else {
 			return this.currentAnimation;
 		}
+	},
+
+	forceHide(){
+		this.setState({shouldAnimate:true});
 	},
 
 	componentWillReceiveProps(nextProps){
@@ -128,10 +153,15 @@ const Overlay = React.createClass({
 	},
 
 	render(){
-		let styles = this.prepareStyles();
+		let _styles = this.prepareStyles();
+		let {shouldAnimate,active} = this.state;
 		return (
-			<div style={styles} ref="overlay" onClick={this.capture}>
-				{this.props.children}
+			<div
+				onClick={this.forceHide}
+				style={merge({},styles.overlay_container,(shouldAnimate || active) ? styles.overlay_container_active : {})}>
+				<div style={_styles} ref="overlay" onClick={this.capture}>
+					{this.props.children}
+				</div>
 			</div>
 		);
 	},
