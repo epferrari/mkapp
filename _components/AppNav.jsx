@@ -2,7 +2,7 @@ import React
 	from 'react';
 import ReactDOM
 	from 'react-dom';
-import {map,merge,contains}
+import {map,merge,contains,pick}
 	from 'lodash';
 import {History,Link}
 	from 'react-router';
@@ -22,6 +22,8 @@ import Trigger
 	from './Trigger';
 import MkappThemeMixin
 	from '../theme/mixin';
+import MkappThemeStyleMerger
+	from '../theme/utils/styleMerger';
 
 /*************************************/
 /* helpers */
@@ -329,7 +331,7 @@ var AppNav = React.createClass({
 	},
 
 	componentDidUpdate(){
-		let styles = this.getStyles();
+		let styles = this.getBaseStyles();
 		let closeButton = this.refs.closeButton;
 
 		if(this.state.menuActive){
@@ -339,10 +341,56 @@ var AppNav = React.createClass({
 		}
 	},
 
-
-
 	getStyles(){
-		let styles = {
+		var _styles = this.getBaseStyles();
+		return merge(_styles,this.getNavbarStyles(_styles),this.getMenuStyles(_styles));
+	},
+
+	getNavbarStyles(baseStyles){
+		// theme styles
+		let themeStyles_navbar = this.getThemeStyles('appNav');
+		// props styles, override theme styles
+		let propsStyles_navbar = {
+			bgColor: this.props.navbarColor,
+			textColor: this.props.textColor
+		};
+		// only use backgroundColor and color from theme and props
+		let navbarStyles = pick(MkappThemeStyleMerger(propsStyles_navbar,themeStyles_navbar),'backgroundColor','color');
+
+		// return to be merged into rendered styles
+		return {
+			navbar: merge({},baseStyles.navbar,navbarStyles),
+			navbar_statusBar: merge({},baseStyles.navbar_statusBar,navbarStyles),
+		};
+	},
+
+	getMenuStyles(baseStyles){
+		let themeStyles_menu = this.getThemeStyles('appNavMenu');
+		let propsStyles_menu = (this.props.menuStyle || {});
+
+		let mergedMenuStyles = MkappThemeStyleMerger(propsStyles_menu,themeStyles_menu);
+		// only use background and width styles from theme and props
+		let styleProps = [
+			'backgroundColor',
+			'backgroundPosition',
+			'backgroundRepeat',
+			'backgroundSize',
+			'width',
+			'maxWidth',
+			'minWidth'
+		];
+
+		let menuStyles = pick(mergedMenuStyles,styleProps);
+		let closeBtnStyles = pick(mergedMenuStyles,'color');
+
+		return {
+			menu_overlay: merge({},baseStyles.menu_overlay,menuStyles),
+			menu_closeBtnTop: merge({},baseStyles.menu__closeBtnTop,closeBtnStyles)
+		};
+	},
+
+	getBaseStyles(){
+		return merge({},{
 			/**
 			* animation states for velocity-animate
 			*/
@@ -479,25 +527,10 @@ var AppNav = React.createClass({
 				bottom: 22,
 				right: 12
 			}
-		};
-
-		// theme styles can be overridden at component level with props `navbarColor` and `menuStyle`
-		let navbarColor = {backgroundColor: (this.props.navbarColor || this.getThemeStyles('navbar').bgColor || this.getThemeStyles('navbar').backgroundColor || 'rgb(0,0,0)')};
-		let themeMenuStyles = this.getThemeStyles('mainMenu');
-
-		let themeMenuBg = {
-			backgroundColor: themeMenuStyles.bgColor,
-			backgroundImage: themeMenuStyles.bgImage,
-			backgroundRepeat: themeMenuStyles.bgRepeat,
-			backgroundPosition: themeMenuStyles.bgPosition
-		};
-
-		let _styles = merge({},styles);
-		_styles.navbar = merge({},_styles.navbar,navbarColor);
-		_styles.navbar_statusBar = merge({},_styles.navbar_statusBar,navbarColor);
-		_styles.menu_overlay = merge({},themeMenuBg,this.props.menuStyle);
-		return _styles;
+		});
 	}
+
+
 });
 
 
