@@ -9,8 +9,6 @@ import {SET_CONNECTION_STATUS}
 import {CONDUX_SERVER,PORT}
 	from '../../../mkapp_config.json';
 
-	console.log(PORT);
-
 var persistenceOptions = {
 	enabled: true,
 	attempts: 12,
