@@ -207,10 +207,18 @@ var AppNav = React.createClass({
 		);
 	},
 
+	trimTitle(){
+		if(this.props.title.length > 16){
+			return this.props.title.split('').slice(0,16).concat("...").join('');
+		} else {
+			return this.props.title;
+		}
+	},
+
 	renderTitleCenter(styles){
 		return (
 			<Col xs={6}>
-				<div style={styles.navbar_titleCenter}>{!this.props.hideTitle && this.props.title}</div>
+				<div style={styles.navbar_titleCenter}>{!this.props.hideTitle && this.trimTitle()}</div>
 			</Col>
 		);
 	},
@@ -218,7 +226,7 @@ var AppNav = React.createClass({
 	renderTitleLeft(styles){
 		return (
 			<Col xs={8}>
-				<div style={styles.navbar_titleLeft}>{!this.props.hideTitle && this.props.title}</div>
+				<div style={styles.navbar_titleLeft}>{!this.props.hideTitle && this.trimTitle()}</div>
 			</Col>
 		);
 	},
