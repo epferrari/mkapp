@@ -1,10 +1,11 @@
 import React from 'react';
 import AppNav from './AppNav';
+import {merge} from 'lodash';
 
 var androidMenuStyles = {
   width:"70%",
   maxWidth:300,
-  backgroundColor:'black'
+  bgColor:'black'
 };
 
 var AndroidNav = React.createClass({
@@ -14,7 +15,7 @@ var AndroidNav = React.createClass({
         {...this.props}
         menuPosition="left"
         materialDesign={true}
-        menuStyle={androidMenuStyles}/>
+        menuStyle={merge({},androidMenuStyles,this.props.menuStyle)}/>
     );
   }
 });

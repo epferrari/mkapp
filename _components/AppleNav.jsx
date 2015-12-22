@@ -1,9 +1,6 @@
 import React from 'react';
 import AppNav from './AppNav';
-
-var appleNavStyles = {
-  width:"100%"
-};
+import {merge} from 'lodash';
 
 var AppleNav = React.createClass({
   render(){
@@ -11,7 +8,7 @@ var AppleNav = React.createClass({
       <AppNav
         {...this.props}
         menuPosition="top"
-        menuStyle={appleNavStyles}/>
+        menuStyle={merge({},this.props.menuStyle,{width:"100%"})}/>
     );
   }
 });
