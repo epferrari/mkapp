@@ -35,6 +35,7 @@
   "author": "Ethan Ferrari <ethan@ethanferrari.com>",
   "license": "MIT",
   "dependencies": {
+    "@epferrari/immutable-state": "0.0.3",
     "@epferrari/js-utils": "^1.0.0",
     "@epferrari/react-context-utility": "^1.0.2",
     "@epferrari/react-fa-icon": "^1.0.1",
