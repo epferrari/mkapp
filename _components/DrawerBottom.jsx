@@ -1,0 +1,45 @@
+import React
+  from 'react';
+import Overlay
+  from './Overlay';
+import ThemeStyleMerger
+  from '../theme/utils/styleMerger';
+import {pick,merge}
+  from 'lodash';
+import MkappThemeMixin
+	from '../theme/mixin';
+
+
+var DrawerBottom = React.createClass({
+  mixins: [MkappThemeMixin],
+  propTypes: {
+		open: React.PropTypes.bool,
+		style: React.PropTypes.object,
+		onExit: React.PropTypes.func
+	},
+  prepareStyles(){
+    var defaultStyles = {
+      bgColor:'rgb(0,0,0)',
+      color: 'rgb(255,255,255)',
+      height: (global.screen.height / 4),
+      minHeight: 150
+    };
+    let themeStyles =  merge({},this.getThemeStyles('drawer'),this.getThemeStyles('drawerBottom'));
+    let okStyles = ['backgroundColor','color','height','minHeight'];
+    let _styles = pick(ThemeStyleMerger(this.props.style,themeStyles,defaultStyles),okStyles);
+    _styles.maxHeight = global.screenHeight;
+    return _styles;
+  },
+  render(){
+    return (
+      <Overlay
+        {...this.props}
+        style={this.prepareStyles()}
+        position="bottom">
+        {this.props.children}
+      </Overlay>
+    );
+  }
+});
+
+export default DrawerBottom;
