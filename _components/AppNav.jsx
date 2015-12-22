@@ -107,7 +107,8 @@ var AppNav = React.createClass({
 			},
 			menuButtonLabel:"",
 			menuButtonIconElement: 	(<FontIcon icon="bars"/>),
-			materialDesign: false
+			materialDesign: false,
+			title: ""
 		};
 	},
 
