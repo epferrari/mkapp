@@ -42,13 +42,13 @@ const CAPITALIZE = "capitalize";
 var _getComponentStyles = function(palette,typekit){
 
 	return {
-		mainMenu:{
+		appNavMenu:{
 			bgImage:undefined,
 			bgColor: undefined,
 			bgPosition: undefined,
 			bgRepeat: undefined
 		},
-		navbar:{
+		appNav:{
 			bgColor: undefined
 		},
 		iconNavNext:{
@@ -111,5 +111,6 @@ function Theme(palette,typekit,getComponentStyles){
 		}
 	};
 }
+
 
 module.exports = Theme;
