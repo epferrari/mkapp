@@ -492,7 +492,7 @@ var AppNav = React.createClass({
 				border:"none",
 				background:"none",
 				float:"left",
-				paddingBottom:8
+				paddingBottom:0
 			},
 			navbar_menuOpenBtnRight:{
 				margin:0,
@@ -501,7 +501,7 @@ var AppNav = React.createClass({
 				border:"none",
 				background:"none",
 				float:"right",
-				paddingBottom:8
+				paddingBottom:0
 			},
 			navbar_backBtn:{
 				width:40,
