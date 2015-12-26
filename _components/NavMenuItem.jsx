@@ -12,7 +12,8 @@ import MuiIcon
 	from './MuiIcon';
 import MkappThemeMixin
 	from '../theme/mixin';
-
+import Touchable
+	from './Touchable';
 
 	var transitions = {
 		componentWillEnter:{
@@ -96,15 +97,19 @@ var NavMenuItem = React.createClass({
 		}
 		let ts = {};
 		return (
-			<div 	onClick={this.setNextRoute} ref="menuItem" style={merge({},styles.menuItem,ts.componentWillEnter)}>
+			<Touchable style={{width:"100%",display:"block"}} onClick={this.setNextRoute}>
 				<div
-					to={this.props.path}
-					style={link__style}
-					activeStyle={styles.menuItem__linkActive}>
-						<span style={{verticalAlign: "middle", marginRight: 4}}>{this.props.name}</span>
-						{this.renderIcon()}
+					ref="menuItem"
+					style={merge({},styles.menuItem,ts.componentWillEnter)}>
+					<div
+						to={this.props.path}
+						style={link__style}
+						activeStyle={styles.menuItem__linkActive}>
+							<span style={{verticalAlign: "middle", marginRight: 4}}>{this.props.name}</span>
+							{this.renderIcon()}
+					</div>
 				</div>
-			</div>
+			</Touchable>
 		);
 	},
 
