@@ -32,6 +32,7 @@ var Curtain = React.createClass({
   render(){
     return (
       <Overlay
+        focusOnEnter={false}
         {...this.props}
         style={this.prepareStyles()}
         position="top">
