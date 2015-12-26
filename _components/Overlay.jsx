@@ -140,17 +140,28 @@ const Overlay = React.createClass({
 				fontSize:16,
 				textDecoration:"none",
 				fontWeight: 200,
-				position: "absolute",
-				top: 8,
-				right: 8
+				display:"table",
+				width:"100%"
+				//position: "absolute",
+				//top: 8,
+				//right: 8
 			},
 			pick(this.props.closeButtonStyles,'color','fontWeight')
 		);
 
+		var iconStyles = {
+			fontSize: 21,
+			verticalAlign: "middle",
+			paddingTop:8,
+			paddingRight:8,
+			display: 'table-cell',
+			float: "right"
+		}
+
 		if(this.props.closeButton){
 			return (
-				<Touchable ref="closeButton" onClick={this.forceHide} style={btnStyles}>
-					<MuiIcon style={{fontSize:21,verticalAlign:"middle"}} icon="clear"/>
+				<Touchable onClick={this.forceHide} style={btnStyles}>
+					<MuiIcon ref="closeButton" style={iconStyles} icon="clear"/>
 				</Touchable>
 			);
 		}
