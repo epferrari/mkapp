@@ -23,9 +23,10 @@ var DrawerRight = React.createClass({
       width:"70%",
       maxWidth:300,
       bgColor:'rgb(0,0,0)',
-      color:"rgb(255,255,255)"
+      color:"rgb(255,255,255)",
+      boxShadow: "rgba(0,0,0,0.5) -2px 2px 6px"
     };
-    let okStyles = ['backgroundColor','color','width','minWidth','maxWidth'];
+    var okStyles = ['backgroundColor', 'color', 'width', 'minWidth', 'maxWidth','boxShadow'];
     let themeStyles =  merge({},this.getThemeStyles('drawer'),this.getThemeStyles('drawerRight'));
     return pick(ThemeStyleMerger(this.props.style,themeStyles,defaultStyles),okStyles);
   },

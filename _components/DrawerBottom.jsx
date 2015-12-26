@@ -22,10 +22,11 @@ var DrawerBottom = React.createClass({
       bgColor:'rgb(0,0,0)',
       color: 'rgb(255,255,255)',
       height: (global.screen.height / 4),
-      minHeight: 150
+      minHeight: 150,
+      boxShadow:"rgba(0,0,0,0.5) 0px -3px 6px"
     };
     let themeStyles =  merge({},this.getThemeStyles('drawer'),this.getThemeStyles('drawerBottom'));
-    let okStyles = ['backgroundColor','color','height','minHeight'];
+    let okStyles = ['backgroundColor','color','height','minHeight','boxShadow'];
     let _styles = pick(ThemeStyleMerger(this.props.style,themeStyles,defaultStyles),okStyles);
     _styles.maxHeight = global.screenHeight;
     return _styles;
