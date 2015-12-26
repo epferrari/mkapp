@@ -6,12 +6,14 @@ import Velocity
 	from 'velocity-animate';
 import Promise
 	from 'bluebird';
-import {merge,extend}
+import {merge,extend,pick}
 	from 'lodash';
 import MkappThemeMixin
 	from '../theme/mixin';
 import Touchable
 	from './Touchable';
+import MuiIcon
+	from './MuiIcon';
 
 
 
@@ -22,7 +24,9 @@ const Overlay = React.createClass({
 		position: React.PropTypes.oneOf(['top','left','right','bottom']),
 		style: React.PropTypes.object,
 		onExit: React.PropTypes.func,
-		focusOnEnter: React.PropTypes.bool
+		focusOnEnter: React.PropTypes.bool,
+		closeButton: React.PropTypes.bool,
+		closeButtonStyles: React.PropTypes.object
 	},
 
 	getDefaultProps(){
@@ -30,7 +34,8 @@ const Overlay = React.createClass({
 			open: false,
 			position: 'top',
 			onExit: function(){ return true; },
-			focusOnEnter: true
+			focusOnEnter: true,
+			closeButton: true
 		};
 	},
 
@@ -109,6 +114,15 @@ const Overlay = React.createClass({
 	},
 
 	componentDidUpdate(){
+		let anims = this.getAnimationStyles();
+		let closeButton = this.refs.closeButton;
+
+		if(closeButton && this.state.active){
+			Velocity(closeButton,anims.componentDidEnter,{delay:450});
+		}else if(closeButton){
+			Velocity(closeButton,anims.componentWillEnter,{duration:200});
+		}
+
 		if(this.state.shouldAnimate){
 			this.currentAnimation = this.state.active ? this.hide() : this.show();
 		}
@@ -119,21 +133,54 @@ const Overlay = React.createClass({
 		e.preventDefault();
 	},
 
+	renderCloseButton(){
+		var btnStyles = merge(
+			{},{
+				color: "rgb(255,255,255)",
+				fontSize:16,
+				textDecoration:"none",
+				fontWeight: 200,
+				position: "absolute",
+				top: 8,
+				right: 8
+			},
+			pick(this.props.closeButtonStyles,'color','fontWeight')
+		);
+
+		if(this.props.closeButton){
+			return (
+				<Touchable ref="closeButton" onClick={this.forceHide} style={btnStyles}>
+					<MuiIcon style={{fontSize:21,verticalAlign:"middle"}} icon="clear"/>
+				</Touchable>
+			);
+		}
+	},
+
 	render(){
 		let _styles = this.prepareStyles();
 		let containerStyles = this.getContainerStyles();
 		let {shouldAnimate,active} = this.state;
+
+		containerStyles = merge(
+			{},
+			containerStyles.container,
+			((shouldAnimate || active) && containerStyles.container__ACTIVE)
+		);
+
 		return (
 			<Touchable
 				component="div"
 				onClick={this.forceHide}
-				style={merge({},containerStyles.container,((shouldAnimate || active) && containerStyles.container__ACTIVE))}>
+				style={containerStyles}>
 				<div style={_styles} ref="overlay" onClick={this.capture} onTouchEnd={this.capture}>
+					{this.renderCloseButton()}
 					{this.props.children}
 				</div>
 			</Touchable>
 		);
 	},
+
+	/* Styling */
 
 	prepareStyles(){
 		let {overlay__BASE,overlay__IMMUTABLE} = this.getOverlayStyles();
@@ -250,6 +297,24 @@ const Overlay = React.createClass({
 				backgroundColor: this.props.focusOnEnter ? 'rgba(0,0,0,0.25)' : 'transparent'
 			}
 		};
+	},
+
+	getAnimationStyles(){
+		/**
+		* animation states for velocity-animate
+		*/
+		return merge({},{
+			componentWillEnter:{
+				opacity: 0,
+				marginLeft: -5,
+				marginTop: -5
+			},
+			componentDidEnter: {
+				opacity: 1,
+				marginLeft: 0,
+				marginTop:0
+			},
+		});
 	}
 });
 
