@@ -8,63 +8,29 @@ import Promise
 	from 'bluebird';
 import {merge,extend}
 	from 'lodash';
+import MkappThemeMixin
+	from '../theme/mixin';
+import Touchable
+	from './Touchable';
 
-
-var styles = {
-	overlay: {
-		width:"100%",
-		height:"100%",
-		backgroundColor: 'rgba(0,0,0,0.8)'
-	},
-	overlay_immutable:{
-		position:"fixed",
-		overflowX:"hidden",
-		overflowY:"scroll",
-		backgroundSize:"cover"
-	},
-	overlay_initial:{
-		visibility:"hidden",
-		opacity:0,
-		zIndex:10
-	},
-	overlay_animating: {
-		visibility: "visible",
-		display: "block",
-		zIndex: 999999999999
-	},
-	overlay_active: {
-		zIndex: 999999999999,
-		opacity:1
-	},
-	overlay_container: {
-		zIndex: -10
-	},
-	overlay_container_active: {
-		top: 0,
-		bottom: 0,
-		left: 0,
-		right: 0,
-		position: "fixed",
-		width: "100%",
-		height: "100%",
-		zIndex: 999999999999
-	}
-};
 
 
 const Overlay = React.createClass({
+	mixins: [MkappThemeMixin],
 	propTypes: {
 		open: React.PropTypes.bool,
 		position: React.PropTypes.oneOf(['top','left','right','bottom']),
 		style: React.PropTypes.object,
-		onExit: React.PropTypes.func
+		onExit: React.PropTypes.func,
+		focusOnEnter: React.PropTypes.bool
 	},
 
 	getDefaultProps(){
 		return {
 			open: false,
 			position: 'top',
-			onExit: function(){ return true; }
+			onExit: function(){ return true; },
+			focusOnEnter: true
 		};
 	},
 
@@ -79,7 +45,8 @@ const Overlay = React.createClass({
 	show(){
 		if(this.state.shouldAnimate && !this.isAnimating){
 			let node = this.refs.overlay;
-			extend(node.style,styles.overlay_animating);
+			let {overlay__ANIMATING} = this.getOverlayStyles();
+			extend(node.style,overlay__ANIMATING);
 			// wrapping Velocity in a bluebird Promise since Velocity's Promise implementation fails to take the global assigned
 			// in app.jsx
 			return new Promise(resolve => {
@@ -154,31 +121,36 @@ const Overlay = React.createClass({
 
 	render(){
 		let _styles = this.prepareStyles();
+		let containerStyles = this.getContainerStyles();
 		let {shouldAnimate,active} = this.state;
 		return (
-			<div
+			<Touchable
+				component="div"
 				onClick={this.forceHide}
-				style={merge({},styles.overlay_container,(shouldAnimate || active) ? styles.overlay_container_active : {})}>
-				<div style={_styles} ref="overlay" onClick={this.capture}>
+				style={merge({},containerStyles.container,((shouldAnimate || active) && containerStyles.container__ACTIVE))}>
+				<div style={_styles} ref="overlay" onClick={this.capture} onTouchEnd={this.capture}>
 					{this.props.children}
 				</div>
-			</div>
+			</Touchable>
 		);
 	},
 
 	prepareStyles(){
-		let _style = merge({},styles.overlay,this.props.style);
+		let {overlay__BASE,overlay__IMMUTABLE} = this.getOverlayStyles();
+		let renderStyle = merge({},overlay__BASE,this.props.style);
 
 		if(this.state.active){
-			merge(_style,this.getActiveStyle(),styles.overlay_immutable);
+			merge(renderStyle,this.getActiveStyle(),overlay__IMMUTABLE);
 		} else {
-			merge(_style,this.getInitialStyle(),styles.overlay_immutable);
+			merge(renderStyle,this.getInitialStyle(),overlay__IMMUTABLE);
 		}
 
-		return _style;
+		return renderStyle;
 	},
 
 	getInitialStyle(){
+		let {overlay__INITIAL} = this.getOverlayStyles();
+		let offsetTop = this.getThemeStyles('overlay').top || 0;
 		let positions = {
 			top: {
 				top: "-100%",
@@ -186,40 +158,98 @@ const Overlay = React.createClass({
 			},
 			left:{
 				left: "-100%",
-				top:0
+				top: offsetTop
 			},
 			right:{
 				right: "-100%",
-				top:0
+				top: offsetTop
 			},
 			bottom:{
 				left:0,
 				bottom:"-100%"
 			},
 		};
-		return merge({},styles.overlay_initial,positions[this.props.position]);
+		return merge({},overlay__INITIAL,positions[this.props.position]);
 	},
 
 	getActiveStyle(){
+		let {overlay__ACTIVE} = this.getOverlayStyles();
+		let offsetTop = this.getThemeStyles('overlay').top || 0;
 		let positions = {
 			top: {
-				top: "0%",
+				top: offsetTop,
 				left:0
 			},
 			left:{
 				left: "0%",
-				top:0
+				top: offsetTop
 			},
 			right:{
 				right: "0%",
-				top:0
+				top: offsetTop
 			},
 			bottom:{
 				left:0,
 				bottom:"0%"
 			},
 		};
-		return merge({},styles.overlay_active,positions[this.props.position]);
+
+		return merge({},overlay__ACTIVE,positions[this.props.position]);
+	},
+
+	getOverlayStyles(){
+		return {
+			overlay__BASE: {
+				width:"100%",
+				height:"100%",
+				backgroundColor: 'rgba(0,0,0,0.8)'
+			},
+			overlay__IMMUTABLE:{
+				position:"fixed",
+				overflowX:"hidden",
+				overflowY:"scroll",
+				backgroundSize:"cover"
+			},
+			overlay__INITIAL:{
+				visibility:"hidden",
+				opacity:0,
+				zIndex:10
+			},
+			overlay__ANIMATING: {
+				visibility: "visible",
+				display: "block",
+				zIndex: 999999999999
+			},
+			overlay__ACTIVE: {
+				zIndex: 999999999999,
+				opacity:1
+			},
+
+		};
+	},
+	getContainerStyles(){
+
+		let offsetTop = this.getThemeStyles('overlay').top || 0;
+
+		return {
+			container: {
+				zIndex: -10,
+				opacity: 0
+			},
+			container__ACTIVE: {
+				top: offsetTop,
+				bottom: 0,
+				left: 0,
+				right: 0,
+				position: "fixed",
+				width: "100%",
+				height: "100%",
+				zIndex: 999999999999,
+				opacity: 1,
+				transition: "opacity 400ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
+				backgroundColor: this.props.focusOnEnter ? 'rgba(0,0,0,0.25)' : 'transparent'
+			}
+		};
 	}
 });
 
