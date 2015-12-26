@@ -371,13 +371,21 @@ var AppNav = React.createClass({
 			bgColor: this.props.navbarColor,
 			textColor: this.props.textColor
 		};
-		// only use backgroundColor and color from theme and props
-		let navbarStyles = pick(MkappThemeStyleMerger(propsStyles_navbar,themeStyles_navbar),'backgroundColor','color');
+
+		// only use backgroundColor and color from and props
+		// height, maxHeight, and top are immutably merged onto the theme
+		let okProps = ['backgroundColor','color','height','maxHeight','paddingTop'];
+		let navbarStyles = pick(MkappThemeStyleMerger(propsStyles_navbar,themeStyles_navbar),okProps);
+		let navbarWithStatusStyles = {
+			height: navbarStyles.height + 6,
+			maxHeight: navbarStyles.height + 6
+		};
 
 		// return to be merged into rendered styles
 		return {
 			navbar: merge({},baseStyles.navbar,navbarStyles),
-			navbar_statusBar: merge({},baseStyles.navbar_statusBar,navbarStyles),
+			navbar_statusBar: merge({},baseStyles.navbar_statusBar,pick(navbarStyles,'backgroundColor','color')),
+			navbar_hasStatus: merge({},baseStyles.navbar_hasStatus,navbarWithStatusStyles)
 		};
 	},
 
