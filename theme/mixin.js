@@ -23,10 +23,15 @@ var ThemeMixin = {
       return {};
     }
   },
+  preferMaterialTheme(){
+    if(this.context.mkappTheme){
+      return this.context.mkappTheme.preferMaterial;
+    }
+  },
   contextTypes:{
 		mkappTheme: PropTypes.shape({
 			getPalette: PropTypes.func,
-			updatePalette: PropTypes.func,
+			setPalette: PropTypes.func,
 			getTypekit: PropTypes.func,
 			setTypekit: PropTypes.func,
 			getComponentStyles: PropTypes.func,
