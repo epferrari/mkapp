@@ -18,12 +18,26 @@ import NavMenuItem
 	from './NavMenuItem';
 import MuiIcon
 	from './MuiIcon';
-import Trigger
-	from './Trigger';
+import Touchable
+	from './Touchable';
 import MkappThemeMixin
 	from '../theme/mixin';
 import MkappThemeStyleMerger
 	from '../theme/utils/styleMerger';
+import DrawerLeft
+	from './DrawerLeft';
+import DrawerRight
+	from './DrawerRight';
+import Curtain
+	from './Curtain';
+
+
+
+var _menuPositions = {
+	left: DrawerLeft,
+	right: DrawerLeft,
+	top: Curtain
+};
 
 /*************************************/
 /* helpers */
@@ -90,7 +104,7 @@ var AppNav = React.createClass({
 				title: React.PropTypes.string
 			})
 		),
-		menuPosition:React.PropTypes.oneOf(['top','left','right','bottom']),
+		menuPosition:React.PropTypes.oneOf(['top','left','right']),
 		menuStyle: React.PropTypes.object,
 		menuButtonLabel: React.PropTypes.string,
 		menuButtonIconElement: React.PropTypes.element,
@@ -103,13 +117,12 @@ var AppNav = React.createClass({
 			navbarColor: undefined,
 			hideTitle: false,
 			usemkappTheme: true,
-			menuPosition: "left",
+			menuPosition: "right",
 			menuStyle:{
 				width:"70%"
 			},
 			menuButtonLabel:"",
 			menuButtonIconElement: 	(<FontIcon icon="bars"/>),
-			materialDesign: false,
 			title: ""
 		};
 	},
@@ -147,6 +160,7 @@ var AppNav = React.createClass({
 	menuDidLeave(){
 		let nextRoute = this.state.nextRoute;
 		this.setState({
+			menuActive: false,
 			menuAnimating:false,
 			nextRoute: null
 		});
@@ -189,11 +203,9 @@ var AppNav = React.createClass({
 		if(this.props.backButtonLink && !this.props.materialDesign){
 			return (
 				<Col xs={2} >
-					<div
-						style={styles.navbar_backBtn}
-						onClick={this.handleNavBack}>
-							<MuiIcon icon="arrow-back" />
-					</div>
+					<Touchable component="div" style={styles.navbar_backBtn} onClick={this.handleNavBack}>
+						<MuiIcon icon="arrow-back"/>
+					</Touchable>
 				</Col>
 			);
 		}else{
@@ -236,7 +248,9 @@ var AppNav = React.createClass({
 	renderMenuButtonRight(styles){
 		if(!this.state.menuActive){
 			return (
-				<Col xs={3}
+				<Touchable
+					component={Col}
+					xs={3}
 					onClick={(e) => {
 						e.stopPropagation();
 						this.showMenu();
@@ -245,7 +259,7 @@ var AppNav = React.createClass({
 					<button style={styles.navbar_menuOpenBtnRight}>
 						{this.props.menuButtonLabel} {this.props.menuButtonIconElement}
 					</button>
-				</Col>
+				</Touchable>
 			);
 		} else {
 			return <Col xs={3}/>;
@@ -255,7 +269,9 @@ var AppNav = React.createClass({
 	renderMenuButtonLeft(styles){
 		if(!this.state.menuActive){
 			return (
-				<Col xs={1}
+				<Touchable
+					component={Col}
+					xs={1}
 					onClick={(e) => {
 						e.stopPropagation();
 						this.showMenu();
@@ -264,7 +280,7 @@ var AppNav = React.createClass({
 					<button style={styles.navbar_menuOpenBtnLeft}>
 						{this.props.menuButtonLabel} {this.props.menuButtonIconElement}
 					</button>
-				</Col>
+				</Touchable>
 			);
 		} else {
 			return <Col xs={1}/>;
@@ -296,8 +312,10 @@ var AppNav = React.createClass({
 		// render extra height for status bar?
 		if(contains([0,1],this.props.connectionStatus)) merge(navbarStyle,styles.navbar_hasStatus);
 
-		let md = this.props.materialDesign;
+		// ensure `false` as prop overrides theme preference
+		let md = (this.props.materialDesign !== false) ? (this.props.materialDesign || this.preferMaterialTheme()) : false;
 
+		let MenuComponent = _menuPositions[this.props.menuPosition || md ? "left" : "top"];
 		return (
 			<div style={appNavStyle} onClick={() => this.hideMenu()}>
 				<Row style={navbarStyle}>
@@ -308,22 +326,21 @@ var AppNav = React.createClass({
 					{md ? this.renderLoadingState(styles) : this.renderMenuButtonRight(styles)}
 					{this.renderStatusBar(styles)}
 
-					<Overlay
+					<MenuComponent
 						open={this.state.menuActive}
 						onExit={this.menuDidLeave}
-						position={this.props.menuPosition}
 						style={styles.menu_overlay}>
 
 						<div style={styles.menu_inner}>
-							<Trigger ref="closeButton" onClick={this.hideMenu} style={styles.menu_closeBtnTop}>
+							<Touchable ref="closeButton" onClick={this.hideMenu} style={styles.menu_closeBtnTop}>
 								<MuiIcon style={{fontSize:21,verticalAlign:"middle"}} icon="clear"/>
-							</Trigger>
+							</Touchable>
 							<div style={styles.menu_itemList}>
 								{this.renderNavItems()}
 							</div>
 							{this.props.children}
 						</div>
-					</Overlay>
+					</MenuComponent>
 
 				</Row>
 			</div>
