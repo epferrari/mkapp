@@ -168,7 +168,7 @@ const Overlay = React.createClass({
 	},
 
 	render(){
-		let _styles = this.prepareStyles();
+		let preparedStyles = this.prepareStyles();
 		let containerStyles = this.getContainerStyles();
 		let {shouldAnimate,active} = this.state;
 
@@ -183,7 +183,7 @@ const Overlay = React.createClass({
 				component="div"
 				onClick={this.forceHide}
 				style={containerStyles}>
-				<div style={_styles} ref="overlay" onClick={this.capture} onTouchEnd={this.capture}>
+				<div style={preparedStyles} ref="overlay" onClick={this.capture} onTouchEnd={this.capture}>
 					{this.renderCloseButton()}
 					{this.props.children}
 				</div>
