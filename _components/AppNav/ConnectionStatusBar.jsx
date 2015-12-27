@@ -6,7 +6,8 @@ import FontIcon
   from '@epferrari/react-fa-icon';
 import MuiIcon
   from '../MuiIcon';
-
+import {merge,pick}
+  from 'lodash';
 
 var rowStyles = {
   fontSize: 10,
@@ -30,21 +31,27 @@ var ConnectionStatusBar = React.createClass({
   },
   render(){
 		let {status} = this.props;
+
 		if(status === 0){
+      let styles = this.prepareStyles();
 			return (
-				<Row style={rowStyles}>
+				<Row style={styles}>
 					<span style={{display:"table-cell"}}>Not Connected <MuiIcon icon="warning"/></span>
 				</Row>
 			);
 		} else if(status === 1){
+      let styles = this.prepareStyles();
 			return (
-				<Row style={rowStyles}>
+				<Row style={styles}>
 					<span style={{display:"table-cell"}}>Connecting <FontIcon icon="spinner" spin/></span>
 				</Row>
 			);
 		} else{
 			return null;
 		}
+  },
+  prepareStyles(){
+    return merge({},rowStyles,pick(this.props.style,'color','backgroundColor'));
   }
 });
 
