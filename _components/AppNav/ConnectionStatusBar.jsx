@@ -1,7 +1,7 @@
 import React
   from 'react';
 import Row
-  from '../utility/Row';
+  from '../gridsystem/Row';
 import FontIcon
   from '@epferrari/react-fa-icon';
 import MuiIcon

@@ -3,7 +3,7 @@ import React
 import Touchable
   from '../Touchable';
 import Column
-  from '../utility/Column';
+  from '../gridsystem/Column';
 import FontIcon
   from '@epferrari/react-fa-icon';
 

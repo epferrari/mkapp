@@ -1,7 +1,7 @@
 import React
   from 'react';
 import Column
-  from '../utility/Column';
+  from '../gridsystem/Column';
 
 var NavTitle = React.createClass({
   propTypes:{
