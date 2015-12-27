@@ -7,11 +7,11 @@ var NavTitleCenter = React.createClass({
   render(){
     return (
       <NavTitle
-      capitalize={false}
-      {...this.props}
-      alignment="center"
-      maxLength={16}
-      width={6}/>
+        capitalize={false}
+        width={6}
+        maxLength={16}
+        {...this.props}
+        alignment="center"/>
     );
   }
 });

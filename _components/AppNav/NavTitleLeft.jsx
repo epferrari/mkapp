@@ -7,11 +7,11 @@ var NavTitleLeft = React.createClass({
   render(){
     return (
       <NavTitle
-      capitalize={true}
-      {...this.props}
-      alignment="left"
-      maxLength={20}
-      width={8}/>
+        capitalize={true}
+        maxLength={20}
+        width={8}
+        {...this.props}
+        alignment="left"/>
     );
   }
 });

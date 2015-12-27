@@ -22,13 +22,21 @@ var BackButton = React.createClass({
     location: React.PropTypes.object.isRequired,
     history: React.PropTypes.object.isRequired
   },
+  propTypes:{
+    width: React.PropTypes.number
+  },
+  getDefaultProps(){
+    return {
+      width: 2
+    };
+  },
   handleClick(e){
     this.context.history.goBack();
   },
   render(){
     if(this.context.location.pathname !== '/'){
 			return (
-				<Column width={2} >
+				<Column width={this.props.width} >
 					<Touchable
             component="div"
             style={buttonStyles}
@@ -38,7 +46,7 @@ var BackButton = React.createClass({
 				</Column>
 			);
 		}else{
-			return <Column width={2}/>;
+			return <Column width={this.props.width}/>;
 		}
   }
 });
