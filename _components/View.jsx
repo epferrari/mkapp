@@ -1,11 +1,13 @@
 import React
 	from 'react';
-import {Grid}
-	from 'react-bootstrap';
+import Container
+	from './gridsystem/Container';
 import {merge,pick}
   from 'lodash';
 import MkappThemeMixin
 	from '../theme/mixin';
+import MkappThemeStyleMerger
+	from '../theme/utils/styleMerger';
 
 function copy(object){
 	return merge({},object);
@@ -17,40 +19,41 @@ function copy(object){
 * @desc A view wrapper that can enforce certain behaviors for full screen views
 * component mounts. Also provides a Bootstrap Grid for children to render into.
 *
-* @param {function|array} fixed - element or elements to render outside the Grid component.
+* @param {function|array} static - element or elements to render outside the Grid component.
 * 	Good for drawers, modals, and fixed position elements like footers
 */
 const View = React.createClass({
 	mixins:[MkappThemeMixin],
 
 	propTypes:{
-		fixed: React.PropTypes.oneOfType([
+		static: React.PropTypes.oneOfType([
 			React.PropTypes.element,
 			React.PropTypes.arrayOf(React.PropTypes.element)
-		])
+		]),
+		navbarOffset: React.PropTypes.number
+	},
+
+	getDefaultProps(){
+		return {navbarOffset: 30};
 	},
 
 	render(){
 		let styles = this.prepareStyles();
+		let propsStyles = merge({},this.props.style);
+		let bgStyles = pick(MkappThemeStyleMerger(this.props.style,this.getThemeStyles('view')),'backgroundColor');
+		delete propsStyles.backgroundColor;
 		return (
-			<div style={merge({},styles.viewframe,styles.grid)} ref="view">
-				<Grid style={merge({},styles.grid,this.props.style,styles.content)}>
+			<div style={merge({},styles.viewframe,bgStyles)} ref="view">
+				<Container style={merge({},styles.container,propsStyles,styles.content)}>
 					{this.props.children}
-				</Grid>
-				{this.props.fixed}
+				</Container>
+				{this.props.static}
 			</div>
 		);
 	},
 
 	prepareStyles(){
-		let _styles = this.getStyles();
-		let themeStyles_view = pick(this.getThemeStyles('view'),'marginTop','minHeight');
-		_styles.viewframe = merge({},_styles.viewframe,themeStyles_view);
-		_styles.grid = merge({},_styles.grid,{minHeight: themeStyles_view.minHeight});
-		return _styles;
-	},
-
-	getStyles(){
+		let offsetTop = this.getThemeStyles('view').offsetTop || 0;
 		return copy({
 			viewframe: {
 				position: "absolute",
@@ -59,12 +62,16 @@ const View = React.createClass({
 				right: 0,
 				bottom: 0,
 				width: "100%",
-				marginTop: 40,
-				minHeight: (global.screen.height - 40)
-			},
-			grid: {
 				overflowX: 'hidden',
-				overflowY: "scroll"
+				overflowY: "scroll",
+				minHeight: global.screen.height
+			},
+			container: {
+				overflowX: 'hidden',
+				overflowY: "scroll",
+				paddingTop:20,
+				marginTop: this.props.navbarOffset + offsetTop,
+				minHeight: (global.screen.height - this.props.navbarOffset - offsetTop)
 			},
 			content: {
 				WebkitOverflowScrolling: "touch"
