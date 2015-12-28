@@ -7,7 +7,7 @@ import Router
 import actions
 	from '../actions';
 import View
-	from 'mkapp/lib/View';
+	from 'mkapp/lib/material/View';
 
 /**
 * @name AdminView
@@ -22,29 +22,16 @@ import View
 const AdminView = React.createClass({
 	mixins: [Reflux.ListenerMixin],
 	propTypes: {
-		title: React.PropTypes.string.isRequired,
-		backButtonLink: React.PropTypes.oneOfType([
-			React.PropTypes.string,
-			React.PropTypes.bool
-		])
-	},
-	getDefaultProps(){
-		return {backButtonLink: false};
+		title: React.PropTypes.string
 	},
 	componentDidMount(){
 		actions.DID_NAVIGATE({
-			viewTitle: this.props.title,
-			backButtonLink: (this.props.backButtonLink || false)
+			viewTitle: this.props.title
 		});
 		actions.SET_NAVBAR_COLOR(this.props.navbarColor);
-		if(this.props.hideNavbarTitle){
-			actions.HIDE_NAVBAR_TITLE();
-		} else {
-			actions.SHOW_NAVBAR_TITLE();
-		}
 	},
 	render(){
-		return <View {...this.props}/>
+		return <View style={{paddingTop:20}} {...this.props}/>
 	}
 });
 

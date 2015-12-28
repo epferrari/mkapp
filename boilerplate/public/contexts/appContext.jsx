@@ -24,57 +24,13 @@ muiTheme = ThemeManager.getMuiTheme(DarkRawTheme);
 customTheme = ThemeManager.modifyRawThemePalette(muiTheme,customPalette);
 customTheme = merge({},customTheme,customComponentThemes);
 
-import MkappTheme from 'mkapp/theme';
-var mkappTheme = new MkappTheme();
-
-
-
-
-/* Cordova stuffs
-/*****************************/
-
-
-var cordovaIsReady = false;
-var cordovaDidLoad = new Promise((resolve) => {
-	if(window._cordovaIsReady){
-		cordovaIsReady = true;
-		delete window._cordovaIsReady;
-		resolve();
-	}else{
-		document.addEventListener("deviceready",() => {
-			cordovaIsReady = true;
-			resolve();
-		});
-	}
-});
-
-var cordovaEnv = {
-	get expected(){
-		return global.isCordovaApp;
-	},
-	get ready(){
-		return cordovaIsReady;
-	},
-	get didLoad(){
-		return cordovaDidLoad;
-	},
-	get platformId(){
-		if(cordovaIsReady) return global.cordova.platformId;
-	}
-};
-
-
-
 
 
 /* Create the Context
 /*****************************/
 
 const appContext = new Context({
-	muiTheme: [customTheme,"object"],
-	mkappTheme: [mkappTheme,"object"],
-	cordovaEnv: [cordovaEnv,"object"],
-
+	muiTheme: [customTheme,"object"]
 });
 
 

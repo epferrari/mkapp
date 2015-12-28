@@ -72,14 +72,6 @@ var stateStore = Reflux.createStore({
 		}
 	},
 
-	onSHOW_NAVBAR_TITLE(){
-		if(!app.state.showNavbarTitle) this.trigger( app.setState({showNavbarTitle: true}) );
-	},
-
-	onHIDE_NAVBAR_TITLE(){
-		if(app.state.showNavbarTitle) this.trigger( app.setState({showNavbarTitle: false}) );
-	},
-
 	getState(){
 		return app.state;
 	}

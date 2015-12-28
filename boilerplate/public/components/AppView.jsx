@@ -4,12 +4,10 @@ import Reflux
 	from 'reflux';
 import Router
 	from 'react-router';
-import {Grid}
-	from 'react-bootstrap';
 import actions
 	from '../actions';
 import View
-	from 'mkapp/lib/View';
+	from 'mkapp/lib/hybrid/View';
 
 /**
 * @name AppView
@@ -25,34 +23,19 @@ const AppView = React.createClass({
 
 	propTypes: {
 		//title: React.PropTypes.string.isRequired,
-		title: React.PropTypes.string,
-		backButtonLink: React.PropTypes.oneOfType([
-			React.PropTypes.string,
-			React.PropTypes.bool
-		])
-	},
-
-	contextTypes:{
-		navbarHeight: React.PropTypes.number
-	},
-
-	getDefaultProps(){
-		return {
-			backButtonLink: false
-		};
+		title: React.PropTypes.string
 	},
 
 	componentDidMount(){
 		actions.DID_NAVIGATE({
-			viewTitle: this.props.title || "",
-			backButtonLink: (this.props.backButtonLink || false)
+			viewTitle: this.props.title || ""
 		});
 		actions.SET_NAVBAR_COLOR(this.props.navbarColor);
 	},
 
 	render(){
 		return (
-			<View {...this.props}/>
+			<View style={{paddingTop:15}} {...this.props}/>
 		);
 	}
 });

@@ -7,7 +7,14 @@ import DrawerTop from 'mkapp/lib/DrawerTop';
 import DrawerBottom from 'mkapp/lib/DrawerBottom';
 import Curtain from 'mkapp/lib/Curtain';
 import {FlatButton} from 'material-ui';
+import Touchable from 'mkapp/lib/Touchable';
 
+
+var FlatTouchButton = React.createClass({
+	render(){
+		return <Touchable component={FlatButton} {...this.props}/>;
+	}
+});
 
 var buttonStyle = {
 	display: "block",
@@ -21,70 +28,103 @@ var innerButtonStyle = {
 	marginLeft: "auto",
 	marginRight: "auto",
 	padding: 3,
-	marginTop: 100
+	marginTop: 50
 }
 
 var Home = React.createClass({
 
 	getInitialState(){
 		return {
-			drawerLeftOpen: false,
-			drawerRightOpen: false,
-			drawerTopOpen: false,
-			drawerBottomOpen: false,
-			curtainOpen: false
+			openDrawer: null
 		}
 	},
 
-	toggle(dir){
-		let newState = {
-			drawerLeftOpen: false,
-			drawerRightOpen: false,
-			drawerTopOpen: false,
-			drawerBottomOpen: false,
-			drawerCurtainOpen: false
-		};
-		dir = dir.split("");
-		dir[0] = dir[0].toUpperCase();
-		dir = dir.join("");
-		newState['drawer' + dir + "Open"] = !this.state['drawer' + dir + "Open"];
-		this.setState(newState);
+	contextTypes:{
+		mkappTheme: React.PropTypes.object
 	},
 
+	open(id){
+		if(id === this.state.openDrawer){
+			this.setState({openDrawer: null});
+		}else{
+			this.setState({openDrawer: id});
+		}
+	},
+
+	renderStatic(){
+		return [
+			<DrawerLeft
+				key={0}
+				open={this.state.openDrawer === 0}
+				onExit={() => {if(this.state.openDrawer === 0) this.setState({openDrawer: null});}}>
+			</DrawerLeft>,
+
+			<DrawerRight
+				key={1}
+				open={this.state.openDrawer === 1}
+				onExit={() => {if(this.state.openDrawer === 1) this.setState({openDrawer: null});}}>
+			</DrawerRight>,
+
+			<DrawerTop
+				key={2}
+				open={this.state.openDrawer === 2}
+				onExit={() => {if(this.state.openDrawer === 2) this.setState({openDrawer: null});}}>
+				<FlatTouchButton
+					style={innerButtonStyle}
+					onClick={() => this.open(2)}>Close Drawer</FlatTouchButton>
+			</DrawerTop>,
+
+			<DrawerBottom
+				key={3}
+				open={this.state.openDrawer === 3}
+				onExit={() => {if(this.state.openDrawer === 3) this.setState({openDrawer: null});}}>
+				<FlatTouchButton
+					style={innerButtonStyle}
+					onClick={() => this.open(3)}>Close Drawer</FlatTouchButton>
+			</DrawerBottom>,
+
+			<Curtain
+				key={4}
+				open={this.state.openDrawer === 4}
+				onExit={() => {if(this.state.openDrawer === 4) this.setState({openDrawer: null});}}>
+				<FlatTouchButton
+					style={innerButtonStyle}
+					onClick={() => this.open(4)}>Close Curtain</FlatTouchButton>
+			</Curtain>
+		];
+	},
 	render(){
 		return (
-			<View title="Boilerplate" hideNavbarTitle={false}>
-					<FlatButton style={buttonStyle} onClick={actions.TOGGLE_NAVBAR_TYPE}>Toggle Menu</FlatButton>
+			<View title="Mkapp" navbarColor="transparent" static={this.renderStatic()} style={{backgroundColor:"rgb(101, 188, 207)"}}>
+				<FlatTouchButton
+					style={buttonStyle}
+					onClick={() => {
+						this.context.mkappTheme.preferMaterial = !this.context.mkappTheme.preferMaterial;
+					}
+					}>Toggle Menu</FlatTouchButton>
 				<br/>
-				<FlatButton style={buttonStyle} onClick={() => this.toggle('left')}>Left Drawer</FlatButton>
+				<FlatTouchButton
+					style={buttonStyle}
+					onClick={() => this.open(0)} >Left Drawer</FlatTouchButton>
 				<br/>
-				<FlatButton style={buttonStyle} onClick={() => this.toggle('right')}>Right Drawer</FlatButton>
+				<FlatTouchButton
+					style={buttonStyle}
+					onClick={() => this.open(1)} >Right Drawer</FlatTouchButton>
 				<br/>
-				<FlatButton style={buttonStyle} onClick={() => this.toggle('top')}>Top Drawer</FlatButton>
+				<FlatTouchButton
+					style={buttonStyle}
+					onClick={() => this.open(2)} >Top Drawer</FlatTouchButton>
 				<br/>
-				<FlatButton style={buttonStyle} onClick={() => this.toggle('bottom')}>Bottom Drawer</FlatButton>
+				<FlatTouchButton
+					style={buttonStyle}
+					onClick={() => this.open(3)} >Bottom Drawer</FlatTouchButton>
 				<br/>
-				<FlatButton style={buttonStyle} onClick={() => this.toggle('curtain')}>Curtain</FlatButton>
-
-				<DrawerLeft open={this.state.drawerLeftOpen}>
-					<FlatButton style={innerButtonStyle} onClick={() => this.toggle('left')}>Close Drawer</FlatButton>
-				</DrawerLeft>
-				<DrawerRight open={this.state.drawerRightOpen}>
-					<FlatButton style={innerButtonStyle} onClick={() => this.toggle('right')}>Close Drawer</FlatButton>
-				</DrawerRight>
-				<DrawerTop open={this.state.drawerTopOpen}>
-					<FlatButton style={innerButtonStyle} onClick={() => this.toggle('top')}>Close Drawer</FlatButton>
-				</DrawerTop>
-				<DrawerBottom open={this.state.drawerBottomOpen}>
-					<FlatButton style={innerButtonStyle} onClick={() => this.toggle('bottom')}>Close Drawer</FlatButton>
-				</DrawerBottom>
-				<Curtain open={this.state.drawerCurtainOpen}>
-					<FlatButton style={innerButtonStyle} onClick={() => this.toggle('curtain')}>Close Curtain</FlatButton>
-				</Curtain>
-
+				<FlatTouchButton
+					style={buttonStyle}
+					onClick={() => this.open(4)}>Curtain</FlatTouchButton>
 			</View>
 		);
 	}
 });
 
-export default Home;
+module.exports = Home;

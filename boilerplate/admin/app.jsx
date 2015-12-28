@@ -36,10 +36,7 @@ import {merge}
 import Router,{Route,History,IndexRoute}
 	from 'react-router';
 
-//import AppNav from './components/AppNav.jsx';
-
-import CustomAppBar from './components/CustomAppBar.jsx';
-import AndroidNav from 'mkapp/lib/AndroidNav';
+import AppNav from 'mkapp/lib/material/AppNav';
 
 
 /* contexts & state
@@ -77,29 +74,15 @@ const App = React.createClass({
 		this.listenTo(AppStateStore,s => this.setState(s));
 	},
 
-	getStyles(){
-		return {
-			viewContainer:{
-				//marginTop:40,
-				zIndex:0,
-				position:"relative",
-				minHeight: (global.screen.height - 30),
-				WebkitOverflowScrolling:"touch"
-			}
-		};
-	},
-
 	render(){
 		return (
 			<div >
-				<AndroidNav
+				<AppNav
 					{...this.state}
 					title={this.state.viewTitle}
 					showLoading={this.state.inLoadingState}
 					style={{backgroundColor: this.state.navbarColor}}/>
-				<div  {...this.state}>
 					{this.props.children}
-				</div>
 			</div>
 		);
 	}

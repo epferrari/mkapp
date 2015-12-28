@@ -44,9 +44,8 @@ var stateStore = Reflux.createStore({
 			if(!conduxService.connected && !conduxService.connecting) conduxService.reconnect();
 
 			let newState = app.setState({
-				currentPath: payload.path,
-				viewTitle: payload.viewTitle,
-				backButtonLink: payload.backButtonLink
+				//currentPath: payload.path,
+				viewTitle: payload.viewTitle
 			});
 
 			this.trigger(newState);

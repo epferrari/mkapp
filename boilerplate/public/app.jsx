@@ -2,62 +2,62 @@
 /*************************************************/
 import React
 	from "react";
-
-import ReactDOM from 'react-dom';
-
+import ReactDOM
+	from 'react-dom';
 import Reflux
 	from 'reflux';
-
 import Promise
 	from 'bluebird';
 
 /* ensure Promise implementation for Velocity animate on Android*/
 global.Promise = Promise;
 
-
-/* try like hell to get something to work for fast touch events
 /*************************************************/
-//require('react-fastclick');
 require('react-tap-event-plugin')();
-//React.initializeTouchEvents(true);
-
 
 /* utilities
 /*************************************************/
-import {merge}
-	from 'lodash';
+import {merge} from 'lodash';
 
 /* Routes and Navigation
 /**************************************************/
 import Router,{Route,History,IndexRoute}
 	from 'react-router';
 
-import AppleNav
-	from 'mkapp/lib/AppleNav';
-import AndroidNav
-	from 'mkapp/lib/AndroidNav';
-
-var menuItems = [
+import ThemeProvider from 'mkapp/lib/ThemeProvider';
+import HybridNav from 'mkapp/lib/hybrid/AppNav';
+import NavBar from 'mkapp/lib/ios/NavBar';
+import NavMenu from 'mkapp/lib/NavMenu';
+const menuItems = [
 	{title:"Home",path:"/"},
 	{title:"View 1",path:"/view1"},
-	{title:"View 2",path:"/view2"}
+	{title:"View 2",path:"/view2"},
+	{title:"View 3",path:"/view3"}
 ];
 
 
 /* contexts & state
 /**************************************************/
-import AppContext
-	from './contexts/appContext.jsx';
+import AppContext from './contexts/appContext.jsx';
+import AppStateStore from './datastores/AppState.js';
 
-import AppStateStore
-	from './datastores/AppState.js';
-
+import MkappTheme from 'mkapp/theme';
+var getComponentStyles = function(palette,typekit,useMaterial){
+	return {
+		view:{
+			bgColor: "rgb(235, 213, 162)"
+		},
+		navBar: {
+			bgColor: useMaterial ? "rgb(231, 70, 60)" : "rgb(101, 188, 207)"
+		}
+	};
+}
+var mkappTheme = new MkappTheme(null,null,getComponentStyles);
 
 /* Components
 /**************************************************/
 
 
-/* container for credentialed application views */
 const App = React.createClass({
 	mixins: [AppContext.Mixin,Reflux.ListenerMixin],
 	childContextTypes: {
@@ -80,27 +80,28 @@ const App = React.createClass({
 	},
 
 	render(){
-		var AppNav = (this.state.materialNav) ? AndroidNav : AppleNav;
 		return (
-			<div>
-				<AppNav
+			<ThemeProvider mkappTheme={mkappTheme}>
+				<HybridNav
 					{...this.state}
 					title={this.state.viewTitle}
 					connectionStatus={this.state.wsConnection}
 					isLoading={this.state.inLoadingState}
 					menuItems={menuItems}/>
 					{this.props.children}
-			</div>
+			</ThemeProvider>
 		);
 	}
 });
 
-import Home from './views/Home.jsx';
 
 ReactDOM.render((
 	<Router >
 		<Route path="/" component={App}>
-			<IndexRoute component={Home}/>
+			<IndexRoute component={ require('./views/Home.jsx') }/>
+			<Route path="/view1" component={ require('./views/View1.jsx') }/>
+			<Route path="/view2" component={ require('./views/View2.jsx') }/>
+			<Route path="/view3" component={ require('./views/View3.jsx') }/>
 		</Route>
 	</Router>
 ),document.getElementById('app'));

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Row,Col} from 'react-bootstrap';
+import Row from 'mkapp/lib/gridsystem/Row';
+import Col from 'mkapp/lib/gridsystem/Column';
 import View from '../components/View.jsx';
 import {chain} from 'lodash';
 
@@ -53,7 +54,7 @@ var Home = React.createClass({
 		return (
 			<View title="Admin Boilerplate" navbarColor="rgb(0,0,0)" hideNavbarTitle={false}>
 				<Row>
-					<Col xs={12}>
+					<Col width={12}>
 						<label>Action A</label>
 							<ActionTrigger
 								action={conduxActions.ACTION_A}
@@ -77,7 +78,7 @@ var Home = React.createClass({
 				</Row>
 				<hr/>
 				<Row>
-					<Col xs={12}>
+					<Col width={12}>
 						<h2>Log (last 15)</h2>
 						{this.renderLog()}
 					</Col>
