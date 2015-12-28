@@ -14,7 +14,7 @@ var buttonStyles = {
   fontWeight: 100,
   paddingTop:4,
   marginLeft:-10,
-  marginTop: -4
+  marginTop: -2
 };
 
 var BackButton = React.createClass({
@@ -30,9 +30,6 @@ var BackButton = React.createClass({
       width: 2
     };
   },
-  handleClick(e){
-    this.context.history.goBack();
-  },
   render(){
     if(this.context.location.pathname !== '/'){
 			return (
@@ -40,7 +37,7 @@ var BackButton = React.createClass({
 					<Touchable
             component="div"
             style={buttonStyles}
-            onClick={this.handleClick}>
+            onClick={() => this.context.history.goBack()}>
 						<MuiIcon icon="arrow-back"/>
 					</Touchable>
 				</Column>

@@ -1,7 +1,7 @@
 import React
   from 'react';
 import NavTitle
-  from './NavTitle';
+  from './NavBarTitle';
 
 var NavTitleCenter = React.createClass({
   render(){

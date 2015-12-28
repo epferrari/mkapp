@@ -6,7 +6,7 @@ import MkappThemeStyleMerger
 module.exports = {
   getDefaultProps(){
     return {
-      offsetTop: 0
+			onMenuButtonClick: function(){}
     };
   },
   propTypes:{
@@ -18,8 +18,7 @@ module.exports = {
     onMenuButtonClick: React.PropTypes.func.isRequired,
     connectionStatus: React.PropTypes.oneOf([0,1,2]),
     title: React.PropTypes.string,
-    showActivity: React.PropTypes.bool,
-    offsetTop: React.PropTypes.number
+    showActivity: React.PropTypes.bool
   },
   prepareStyles(){
     // base styles

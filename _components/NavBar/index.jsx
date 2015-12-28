@@ -6,44 +6,45 @@ import MkappThemeMixin
 	from '../../theme/mixin';
 import MkappThemeStyleMerger
 	from '../../theme/utils/styleMerger';
-import MenuButtonRight
-  from './MenuButtonRight';
-import BackButton
-  from './BackButton';
-import ConnectionStatusBar
-  from './ConnectionStatusBar';
-import NavTitleCenter
-  from './NavTitleCenter';
-import ActivityStatus
-  from './ActivityStatus';
-import Row
-  from '../gridsystem/Row';
+import NavBarMenuButtonRight
+  from './NavBarMenuButtonRight';
+import NavBarBackButton
+  from './NavBarBackButton';
+import NavBarConnectionStatus
+  from './NavBarConnectionStatus';
+import NavBarTitleCenter
+  from './NavBarTitleCenter';
+import NavBarActivityStatus
+  from './NavBarActivityStatus';
 import NavBarMixin
   from './NavBarMixin';
+import Row
+  from '../gridsystem/Row';
 
-var NavBarMobile = React.createClass({
+
+var NavBar = React.createClass({
   mixins:[MkappThemeMixin,NavBarMixin],
 
   render(){
     var styles = this.prepareStyles();
     return(
       <Row style={styles.navbar}>
-        <BackButton width={2}/>
-        <ActivityStatus width={1} activity={this.props.showActivity} />
-        <NavTitleCenter width={6} title={this.props.title} />
-        <MenuButtonRight
+        <NavBarBackButton width={2}/>
+        <NavBarActivityStatus width={1} activity={this.props.showActivity} />
+        <NavBarTitleCenter width={6} title={this.props.title} />
+        <NavBarMenuButtonRight
           width={3}
           show={!this.props.showMenuButton}
           label={this.props.menuButtonLabel}
           iconElement={this.props.menuButtonIconElement}
           onClick={this.props.onMenuButtonClick}/>
-        <ConnectionStatusBar status={this.props.connectionStatus} style={styles.navbar_statusBar}/>
+        <NavBarConnectionStatus status={this.props.connectionStatus} style={styles.navbar_statusBar}/>
       </Row>
     );
   },
 
   getBaseStyles(){
-    let offsetTop = Number.isInteger(this.props.offsetTop) ? this.props.offsetTop : 0;
+    let offsetTop = this.getThemeStyles('navBar').offsetTop || 0;
     return merge({},{
       backgroundColor: "rgb(0,0,0)",
       verticalAlign: 'middle',
@@ -62,4 +63,4 @@ var NavBarMobile = React.createClass({
 
 });
 
-module.exports = NavBarMobile;
+module.exports = NavBar;
