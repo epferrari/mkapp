@@ -5,8 +5,17 @@ import MkappTheme
 import {merge}
   from 'lodash';
 
-var Provider = React.createClass({
-
+var ThemeProvider = React.createClass({
+  propTypes:{
+    detectDevice: React.PropTypes.bool,
+    autoUpdate: React.PropTypes.bool
+  },
+  getDefaultProps(){
+    return {
+      detectDevice: true,
+      autoUpdate: true
+    };
+  },
   getInitialState(){
     return {
       cordovaDeviceReady: false,
@@ -19,8 +28,9 @@ var Provider = React.createClass({
     document.addEventListener('deviceready',() => {
       let platform = (global.device) ? global.device.platform : "browser";
       let theme = this.state.mkappTheme;
-      theme._updateForDevice(platform);
-
+      if(this.props.detectDevice){
+        theme._updateForDevice(platform);
+      }
       this.setState({
         cordovaDeviceReady: true,
         cordovaPlatform: platform,
@@ -31,7 +41,9 @@ var Provider = React.createClass({
 
   componentDidMount(){
     // ensure a re-render is triggered when mkappTheme is updated
-    this.state.mkappTheme.on('update',() => this.forceUpdate());
+    if(this.props.autoUpdate){
+      this.state.mkappTheme.on('update',() => this.forceUpdate());
+    }
   },
 
   componentWillReceiveProps(nextProps){
@@ -39,11 +51,15 @@ var Provider = React.createClass({
     let {mkappTheme} = nextProps;
     let lastTheme = this.state.mkappTheme;
     if(mkappTheme && mkappTheme._id !== lastTheme._id){
-      if(this.state.cordovaDeviceReady) {
-        mkappTheme._updateForDevice(this.state.cordovaPlatform);
+      if(this.state.cordovaDeviceReady){
+        if(this.props.detectDevice || nextProps.detectDevice){
+          mkappTheme._updateForDevice(this.state.cordovaPlatform);
+        }
       }
       lastTheme.removeAllListeners();
-      mkappTheme.on('update',() => this.forceUpdate());
+      if(this.props.autoUpdate || nextProps.autoUpdate){
+        mkappTheme.on('update',() => this.forceUpdate());
+      }
       this.setState({mkappTheme: mkappTheme});
     }
   },
@@ -74,4 +90,4 @@ var Provider = React.createClass({
   }
 });
 
-export default Provider;
+export default ThemeProvider;
