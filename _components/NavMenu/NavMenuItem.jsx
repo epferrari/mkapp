@@ -132,7 +132,8 @@ var NavMenuItem = React.createClass({
 				width:"100%",
 				transform: `translateX(${translateX})`,
 				WebkitTransform: `translateX(${translateX})`,
-				textTransform: this.props.uppercase ? "uppercase" : "none"
+				textTransform: this.props.uppercase ? "uppercase" : "none",
+				paddingTop: 8
 			},
 			menuItem: {
 				height: 38,
