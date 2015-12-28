@@ -1,32 +1,26 @@
 var PropTypes = require('react').PropTypes;
-
+var MkappTheme = require('../theme');
 
 var ThemeMixin = {
   getThemeStyles: function getThemeStyles(component){
-		if(this.context.mkappTheme){
-			return this.context.mkappTheme.getComponentStyles(component) || {};
+		if(this.props.useMkappTheme === true){
+      var mkappTheme = this.context.mkappTheme || new MkappTheme();
+			return mkappTheme.getComponentStyles(component) || {};
 		} else {
 			return {};
 		}
 	},
   getThemePalette: function getThemePalette(){
-    if(this.context.mkappTheme){
-      return this.context.mkappTheme.getPalette();
-    }else{
-      return {}
-    }
+    var mkappTheme = this.context.mkappTheme || new MkappTheme();
+    return mkappTheme.getPalette();
   },
   getThemeTypekit: function getThemeTypekit(){
-    if(this.context.mkappTheme){
-      return this.context.mkappTheme.getTypekit();
-    }else{
-      return {};
-    }
+    var mkappTheme = this.context.mkappTheme || new MkappTheme();
+    return this.context.mkappTheme.getTypekit();
   },
   preferMaterialTheme(){
-    if(this.context.mkappTheme){
-      return this.context.mkappTheme.preferMaterial;
-    }
+    var mkappTheme = this.context.mkappTheme || new MkappTheme();
+    return this.context.mkappTheme.preferMaterial;
   },
   contextTypes:{
 		mkappTheme: PropTypes.shape({
@@ -38,6 +32,9 @@ var ThemeMixin = {
 			setComponentStyles: PropTypes.func
 		})
 	},
+  getDefaultProps(){
+    return {useMkappTheme: true};
+  }
 };
 
 module.exports = ThemeMixin;
