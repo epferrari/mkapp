@@ -52,16 +52,16 @@ function copy(object){
 */
 function defaultComponentStyles(palette,typekit,preferMaterial){
 	return copy({
-		appNav:{
+		navBar:{
 			bgColor: undefined
 		},
-		appNavMenu:{
+		navMenu:{
 			bgImage:undefined,
 			bgColor: undefined,
 			bgPosition: undefined,
 			bgRepeat: undefined
 		},
-		iconNavNext:{
+		navMenuChevron:{
 			color: palette.primary1Color,
 			fontSize: 28,
 			verticalAlign: "middle"
@@ -82,20 +82,16 @@ function defaultComponentStyles(palette,typekit,preferMaterial){
 * @param {boolean} onDevice - construct styles expecting a mobile device
 */
 function getImmutableStyles(preferMaterial,onDevice){
-	var navbarHeight = preferMaterial ? 60 : 30;
-	navbarHeight = onDevice ? navbarHeight + 20 : navbarHeight;
+	var offsetForStatusBar = onDevice ? 20 : 0;
 	return copy({
-		appNav: {
-			height: navbarHeight,
-			maxHeight: navbarHeight,
-			paddingTop: onDevice ? 20 : 0
+		navBar: {
+			offsetTop: offsetForStatusBar
 		},
 		view: {
-			minHeight: global.screen.height - navbarHeight,
-			marginTop: navbarHeight + 10
+			offsetTop: offsetForStatusBar
 		},
 		overlay: {
-			top: onDevice ? 20 : 0
+			top: offsetForStatusBar
 		}
 	});
 }
@@ -222,6 +218,11 @@ function MkappTheme(palette,typekit,getComponentStyles){
 		set: function(bool){
 			if(typeof bool === 'boolean'){
 				preferMaterial = bool;
+				componentStyles = merge({},
+					defaultComponentStyles(palette,typekit,preferMaterial),
+					getComponentStyles(palette,typekit,preferMaterial),
+					getImmutableStyles(preferMaterial,onDevice)
+				);
 				this.emit('update');
 			}
 		},
