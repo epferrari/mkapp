@@ -125,6 +125,7 @@ const Overlay = React.createClass({
 
 		if(this.state.shouldAnimate){
 			this.currentAnimation = this.state.active ? this.hide() : this.show();
+			this.currentAnimation.then( () => this.props.onEnter && this.props.onEnter());
 		}
 	},
 
