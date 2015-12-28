@@ -8,12 +8,14 @@ import {merge}
 var ThemeProvider = React.createClass({
   propTypes:{
     detectDevice: React.PropTypes.bool,
-    autoUpdate: React.PropTypes.bool
+    autoUpdate: React.PropTypes.bool,
+    expectStatusBar: React.PropTypes.bool
   },
   getDefaultProps(){
     return {
       detectDevice: true,
-      autoUpdate: true
+      autoUpdate: true,
+      expectStatusBar: true
     };
   },
   getInitialState(){
@@ -29,7 +31,7 @@ var ThemeProvider = React.createClass({
       let platform = (global.device) ? global.device.platform : "browser";
       let theme = this.state.mkappTheme;
       if(this.props.detectDevice){
-        theme._updateForDevice(platform);
+        theme.setOptions({platform: platform});
       }
       this.setState({
         cordovaDeviceReady: true,
@@ -41,26 +43,38 @@ var ThemeProvider = React.createClass({
 
   componentDidMount(){
     // ensure a re-render is triggered when mkappTheme is updated
+    let theme = this.state.mkappTheme;
+    theme.setOptions({expectStatusBar: this.props.expectStatusBar});
     if(this.props.autoUpdate){
-      this.state.mkappTheme.on('update',() => this.forceUpdate());
+      theme.on('update',() => {
+        this.forceUpdate();
+      });
     }
   },
 
   componentWillReceiveProps(nextProps){
     // reset theme-update listener when new theme is passed via props
-    let {mkappTheme} = nextProps;
-    let lastTheme = this.state.mkappTheme;
-    if(mkappTheme && mkappTheme._id !== lastTheme._id){
+    let {nextTheme} = nextProps;
+    let currentTheme = this.state.mkappTheme;
+    if(nextTheme && nextTheme._id !== currentTheme._id){
+      // update the state theme with new theme passed from props
       if(this.state.cordovaDeviceReady){
         if(this.props.detectDevice || nextProps.detectDevice){
-          mkappTheme._updateForDevice(this.state.cordovaPlatform);
+          nextTheme.setOptions({
+            platform: this.state.cordovaPlatform,
+            expectStatusBar: nextProps.expectStatusBar
+          });
         }
       }
-      lastTheme.removeAllListeners();
+      currentTheme.removeAllListeners();
       if(this.props.autoUpdate || nextProps.autoUpdate){
-        mkappTheme.on('update',() => this.forceUpdate());
+        nextTheme.on('update',() => this.forceUpdate());
       }
-      this.setState({mkappTheme: mkappTheme});
+      this.setState({mkappTheme: nextTheme});
+    }else{
+      currentTheme.setOptions({
+        expectStatusBar: nextProps.expectStatusBar
+      });
     }
   },
 

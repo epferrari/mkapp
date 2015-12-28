@@ -1,4 +1,6 @@
 var merge = require('lodash').merge;
+var pick = require('lodash').pick;
+var isEqual = require('lodash').isEqual;
 var Colors = require('material-ui/lib/styles/colors');
 var typeOf = require('@epferrari/js-utils/lib/typeOf').default;
 var EventEmitter = require('events');
@@ -40,7 +42,7 @@ var UPPERCASE = "uppercase";
 var CAPITALIZE = "capitalize";
 
 
-function copy(object){
+function clone(object){
 	return merge({},object);
 }
 
@@ -48,10 +50,10 @@ function copy(object){
 *
 * @param {object} palette
 * @param {object} typekit
-* @param {boolean} preferMaterial
+* @param {object} themeOptions
 */
-function defaultComponentStyles(palette,typekit,preferMaterial){
-	return copy({
+function defaultComponentStyles(palette,typekit,themeOptions){
+	return clone({
 		navBar:{
 			bgColor: undefined
 		},
@@ -78,12 +80,13 @@ function defaultComponentStyles(palette,typekit,preferMaterial){
 
 /**
 *
-* @param {boolean} preferMaterial - construct styles in material design style
-* @param {boolean} onDevice - construct styles expecting a mobile device
+* @param {object} palette
+* @param {object} typekit
+* @param {object} themeOptions
 */
-function getImmutableStyles(preferMaterial,onDevice){
-	var offsetForStatusBar = onDevice ? 20 : 0;
-	return copy({
+function getImmutableStyles(palette,typekit,themeOptions){
+	var offsetForStatusBar = (themeOptions.expectStatusBar && themeOptions.onDevice) ? 20 : 0;
+	return clone({
 		navBar: {
 			offsetTop: offsetForStatusBar
 		},
@@ -96,6 +99,9 @@ function getImmutableStyles(preferMaterial,onDevice){
 	});
 }
 
+
+
+
 function uniqueID(){
   function chr4(){
     return Math.random().toString(16).slice(-4);
@@ -107,127 +113,142 @@ function uniqueID(){
     '-' + chr4() + chr4() + chr4();
 }
 
+
 /**
 *
 * @param {object} palette - color palette to constuct component styles with
 * @param {object} typekit - typography to construct component styles with
-* @param {function} [getComponentStyles] - a function that returns a component style object.
-	Accepts parameters `palette (object)`,`typekit (object)`, and `preferMaterial (boolean)`
+* @param {function|object} [getComponentStyles] - a function that returns a component style object, or a style object literal.
+	Accepts parameters `palette (object)`,`typekit (object)`, and `themeOptions (object)`
 */
 function MkappTheme(palette,typekit,getComponentStyles){
 
 	// ensure constructor
 	if(!(this instanceof MkappTheme)) return new MkappTheme(palette,typekit,getComponentStyles);
 
-	var _id,preferMaterial,onDevice,componentStyles;
-
 	EventEmitter.call(this);
+
+	/*
+	*
+	* private properties
+	*
+	*/
+	
+	var _id,componentStyles,themeOptions;
+
+	_id = uniqueID();
+	themeOptions = {
+		preferMaterial: false,
+		onDevice: false,
+		expectStatusBar: true,
+		platform: 'browser'
+	};
 
 	palette = merge({},_palette,palette);
 	typekit = merge({},_typekit,typekit);
-	preferMaterial = false;
-	onDevice = false;
+	// set default styles
+	componentStyles = defaultComponentStyles(palette,typekit,themeOptions);
+	// merge in styling passed to constructor and immutable styles
+	componentStyles = updateComponentStyles(componentStyles,getComponentStyles);
 
-	_id = uniqueID();
+	/*
+	*
+	* public read-only properties
+	*
+	*/
+
 	Object.defineProperty(this,'_id',{
 		value: _id,
 		writable: false,
 		configurable: false,
-		enumberable: false
+		enumerable: false
 	});
 
+	Object.defineProperty(this,'options',{
+		get: function(){
+			return merge({},themeOptions);
+		},
+		configurable: false,
+		enumerable: false
+	});
+
+	/*
+	*
+	* private methods
+	*
+	*/
+
 	if(typeOf(getComponentStyles) !== 'function'){
-		getComponentStyles = function(){return {}; };
+		getComponentStyles = function(){};
 	}
 
-	componentStyles = merge({},
-		defaultComponentStyles(palette,typekit,preferMaterial),
-		getComponentStyles(palette,typekit,preferMaterial),
-		getImmutableStyles(preferMaterial,onDevice)
-	);
+	function updateComponentStyles(Object_lastStyles,updater){
+		var newStyles;
+		if(typeOf(updater) === 'function'){
+			newStyles = updater(palette,typekit,themeOptions);
+		}else if(typeOf(updater) === 'object'){
+			newStyles = updater;
+		}
+		return merge(
+			{},
+			Object_lastStyles,
+			getComponentStyles(palette,typekit,themeOptions),
+			newStyles,
+			getImmutableStyles(palette,typekit,themeOptions)
+		);
+	}
 
-	this.getPalette = function(){
-		return copy(palette);
+	/*
+	*
+	* public methods
+	*
+	*/
+
+	this.getPalette = function getPalette(){
+		return clone(palette);
 	};
 
-	this.setPalette = function(newPalette){
+	this.setPalette = function setPalette(newPalette){
 		palette = merge({},palette,newPalette);
 		this.emit('update');
-		return copy(palette);
+		return clone(palette);
 	};
 
-	this.getTypekit = function(){
-		return copy(typekit);
+	this.getTypekit = function getTypekit(){
+		return clone(typekit);
 	};
 
-	this.setTypekit = function(newTypekit){
+	this.setTypekit = function setTypekit(newTypekit){
 		typekit = merge({},typekit,newTypekit);
 		this.emit('update');
-		return copy(typekit);
+		return clone(typekit);
 	};
 
-	this.getComponentStyles = function(component){
+	this.getComponentStyles = function getComponentStyles(component){
 		if(component !== undefined){
-			return copy(componentStyles[component]);
+			return clone(componentStyles[component]);
 		}else{
-			return copy(componentStyles);
+			return clone(componentStyles);
 		}
 	};
 
-	this._updateForDevice = function(platform){
-		var shouldUpdate = false;
-		if(!onDevice){
-			onDevice = true;
-			shouldUpdate = true;
-		}
-		if(!preferMaterial && (platform === 'Android')){
-			preferMaterial = true;
-			shouldUpdate = true;
-		}
-		componentStyles = merge({},
-			defaultComponentStyles(palette,typekit,preferMaterial),
-			getComponentStyles(palette,typekit,preferMaterial),
-			getImmutableStyles(preferMaterial,onDevice)
-		);
-		if(shouldUpdate) this.emit('update');
-	};
-
-	this.setComponentStyles = function(newStyles){
-		if(typeOf(newStyles) === 'function'){
-			componentStyles = merge(
-				{},
-				componentStyles,
-				newStyles(palette,typekit,preferMaterial),
-				getImmutableStyles(preferMaterial,onDevice)
-			);
-		}else if(typeOf(newStyles) === 'object'){
-			componentStyles = merge(
-				{},
-				componentStyles,
-				newStyles,
-				getImmutableStyles(preferMaterial,onDevice)
-			);
-		}
+	this.setComponentStyles = function setComponentStyles(newStyles){
+		componentStyles = updateComponentStyles(componentStyles,newStyles);
 		this.emit('update');
 	};
 
-	Object.defineProperty(this,'preferMaterial',{
-		get: function(){
-			return preferMaterial;
-		},
-		set: function(bool){
-			if(typeof bool === 'boolean'){
-				preferMaterial = bool;
-				componentStyles = merge({},
-					defaultComponentStyles(palette,typekit,preferMaterial),
-					getComponentStyles(palette,typekit,preferMaterial),
-					getImmutableStyles(preferMaterial,onDevice)
-				);
-				this.emit('update');
-			}
-		},
-		configurable: false
-	})
+	this.setOptions = function setOptions(newOptions){
+		var lastOptions = themeOptions;
+		var configurableOptions = ['preferMaterial','onDevice','expectStatusBar','platform'];
+
+		if(newOptions.platform === 'Android') newOptions.preferMaterial = true;
+		themeOptions = merge({},themeOptions,pick(newOptions,configurableOptions));
+
+		if(!isEqual(lastOptions,themeOptions)){
+			componentStyles = updateComponentStyles(componentStyles);
+			this.emit('update');
+		}
+	};
 }
 
 util.inherits(MkappTheme,EventEmitter);

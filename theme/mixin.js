@@ -18,10 +18,7 @@ var ThemeMixin = {
     var mkappTheme = this.context.mkappTheme || new MkappTheme();
     return this.context.mkappTheme.getTypekit();
   },
-  preferMaterialTheme(){
-    var mkappTheme = this.context.mkappTheme || new MkappTheme();
-    return this.context.mkappTheme.preferMaterial;
-  },
+
   contextTypes:{
 		mkappTheme: PropTypes.shape({
 			getPalette: PropTypes.func,
@@ -29,7 +26,8 @@ var ThemeMixin = {
 			getTypekit: PropTypes.func,
 			setTypekit: PropTypes.func,
 			getComponentStyles: PropTypes.func,
-			setComponentStyles: PropTypes.func
+			setComponentStyles: PropTypes.func,
+      setOptions: PropTypes.func
 		})
 	},
   getDefaultProps(){
