@@ -213,15 +213,18 @@ const Overlay = React.createClass({
 		let positions = {
 			top: {
 				top: "-100%",
+				paddingTop: offsetTop,
 				left:0
 			},
 			left:{
 				left: "-100%",
-				top: offsetTop
+				top: 0,
+				paddingTop: offsetTop,
 			},
 			right:{
 				right: "-100%",
-				top: offsetTop
+				top: 0,
+				paddingTop: offsetTop,
 			},
 			bottom:{
 				left:0,
@@ -236,16 +239,19 @@ const Overlay = React.createClass({
 		let offsetTop = this.getThemeStyles('overlay').top || 0;
 		let positions = {
 			top: {
-				top: offsetTop,
+				top: 0,
+				paddingTop: offsetTop,
 				left:0
 			},
 			left:{
 				left: "0%",
-				top: offsetTop
+				top:0,
+				paddingTop: offsetTop
 			},
 			right:{
 				right: "0%",
-				top: offsetTop
+				top:0,
+				paddingTop: offsetTop
 			},
 			bottom:{
 				left:0,
@@ -296,7 +302,8 @@ const Overlay = React.createClass({
 				opacity: 0
 			},
 			container__ACTIVE: {
-				top: offsetTop,
+				top: 0,
+				paddingTop: offsetTop,
 				bottom: 0,
 				left: 0,
 				right: 0,

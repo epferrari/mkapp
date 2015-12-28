@@ -31,7 +31,11 @@ var ThemeProvider = React.createClass({
       let platform = (global.device) ? global.device.platform : "browser";
       let theme = this.state.mkappTheme;
       if(this.props.detectDevice){
-        theme.setOptions({platform: platform});
+        theme.setOptions({
+          onDevice: true,
+          platform: platform,
+          expectStatusBar: this.props.expectStatusBar
+        });
       }
       this.setState({
         cordovaDeviceReady: true,
@@ -44,7 +48,6 @@ var ThemeProvider = React.createClass({
   componentDidMount(){
     // ensure a re-render is triggered when mkappTheme is updated
     let theme = this.state.mkappTheme;
-    theme.setOptions({expectStatusBar: this.props.expectStatusBar});
     if(this.props.autoUpdate){
       theme.on('update',() => {
         this.forceUpdate();
@@ -61,6 +64,7 @@ var ThemeProvider = React.createClass({
       if(this.state.cordovaDeviceReady){
         if(this.props.detectDevice || nextProps.detectDevice){
           nextTheme.setOptions({
+            onDevice: this.state.cordoveDeviceReady,
             platform: this.state.cordovaPlatform,
             expectStatusBar: nextProps.expectStatusBar
           });
