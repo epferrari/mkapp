@@ -42,13 +42,13 @@ import AppContext from './contexts/appContext.jsx';
 import AppStateStore from './datastores/AppState.js';
 
 import MkappTheme from 'mkapp/theme';
-var getComponentStyles = function(palette,typekit,useMaterial){
+var getComponentStyles = function(palette,typekit,themeOptions){
 	return {
 		view:{
 			bgColor: "rgb(235, 213, 162)"
 		},
 		navBar: {
-			bgColor: useMaterial ? "rgb(231, 70, 60)" : "rgb(101, 188, 207)"
+			bgColor: themeOptions.preferMaterial ? "rgb(231, 70, 60)" : "rgb(101, 188, 207)"
 		}
 	};
 }

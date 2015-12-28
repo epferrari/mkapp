@@ -99,7 +99,7 @@ var Home = React.createClass({
 				<FlatTouchButton
 					style={buttonStyle}
 					onClick={() => {
-						this.context.mkappTheme.preferMaterial = !this.context.mkappTheme.preferMaterial;
+						this.context.mkappTheme.setOptions({preferMaterial: !this.context.mkappTheme.options.preferMaterial });
 					}
 					}>Toggle Menu</FlatTouchButton>
 				<br/>
