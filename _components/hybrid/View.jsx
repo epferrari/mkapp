@@ -6,7 +6,7 @@ import MkappThemeMixin from '../../theme/mixin';
 var HybridView = React.createClass({
   mixins:[MkappThemeMixin],
   render(){
-    let ViewComponent = this.preferMaterialTheme() ? MaterialView : iosView;
+    let ViewComponent = this.context.mkappTheme.options.preferMaterial ? MaterialView : iosView;
     return <ViewComponent {...this.props}/>;
   }
 });

@@ -6,7 +6,7 @@ import MaterialAppNav from '../material/AppNav';
 var HybridNav = React.createClass({
   mixins:[MkappThemeMixin],
   render(){
-    let NavComponent = this.preferMaterialTheme() ? MaterialAppNav : iosAppNav;
+    let NavComponent = this.context.mkappTheme.options.preferMaterial ? MaterialAppNav : iosAppNav;
     return <NavComponent {...this.props}/>;
   }
 });
