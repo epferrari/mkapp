@@ -92,13 +92,13 @@ The first two arguments to `MkappTheme`'s constructor are `palette` and `typekit
 
 The third argument, `getComponentStyles`, is a transformation function. It's called internally by your `mkapp theme` each and every time the theme is updated, and gets passed these three arguments:
 
-- `palette` - the theme's current color palette
-- `typekit` - the theme' current typekit
-- `themeOptions` - the theme's current options
-	- **preferMaterial** `boolean`
-	- **onDevice** `boolean`
-	- **platform** `string`
-	- **expectStatusBar** `boolean`
+- **palette** `object` - the theme's current color palette
+- **typekit** `object` - the theme's current typekit
+- **themeOptions** `object` - the theme's current options
+	- preferMaterial `boolean`
+	- onDevice `boolean`
+	- platform `string`
+	- expectStatusBar `boolean`
 
 Assuming you've defined a `customPalette` and `customTypekit`, declaring a custom theme with `getComponentStyles` might look like this:
 
@@ -120,4 +120,4 @@ Assuming you've defined a `customPalette` and `customTypekit`, declaring a custo
 <a name="theme-provider"></a>
 ###Using the ThemeProvider
 
-The `ThemeProvider` component is a convenient top-level wrapper for your entire application's `mkapp` components. It takes care of setting a theme on context, doing device detection, and updating the theme accordingly. If you're planning on using mkapp as part of a Cordova project to build javascript apps for native device, it's highly recommended you take advantage of `ThemeProvider` and [hybrid components](#)
+The `ThemeProvider` component is a convenient top-level wrapper for your entire application's `mkapp` components. It takes care of setting a theme on context, doing device detection, and updating the theme accordingly. If you're planning on using mkapp as part of a Cordova project to build javascript apps for native devices, use the `ThemeProvider` and [hybrid components](#)
