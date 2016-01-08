@@ -105,12 +105,12 @@ Assuming you've defined a `customPalette` and `customTypekit`, declaring a custo
 	var customTheme = new MkappTheme(customPalette, customTypekit, function(palette,typekit,themeOptions){
 		return {
 			navBar: {
-				bgColor: themeOptions.preferMaterial ? palette.primary1Color : primary2Color,
-				textColor: themeOptions.preferMaterial ? palette.accent1Color : accent2Color
+				bgColor: themeOptions.preferMaterial ? palette.primary1Color : palette.primary2Color,
+				textColor: themeOptions.preferMaterial ? palette.accent1Color : palette.accent2Color
 			},
 			view: {
 				fontWeight: typekit.THIN,
-				bgImage: themeOptions.onDevice ? "url(assets/img/goku-eating-a-pineapple.jpg)" : null
+				bgImage: themeOptions.onDevice ? "url(assets/img/corgi.jpg)" : null
 			}
 		};				
 	});
