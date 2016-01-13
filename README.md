@@ -9,10 +9,7 @@
 If you experience errors when using the global installation, install locally to your project, and the global package will find the local version and use it when
 you run `mkapp` from the terminal.
 
-Alternatively, if installed only locally, adding then following to your shell configuration file (`.bashrc`, `.bash_profile`, etc.) will allow you to run local binaries
-from the command line.
-
-`export PATH=./node_modules/.bin:$PATH`
+Alternatively, if installed locally, set an environment alias `alias mkapp='node ./node_modules/.bin/mkapp'` to use from the command line
 
 
 ===
