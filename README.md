@@ -4,11 +4,16 @@
 
 ### Installation
 
-`npm install mkapp`
+`npm install mkapp` or `npm install mkapp -g`
 
-optionally, to run local node binaries from the command line (not installing them globally), add this to your `.bashrc`
+If you experience errors when using the global installation, install locally to your project, and the global package will find the local version and use it when
+you run `mkapp` from the terminal.
+
+Alternatively, if installed only locally, adding then following to your shell configuration file (`.bashrc`, `.bash_profile`, etc.) will allow you to run local binaries
+from the command line.
 
 `export PATH=./node_modules/.bin:$PATH`
+
 
 ===
 
@@ -20,13 +25,13 @@ optionally, to run local node binaries from the command line (not installing the
 
 - Scaffolds out a new app and copy boilerplate into your project.
 - Make sure to run from your project root where __node_modules__ directory is located
-- copies boilerplate project files from git repository into `./src`
+- copies boilerplate project files from __node_modules__ into `./src`
 
 
 
 #### Develop
 
-`mkapp go`
+`mkapp go` or `mkapp dev`
 
 - transpiles your public and server app into `dev/` using **babel**
 - bundles your public app into `dev/public`
@@ -37,9 +42,9 @@ optionally, to run local node binaries from the command line (not installing the
 - starts a live reload server for `src/public` and reloads `localhost:<port>/app` when files change
 - starts a live reload server for `src/admin` and reloads `localhost:<port>/admin` when files change
 - starts a `nodemon` process to restart the server when api files, middleware files, or index.js are changed
-- connects a reflux-nexus to the admin app and the public app
+- establishes a websocket connection (using condux) between the server, admin app, he public app
 
-* **NOTE:** default port is 3030, override with `export PORT=<port>`. This will override your config.PORT as well (in config.js), and flows down through the app
+* **NOTE:** default `<port>` is 3030, override it in your app's `mkapp_config.json`
 
 
 #### Build
@@ -60,13 +65,12 @@ optionally, to run local node binaries from the command line (not installing the
 
 	root/
 	|-- package.json
-	|-- config.js
+	|-- mkapp_config.json
 	|-- .gitignore
 	|-- .eslintrc
 	|-- node_modules/
 	|-- dist/ (compiled and compressed app files, tracked in git)
 	|-- dev/ (compiled app files, not tracked in git)
-	|-- mkapp_config.js
 	|-- src/
 		|-- server/
 			|-- index.js
@@ -74,7 +78,7 @@ optionally, to run local node binaries from the command line (not installing the
 			|-- api/
 				|-- v1.0/
 					|-- index.js
-		|-- condux/
+		|-- condux/ ( websocket nexus, [see condux package](https://github.com/epferrari/condux) )
 			|-- admin/
 				|-- index.js
 				|-- actions.js
