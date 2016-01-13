@@ -128,6 +128,7 @@ function MkappTheme(palette,typekit,getComponentStyles){
 
 	// ensure constructor
 	if(!(this instanceof MkappTheme)) return new MkappTheme(palette,typekit,getComponentStyles);
+	if(typeof getComponentStyles !== 'function') getComponentStyles = function(){};
 
 	EventEmitter.call(this);
 
