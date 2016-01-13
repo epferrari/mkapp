@@ -1,6 +1,6 @@
 {
   "name": "mkapp",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "A CLI build tool for React + Condux",
   "bin": {
     "mkapp": "./bin/mkapp.js"
