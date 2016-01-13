@@ -1,5 +1,5 @@
 import conduxServer from '../';
-import adminActions from '../adminActions.js';
+import adminActions from '../adminAppActions.js';
 
 var log = [];
 
@@ -21,18 +21,18 @@ module.exports = conduxServer.createStore('/demo',{
 	},
 	onACTION_A(payload){
 		let entry = createEntry(payload);
-    this.trigger(updateLog(entry));
+		this.trigger(updateLog(entry));
 	},
-  onACTION_B(payload){
+	onACTION_B(payload){
 		let entry = createEntry(payload);
-    this.trigger(updateLog(entry));
+		this.trigger(updateLog(entry));
 	},
-  onACTION_C(payload){
+	onACTION_C(payload){
 		let entry = createEntry(payload);
-    this.trigger(updateLog(entry));
+		this.trigger(updateLog(entry));
 	},
-  onACTION_D(payload){
+	onACTION_D(payload){
 		let entry = createEntry(payload);
-    this.trigger(updateLog(entry));
+		this.trigger(updateLog(entry));
 	}
 });

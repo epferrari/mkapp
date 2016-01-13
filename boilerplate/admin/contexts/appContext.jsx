@@ -1,6 +1,5 @@
 import Context from '@epferrari/react-context-utility';
 import mui from 'material-ui';
-import theme from '../styles/theme.js';
 import Promise from 'bluebird';
 import {merge} from 'lodash';
 
@@ -72,7 +71,6 @@ var cordovaEnv = {
 
 const appContext = new Context({
 	muiTheme: [customTheme,"object"],
-	appTheme: [theme,"object"],
 	cordovaEnv: [cordovaEnv,"object"]
 });
 
