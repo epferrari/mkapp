@@ -9,7 +9,7 @@
 If you experience errors when using the global installation, install locally to your project, and the global package will find the local version and use it when
 you run `mkapp` from the terminal.
 
-Alternatively, if installed locally, set an environment alias `alias mkapp='node ./node_modules/.bin/mkapp'` to use from the command line
+Alternatively, if installed locally, set an environment alias `alias mkapp='node ./node_modules/.bin/mkapp'` to use from the command line.
 
 
 ===
@@ -43,6 +43,9 @@ Alternatively, if installed locally, set an environment alias `alias mkapp='node
 
 * **NOTE:** default `<port>` is 3030, override it in your app's `mkapp_config.json`
 
+#### Theming
+
+see the [MkappTheme Documentation](https://github.com/epferrari/mkapp/blob/master/docs/mkapp-theme.md)
 
 #### Build
 
