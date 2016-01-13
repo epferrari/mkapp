@@ -120,21 +120,11 @@ Assuming you've defined a `customPalette` and `customTypekit`, declaring a custo
 <a name="theme-provider"></a>
 ## Using the ThemeProvider Component
 
-The `ThemeProvider` component is a convenient top-level wrapper for your
-	entire application's `mkapp` components. It takes care of setting a theme on
-	context, doing device detection, and updating the theme accordingly. If you're
-	planning on using mkapp as part of a Cordova project to build javascript
-	apps for native devices, use the `ThemeProvider` and [hybrid components](#).
-
-
-
-| Prop | PropType | Default | Description |
-| --- | --- | --- | --- |
-| [mkappTheme] | <code>object</code> | <code>&lt;MkappTheme instance&gt;</code> | a `MkappTheme` instance |
-| [detectDevice] | <code>boolean</code> | <code>true</code> | Should the ThemeProvider listen to Cordova's 	`deviceready` event and respond by updating some styles internally? |
-| [autoUpdate] | <code>boolean</code> | <code>true</code> | Should the ThemeProvider update all components 	in its render tree when its theme is updated? |
-| [expectStatusBar] | <code>boolean</code> | <code>true</code> | Should the ThemeProvider add extra padding 	to the navigation bar and views to offset for a device status bar? 	`detectDevice` must be set to true for this to take effect |
-
+{{#globals name="ThemeProvider"}}
+{{>body~}}
+{{>separator~}}
+{{>members~}}
+{{/globals}}
 
 ###### A simple example
 	var customTheme = new MkappTheme(customPalette);
@@ -187,88 +177,8 @@ When a theme is updated via any of its four `set*` methods, the theme's internal
 <a name="theme-api"></a>
 # Theme API
 
-
-<a name="new_MkappTheme_new"></a>
-### new MkappTheme(palette, typekit, [getComponentStyles])
-
-
-| Prop | PropType | Description |
-| --- | --- | --- |
-| palette | <code>object</code> | color palette to constuct component styles with |
-| typekit | <code>object</code> | typography to construct component styles with |
-| [getComponentStyles] | <code>function</code> &#124; <code>object</code> | a function that returns a component style object, or a style object literal. 	Accepts parameters `palette (object)`,`typekit (object)`, and `themeOptions (object)` |
-
-<a name="MkappTheme+options"></a>
-### mkappTheme.options
-current option state of a theme: `preferMaterial`,`onDevice`,`expectStatusBar`,and `platform`
-
-
-<a name="MkappTheme+getPalette"></a>
-### mkappTheme.getPalette()
-get a theme's palette
-
-
-<a name="MkappTheme+setPalette"></a>
-### mkappTheme.setPalette(newPalette)
-update a theme's palette
-
-
-**Emits**: <code>[update](#MkappTheme+event_update)</code>  
-
-| Prop | PropType | Description |
-| --- | --- | --- |
-| newPalette | <code>object</code> | the new palette to merge into the theme's existing palette |
-
-<a name="MkappTheme+getTypekit"></a>
-### mkappTheme.getTypekit()
-get a theme's typekit
-
-
-<a name="MkappTheme+setTypekit"></a>
-### mkappTheme.setTypekit(newTypekit)
-update a theme's typekit
-
-
-**Emits**: <code>[update](#MkappTheme+event_update)</code>  
-
-| Prop | PropType | Description |
-| --- | --- | --- |
-| newTypekit | <code>object</code> | the new typekit to merge into the theme's existing typekit |
-
-<a name="MkappTheme+getComponentStyles"></a>
-### mkappTheme.getComponentStyles([componentName])
-get a theme's componentStyles object
-
-
-
-| Prop | PropType | Description |
-| --- | --- | --- |
-| [componentName] | <code>string</code> | the key name of the component to retreive styles for. 		if nothing is passed, the entire component styles collection is returned. |
-
-<a name="MkappTheme+setComponentStyles"></a>
-### mkappTheme.setComponentStyles(newStyles)
-update a theme's component styles
-
-
-**Emits**: <code>[update](#MkappTheme+event_update)</code>  
-
-| Prop | PropType | Description |
-| --- | --- | --- |
-| newStyles | <code>object</code> &#124; <code>function</code> | the new component styles definition. If 		passed as a function, the function will be called with `(palette,typekit,themeOptions)`, 		and should return a componentStyles object to be merged into the theme's current 		componentStyles. |
-
-<a name="MkappTheme+setOptions"></a>
-### mkappTheme.setOptions(newOptions)
-update a theme's options state
-
-
-**Emits**: <code>[update](#MkappTheme+event_update)</code>  
-
-| Prop | PropType | Description |
-| --- | --- | --- |
-| newOptions | <code>object</code> | new options the theme will use to create component styles. |
-
-<a name="MkappTheme+event_update"></a>
-### "update"
-Event: emitted when theme is changed
-
-
+{{#class name="MkappTheme"}}
+{{>body~}}
+{{>separator~}}
+{{>members~}}
+{{/class}}

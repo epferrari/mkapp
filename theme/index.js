@@ -51,6 +51,7 @@ function clone(object){
 * @param {object} palette
 * @param {object} typekit
 * @param {object} themeOptions
+* @private
 */
 function defaultComponentStyles(palette,typekit,themeOptions){
 	return clone({
@@ -83,6 +84,7 @@ function defaultComponentStyles(palette,typekit,themeOptions){
 * @param {object} palette
 * @param {object} typekit
 * @param {object} themeOptions
+* @private
 */
 function getImmutableStyles(palette,typekit,themeOptions){
 	var offsetForStatusBar = (themeOptions.expectStatusBar && themeOptions.onDevice) ? 20 : 0;
@@ -103,19 +105,20 @@ function getImmutableStyles(palette,typekit,themeOptions){
 
 
 function uniqueID(){
-  function chr4(){
-    return Math.random().toString(16).slice(-4);
-  }
-  return chr4() + chr4() +
-    '-' + chr4() +
-    '-' + chr4() +
-    '-' + chr4() +
-    '-' + chr4() + chr4() + chr4();
+	function chr4(){
+		return Math.random().toString(16).slice(-4);
+	}
+	return chr4() + chr4() +
+		'-' + chr4() +
+		'-' + chr4() +
+		'-' + chr4() +
+		'-' + chr4() + chr4() + chr4();
 }
 
 
 /**
-*
+* @class
+* @name MkappTheme
 * @param {object} palette - color palette to constuct component styles with
 * @param {object} typekit - typography to construct component styles with
 * @param {function|object} [getComponentStyles] - a function that returns a component style object, or a style object literal.
@@ -128,12 +131,17 @@ function MkappTheme(palette,typekit,getComponentStyles){
 
 	EventEmitter.call(this);
 
+	/**
+	* Event: emitted when theme is changed
+	* @event MkappTheme#update
+	*/
+
 	/*
 	*
 	* private properties
 	*
 	*/
-	
+
 	var _id,componentStyles,themeOptions;
 
 	_id = uniqueID();
@@ -164,6 +172,13 @@ function MkappTheme(palette,typekit,getComponentStyles){
 		enumerable: false
 	});
 
+	/**
+	*
+	* current option state of a theme: `preferMaterial`,`onDevice`,`expectStatusBar`,and `platform`
+	* @name options
+	* @instance
+	* @memberof MkappTheme
+	*/
 	Object.defineProperty(this,'options',{
 		get: function(){
 			return merge({},themeOptions);
@@ -204,39 +219,108 @@ function MkappTheme(palette,typekit,getComponentStyles){
 	*
 	*/
 
+	/**
+	*
+	* get a theme's palette
+	* @name getPalette
+	* @instance
+	* @memberof MkappTheme
+	* @method
+	*/
 	this.getPalette = function getPalette(){
 		return clone(palette);
 	};
 
+	/**
+	*
+	* update a theme's palette
+	* @name setPalette
+	* @instance
+	* @memberof MkappTheme
+	* @method
+	* @param {object} newPalette - the new palette to merge into the theme's existing palette
+	* @emits MkappTheme#update
+	*/
 	this.setPalette = function setPalette(newPalette){
 		palette = merge({},palette,newPalette);
 		this.emit('update');
 		return clone(palette);
 	};
 
+	/**
+	*
+	* get a theme's typekit
+	* @name getTypekit
+	* @instance
+	* @memberof MkappTheme
+	* @method
+	*/
 	this.getTypekit = function getTypekit(){
 		return clone(typekit);
 	};
 
+	/**
+	*
+	* update a theme's typekit
+	* @name setTypekit
+	* @instance
+	* @memberof MkappTheme
+	* @method
+	* @param {object} newTypekit - the new typekit to merge into the theme's existing typekit
+	* @emits MkappTheme#update
+	*/
 	this.setTypekit = function setTypekit(newTypekit){
 		typekit = merge({},typekit,newTypekit);
 		this.emit('update');
 		return clone(typekit);
 	};
 
-	this.getComponentStyles = function getComponentStyles(component){
-		if(component !== undefined){
-			return clone(componentStyles[component]);
+	/**
+	*
+	* get a theme's componentStyles object
+	* @name getComponentStyles
+	* @instance
+	* @memberof MkappTheme
+	* @method
+	* @param {string} [componentName] - the key name of the component to retreive styles for.
+		if nothing is passed, the entire component styles collection is returned.
+	*/
+	this.getComponentStyles = function getComponentStyles(componentName){
+		if(componentName !== undefined){
+			return clone(componentStyles[componentName]);
 		}else{
 			return clone(componentStyles);
 		}
 	};
 
+	/**
+	*
+	* update a theme's component styles
+	* @name setComponentStyles
+	* @instance
+	* @memberof MkappTheme
+	* @method
+	* @param {object|function} newStyles - the new component styles definition. If
+		passed as a function, the function will be called with `(palette,typekit,themeOptions)`,
+		and should return a componentStyles object to be merged into the theme's current
+		componentStyles.
+	* @emits MkappTheme#update
+	*/
 	this.setComponentStyles = function setComponentStyles(newStyles){
 		componentStyles = updateComponentStyles(componentStyles,newStyles);
 		this.emit('update');
 	};
 
+	/**
+	*
+	* update a theme's options state
+	* @name setOptions
+	* @instance
+	* @memberof MkappTheme
+	* @method
+	* @param {object} newOptions - new options the theme will use to create component styles.
+	* @emits MkappTheme#update
+	*/
 	this.setOptions = function setOptions(newOptions){
 		var lastOptions = themeOptions;
 		var configurableOptions = ['preferMaterial','onDevice','expectStatusBar','platform'];
