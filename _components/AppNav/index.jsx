@@ -86,19 +86,22 @@ var AppNav = React.createClass({
 
 	render(){
 		let styles = this.prepareStyles();
-    let navbarProps = pick(this.props,[
-      'textColor',
-      'navbarColor',
-      'title',
-      'menuButtonLabel',
-      'menuButtonIconElement',
-      'connectionStatus'
-    ]);
+		let navbarProps = pick(this.props,[
+			'navbarTextColor',
+			'navbarColor',
+			'title',
+			'menuButtonLabel',
+			'menuButtonIconElement',
+			'connectionStatus'
+		]);
+
+		navbarProps.textColor = navbarProps.navbarTextColor;
+		delete navbarProps.navbarTextColor;
 
 		let childCount = React.Children.count(this.props.children);
-    if(childCount === 1 || childCount > 2){
-      throw new Error('AppNav accepts exactly 2 children, a NavBar component and a NavMenu component. Check the render method of AppNav');
-    }
+		if(childCount === 1 || childCount > 2){
+			throw new Error('AppNav accepts exactly 2 children, a NavBar component and a NavMenu component. Check the render method of AppNav');
+		}
 		if(childCount === 0){
 			return (
 				<div style={styles.appnav} onClick={() => this.hideMenu()}>
@@ -115,45 +118,45 @@ var AppNav = React.createClass({
 		} else {
 			return (
 				<div style={styles.appnav} onClick={() => this.hideMenu()}>
-	        {React.Children.map(this.props.children,(child,index) => {
-	          if(index === 0){
-	            // NavBar Component
-	            return React.cloneElement(child,merge(
-	                {},
-	                navbarProps,
-	                {
-	                  showActivity: this.props.isLoading,
-	                  onMenuButtonClick: this.showMenu
-	                }
-	              )
-	            );
-	          } else if(index === 1){
-	            // Menu Component
-	            return React.cloneElement(child,{
-	              open: this.state.menuActive,
-	              onExit: this.menuDidLeave,
-	              style: merge({},styles.menu_OVERLAY,child.props.style),
-	              closeButtonStyles: merge({},styles.menu_CLOSE_BUTTON,child.props.closeButtonStyles),
-	              menuItems: this.props.menuItems,
-	              onRouteSelection: this.closeAndRoute
-	            });
-	          }
-	        })}
+					{React.Children.map(this.props.children,(child,index) => {
+						if(index === 0){
+							// NavBar Component
+							return React.cloneElement(child,merge(
+									{},
+									navbarProps,
+									{
+										showActivity: this.props.isLoading,
+										onMenuButtonClick: this.showMenu
+									}
+								)
+							);
+						} else if(index === 1){
+							// Menu Component
+							return React.cloneElement(child,{
+								open: this.state.menuActive,
+								onExit: this.menuDidLeave,
+								style: merge({},styles.menu_OVERLAY,child.props.style),
+								closeButtonStyles: merge({},styles.menu_CLOSE_BUTTON,child.props.closeButtonStyles),
+								menuItems: this.props.menuItems,
+								onRouteSelection: this.closeAndRoute
+							});
+						}
+					})}
 				</div>
 			);
 		}
 	},
 
 	prepareStyles(){
-    let baseStyles = this.getBaseStyles();
-    let menuStyles = {
-      props: (this.props.menuStyle || {}),
-      theme: this.getThemeStyles('navMenu'),
-      merged: {}
-    };
+		let baseStyles = this.getBaseStyles();
+		let menuStyles = {
+			props: (this.props.menuStyle || {}),
+			theme: this.getThemeStyles('navMenu'),
+			merged: {}
+		};
 
-    // only allow subset of styles to be overridden
-    let menuStyleKeys = [
+		// only allow subset of styles to be overridden
+		let menuStyleKeys = [
 			'backgroundColor',
 			'backgroundPosition',
 			'backgroundRepeat',
@@ -161,23 +164,23 @@ var AppNav = React.createClass({
 			'width',
 			'maxWidth',
 			'minWidth',
-      'color',
-      'fontWeight'
+			'color',
+			'fontWeight'
 		];
 
-    menuStyles.merged = pick(
-      MkappThemeStyleMerger(menuStyles.props,menuStyles.theme),
-      menuStyleKeys
-    );
+		menuStyles.merged = pick(
+			MkappThemeStyleMerger(menuStyles.props,menuStyles.theme),
+			menuStyleKeys
+		);
 
-    // render with full screen height or collapsed navbar height
-    let menuActive = (this.state.menuActive);
+		// render with full screen height or collapsed navbar height
+		let menuActive = (this.state.menuActive);
 
 		return merge({},baseStyles,{
-      appnav: merge({},baseStyles.appnav_BASE,(menuActive && baseStyles.appnav_OPEN) ),
-      menu_OVERLAY: merge({},menuStyles.merged),
-      menu_CLOSE_BUTTON: merge({},menuStyles.merged,this.props.closeButtonStyles)
-    });
+			appnav: merge({},baseStyles.appnav_BASE,(menuActive && baseStyles.appnav_OPEN) ),
+			menu_OVERLAY: merge({},menuStyles.merged),
+			menu_CLOSE_BUTTON: merge({},menuStyles.merged,this.props.closeButtonStyles)
+		});
 	},
 
 	getBaseStyles(){
