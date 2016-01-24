@@ -4,12 +4,11 @@
 
 ### Installation
 
-`npm install mkapp` or `npm install mkapp -g`
+`npm install mkapp --save`
 
-If you experience errors when using the global installation, install locally to your project, and the global package will find the local version and use it when
-you run `mkapp` from the terminal.
+Install the command line tools globally with `npm install mkapp-cli -g`
 
-Alternatively, if installed locally, set an environment alias `alias mkapp='node ./node_modules/.bin/mkapp'` to use from the command line.
+Alternatively, if installed locally, set an environment alias `alias mkapp='node ./node_modules/.bin/mkapp'` to use from the command line without installing the cli.
 
 
 ===
