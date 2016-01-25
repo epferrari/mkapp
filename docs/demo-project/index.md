@@ -24,12 +24,12 @@ This should be `path/to/your/global/node/installation/bin/mkapp`. Once confirmed
 The global `mkapp-cli` will look for a local copy of `mkapp` using Node's `resolve()` algorithm. Once it finds the local installation, you
 will be prompted to define some configuration keys. They are as follows:
 
-**Source Directory:** where your project files live. The boilerplate project files will get copied here. Keep it at the root level.
-**Development Directory:** where source files are compiled/transpiled into browser-ready code. This is where your app will live as you develop, and where the livereload server will serve files from when you run `mkapp dev`.
-**Distribution Directory:** where the concatenated and minified files for your distribution app will be saved when you run `mkapp dist`
-**Host for Condux Server:** url for the websocket server that keeps your client/admin/and server apps connected in real time. Default is `localhost`
-**Host for API Server:** url where the API server can be reached. Default is `localhost`.
-**Port:** Port for the condux server and files. Default is 3030
+- **Source Directory:** where your project files live. The boilerplate project files will get copied here. Keep it at the root level.
+- **Development Directory:** where source files are compiled/transpiled into browser-ready code. This is where your app will live as you develop, and where the livereload server will serve files from when you run `mkapp dev`.
+- **Distribution Directory:** where the concatenated and minified files for your distribution app will be saved when you run `mkapp dist`
+- **Host for Condux Server:** url for the websocket server that keeps your client/admin/and server apps connected in real time. Default is `localhost`
+- **Host for API Server:** url where the API server can be reached. Default is `localhost`.
+- **Port:** Port for the condux server and files. Default is 3030
 
 Next `mkapp` will scaffold and install a boilerplate project in the Source directory you specified in the configuration. This will be the basis for our project.
 Assuming you've cloned the project already, checkout a new branch pointing to our progress so far with `git checkout -b 1_setup 1_setup`.
