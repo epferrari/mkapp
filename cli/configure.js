@@ -32,7 +32,7 @@ function promptConfigOverwrite(){
 function copyConfigFile(){
 	return new Promise(function(resolve,reject){
 		var pathToDefaultConfig = join(APP_ROOT,'./node_modules/mkapp/mkapp_config.json');
-		var copiedConfig = shell.cp(pathToDefaultConfig,APP_ROOT);
+		var copiedConfig = shell.cp('-f',pathToDefaultConfig,APP_ROOT);
 		if(copiedConfig && copiedConfig.code !== 0){
 			reject('unable to copy mkapp_config.json from mkapp package');
 		}else{
