@@ -42,6 +42,7 @@
     "@epferrari/react-context-utility": "^1.0.2",
     "@epferrari/react-fa-icon": "^1.0.1",
     "adm-zip": "^0.4.7",
+    "app-root-path": "^1.0.0",
     "autoprefixer": "^6.1.0",
     "babel": "^6.0.15",
     "babel-core": "^6.1.2",
