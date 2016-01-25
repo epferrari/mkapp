@@ -3,28 +3,87 @@ var clc = require('cli-color');
 var shell = require('shelljs');
 var Promise = require('bluebird');
 var resolve = require('resolve');
+var join = require('path').join;
+var fs = require('fs');
 
+Promise.promisifyAll(fs);
+
+var configure = require('./configure');
 var downloadBoilerplate = require('./download-boilerplate');
 var copyBoilerplate = require('./copy-boilerplate');
-
 var scaffold = require('./scaffold.js');
 var yesOrNo = require('./promptAsync.js').yesOrNo;
 
+var APP_ROOT = require('app-root-path').toString();
+var CONFIG_PATH = join(APP_ROOT,'./mkapp_config.json');
 
-function promptSrcOverwrite(resolve,reject){
 
-	if(shell.test('-d','./src')){
-		process.stdout.write('\x07');
-		logAlert('Your src directory isn\'t empty, do you want to overwrite it?');
-		return yesOrNo('Overwrite?'.yellow,'N')
-		.then(resolve)
-		.catch(function(){
-			reject('SKIP');
-		});
-	} else {
-		resolve();
-	}
+
+function promptSrcOverwrite(srcDirectory){
+	return new Promise(function(resolve,reject){
+		if(shell.test('-d',join(APP_ROOT,srcDirectory))){
+			process.stdout.write('\x07');
+			logAlert('Your source directory ('+srcDirectory+') isn\'t empty, do you want to overwrite it?');
+			return yesOrNo('Overwrite?'.yellow,'N')
+			.then(resolve)
+			.catch(function(){
+				reject('SKIP');
+			});
+		} else {
+			resolve();
+		}
+	});
 }
+
+
+module.exports = function mkappInit(version){
+	console.log(clc.bold('Welcome to mkapp! This will walk you through project setup'));
+
+	var config = {};
+
+	return configure()
+	.then(function(){
+		return fs.readFileAsync(CONFIG_PATH,'utf-8');
+	})
+	.then(function(data){
+		config = JSON.parse(data);
+	})
+	.then(function(){
+		return promptSrcOverwrite(config.SRC_DIR);
+	})
+	.then(function(){
+		return scaffold(config.SRC_DIR);
+	})
+	.then(function(){
+		var getBoilerplate;
+		try{
+			// local node_modules/mkapp, copy from installed mkapp package
+			var localMkapp = require( resolve.sync('mkapp',{basedir: process.cwd()}) );
+			getBoilerplate = copyBoilerplate;
+		}catch(err){
+			console.log('no local mkapp?)');
+			// no local node_modules/mkapp, download boilerplate from github and check version matches globally installed mkapp
+			getBoilerplate = downloadBoilerplate;
+		}
+		return getBoilerplate(config.SRC_DIR,version);
+	})
+	.catch(function(err){
+		if(err !== 'SKIP') return Promise.reject(err);
+	})
+	.then(function(){
+		logSuccess('App setup complete!');
+		console.log(clc.green('Review the mkapp_config.json file, then type ') + clc.white.bgGreen(' mkapp go '))
+	})
+	.catch(function(err){
+		if(err === 'ABORT'){
+			console.log('Setup Canceled');
+		}else{
+			logError(err);
+		}
+	});
+}
+
+
 
 function logError(err){
 	console.log(clc.red('An error occurred initializing app. Error: ' + err));
@@ -36,48 +95,4 @@ function logSuccess(msg){
 
 function logAlert(msg){
 	console.log(clc.yellow(msg));
-}
-
-
-module.exports = function mkappInit(version){
-	console.log(clc.bold('Welcome to mkapp! This will walk you through project setup'));
-
-	return new Promise(promptSrcOverwrite)
-	.then(function(){
-		return scaffold('./src');
-	})
-	.then(function(){
-		var boilerplate;
-		console.log(process.cwd());
-		try{
-			// local node_modules/mkapp, copy from installed mkapp package
-			var localMkapp = require( resolve.sync('mkapp',{basedir: process.cwd()}) );
-			boilerplate = copyBoilerplate;
-		}catch(err){
-			console.log(err);
-			console.log('no local mkapp?)');
-			// no local node_modules/mkapp, download boilerplate from github and check version matches globally installed mkapp
-			boilerplate = downloadBoilerplate;
-		}
-		return boilerplate(version);
-	})
-	.catch(function(err){
-		if(err !== 'SKIP') return Promise.reject(err);
-	})
-	.then(function(){
-		logSuccess('App setup complete!');
-		if(!shell.test('-f','./mkapp_config.json')) {
-			process.stdout.write('\x07');
-			logAlert("Don't forget to create a mkapp_config.json at your project root");
-		}else{
-			console.log(clc.green('Review the mkapp_config.json file, then type ') + clc.white.bgGreen(' mkapp go '))
-		}
-	})
-	.catch(function(err){
-		if(err === 'ABORT'){
-			console.log('Setup Canceled');
-		}else{
-			logError(err);
-		}
-	});
 }

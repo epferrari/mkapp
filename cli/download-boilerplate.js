@@ -1,16 +1,18 @@
 var Promise = require('bluebird');
 var clc = require('cli-color');
-var __src = require('./constants.js').__src;
 var ghd = require('github-download');
 var AdmZip = require('adm-zip');
 var shell = require('shelljs');
 var yesOrNo = require('./promptAsync.js').yesOrNo;
+var join = require('path').join;
+var APP_ROOT = require('app-root-path').toString();
+var CONFIG_PATH = join(APP_ROOT,'/mkapp_config.json');
 
 var fs = Promise.promisifyAll(require('fs-extra'));
 var ncp = Promise.promisify(require('ncp').ncp);
 var remote = 'https://github.com/epferrari/mkapp.git';
-var tmpfile = './tmp.zip';
-var tmpdir = './tmp';
+var tmpfile = join(APP_ROOT,'./tmp.zip');
+var tmpdir = join(APP_ROOT,'./tmp');
 
 var SKIP = 'SKIP';
 var PROMPT = 'PROMPT';
@@ -18,7 +20,7 @@ var ABORT = 'ABORT';
 
 function promptConfigOverwrite(){
 	return new Promise(function(resolve,reject){
-		if(shell.test('-f','./mkapp_config.json')){
+		if(shell.test('-f',CONFIG_PATH)){
 			process.stdout.write('\x07');
 			console.log(clc.yellow('A mkapp_config.json file already exists in your project. Overwrite it?'));
 			yesOrNo('Overwrite mkapp_config.json?'.yellow,'N')
@@ -61,8 +63,8 @@ function reportIssue(err){
 	return err + ' -- Report issues at https://github.com/epferrari/mkapp/issues.'
 }
 
-module.exports = function downloadBoilerplate(installedMkappVersion){
-
+module.exports = function downloadBoilerplate(installDir,installedMkappVersion){
+	installDir = join(APP_ROOT,installDir);
 	return promptBoilerplateDownload()
 		.then(function(){
 			console.log('downloading boilerplate files from remote...');
@@ -89,8 +91,8 @@ module.exports = function downloadBoilerplate(installedMkappVersion){
 			zip.extractAllTo(tmpdir);
 		})
 		.then(function(){
-			console.log('...copying extracted files to '+__src);
-			return ncp(tmpdir+'/mkapp-master/boilerplate',__src);
+			console.log('...copying extracted files to '+installDir);
+			return ncp(tmpdir+'/mkapp-master/boilerplate',installDir);
 		})
 		.then(function(){
 			console.log(clc.green("Download complete"));

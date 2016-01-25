@@ -6,14 +6,15 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var babelify = require('babelify');
 var envify = require('envify');
+var APP_ROOT = require('app-root-path').toString();
+var config = require(APP_ROOT+'/mkapp_config.json');
 
 Promise.promisifyAll(fs,{context: fs});
 
 var lint = require('./lint');
-var constants = require('./constants');
 
-var __dev = constants.__dev;
-var __src = constants.__src;
+var DEV_DIR = config.DEV_DIR;
+var SRC_DIR = config.SRC_DIR;
 
 module.exports = bundler;
 
@@ -25,9 +26,9 @@ module.exports = bundler;
 function bundler(context,onUpdate){
 	if(["admin","public"].indexOf(context) === -1) return contextError;
 
-	var outfile = join(__dev,context,"/bundle.js");
+	var outfile = join(APP_ROOT,DEV_DIR,context,"/bundle.js");
 	var opts = {
-		entries:[join(__src,context,"/index.jsx")],
+		entries:[join(APP_ROOT,SRC_DIR,context,"/index.jsx")],
 		extensions: ['.js','.jsx'],
 		cache:{},
 		packageCache:{}
@@ -45,9 +46,9 @@ function bundler(context,onUpdate){
 	b.transform(envify);
 	b.plugin(watchify);
 
-  if(onUpdate) b.on('update',onUpdate);
+	if(onUpdate) b.on('update',onUpdate);
 
-  function _bundle(){
+	function _bundle(){
 		return new Promise(function(resolve,reject){
 
 			console.log('bundling javascript files for '+context);
@@ -68,14 +69,14 @@ function bundler(context,onUpdate){
 				reject(err);
 			});
 		});
-  }
+	}
 
-  function bundle(){
-    return fs.ensureFileAsync(outfile)
-    .then(_bundle);
-  }
+	function bundle(){
+		return fs.ensureFileAsync(outfile)
+		.then(_bundle);
+	}
 
-  return bundle;
+	return bundle;
 }
 
 function contextError(){

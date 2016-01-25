@@ -2,33 +2,31 @@ var fs = require('fs-extra');
 var join = require('path').join;
 var Promise = require('bluebird');
 var clc = require('cli-color');
+var APP_ROOT = require('app-root-path').toString();
+var config = require(APP_ROOT + '/mkapp_config.json');
 
-var constants = require('./constants');
-var __src = constants.__src;
-var __dist = constants.__dist;
-var __dev = constants.__dev;
+var SRC_DIR = config.SRC_DIR;
+var DIST_DIR = config.DIST_DIR;
+var DEV_DIR = config.DEV_DIR;
 
 Promise.promisifyAll(fs);
 
-module.exports = copyStatics;
+module.exports = function copy(){
+	var targetDir = (process.env.NODE_ENV === 'production') ? DIST_DIR : DEV_DIR;
 
-
-function copyStatics(){
-	var root = (process.env.NODE_ENV === 'production') ? __dist : __dev;
-
-	console.log('copying static files to '+root);
+	console.log('copying static files to '+targetDir);
 
 	console.log('copying admin files...');
-	return fs.copyAsync(join(__src,'admin/index.html'),join(root,'admin/index.html'))
+	return fs.copyAsync(join(APP_ROOT,SRC_DIR,'admin/index.html'),join(APP_ROOT,targetDir,'admin/index.html'))
 	.then(function(){
-		return fs.copyAsync(join(__src,'admin/assets'),join(root,'admin/assets'));
+		return fs.copyAsync(join(APP_ROOT,SRC_DIR,'admin/assets'),join(APP_ROOT,targetDir,'admin/assets'));
 	})
 	.then(function(){
 		console.log('copying public files...');
-		return fs.copyAsync(join(__src,'public/index.html'),join(root,'public/index.html'));
+		return fs.copyAsync(join(APP_ROOT,SRC_DIR,'public/index.html'),join(APP_ROOT,targetDir,'public/index.html'));
 	})
 	.then(function(){
-		return fs.copyAsync(join(__src,'public/assets'),join(root,'public/assets'));
+		return fs.copyAsync(join(APP_ROOT,SRC_DIR,'public/assets'),join(APP_ROOT,targetDir,'public/assets'));
 	})
 	.then(function(){
 		console.log(clc.green('Successfully copied static assets'));

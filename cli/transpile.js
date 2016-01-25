@@ -4,9 +4,17 @@ var glob = require('glob');
 var flatten = require('lodash').flatten;
 var fs = require('fs-extra');
 var clc = require('cli-color');
+var join = require('path').join;
+var APP_ROOT = require('app-root-path').toString();
+var config = require(APP_ROOT + '/mkapp_config.json');
+
+var SRC_DIR = config.SRC_DIR;
+var DEV_DIR = config.DEV_DIR;
+var DIST_DIR = config.DIST_DIR;
 
 var globAsync = Promise.promisify(glob);
 Promise.promisifyAll(fs,{context:fs});
+
 
 function transformFileAsync(file){
 	var babelOptions = {
@@ -26,22 +34,32 @@ module.exports = transpile;
 */
 function transpile(context){
 
-	if(["dev","dist"].indexOf(context) === -1) return contextError();
+	if(context === 'dev'){
+		targetDir = DEV_DIR;
+	} else if(context === 'dist'){
+		targetDir = DIST_DIR;
+	} else {
+		return contextError();
+	}
 
-	console.log('transpiling server javascript to %s',context);
+	console.log('transpiling server javascript for %s into %s',context,targetDir);
+
 	return Promise.all([
-		globAsync('./src/server/api/**/*.js'),
-		globAsync('./src/condux/**/*.js'),
-		globAsync('./src/middleware/**/*.js'),
-		globAsync('./src/utils/**/*.js')
+		globAsync( join(APP_ROOT,SRC_DIR,'/server/api/**/*.js') ),
+		globAsync( join(APP_ROOT,SRC_DIR,'/condux/**/*.js') ),
+		globAsync( join(APP_ROOT,SRC_DIR,'/middleware/**/*.js') ),
+		globAsync( join(APP_ROOT,SRC_DIR,'/utils/**/*.js') )
 	])
 	.then(function(files){
 		return flatten(files,true);
 	})
 	.map(function(fileName){
-		var outfile = fileName.replace('src',context); // context filename
+		var s = SRC_DIR.replace(/^(\.\/)(.*)$/,'$2');
+		var d = targetDir.replace(/^(\.\/)(.*)$/,'$2');
+		var outfile = fileName.replace(s,d); // context filename
 		var transformed = transformFileAsync(fileName); // babelified file
 		var ensured = fs.ensureFileAsync(outfile);
+
 		return Promise.join(outfile,transformed,ensured,function(outfile,transformed){
 			return {
 				dest: outfile,
@@ -53,17 +71,17 @@ function transpile(context){
 		return fs.writeFileAsync(file.dest,file.contents);
 	})
 	.then(function(){
-		return transformFileAsync('./src/server/index.js');
+		return transformFileAsync( join(APP_ROOT,SRC_DIR,'/server/index.js') );
 	})
 	.then(function(result){
-		return fs.writeFileAsync("./"+context+"/server/index.js",result.code);
+		return fs.writeFileAsync(join(APP_ROOT,targetDir,"/server/index.js"),result.code);
 	})
 	.then(function(){
 		var msg = 'transpilation complete!';
 		console.log(clc.green(msg));
 	});
-};
+}
 
 function contextError(){
-	return Promise.reject('Invalid context argument passed to `transpile`. Valid contexts are "dev" or "dist"');
+	return Promise.reject('Error: Invalid context argument passed to `transpile`. Valid arguments are are "dev" and "dist"');
 }

@@ -2,16 +2,19 @@ var Promise = require('bluebird');
 var fs = require('fs-extra');
 var clc = require('cli-color');
 var yesOrNo = require('./promptAsync').yesOrNo;
+var APP_ROOT = require('app-root-path').toString();
+var join = require('path').join;
 
 Promise.promisifyAll(fs);
 
 module.exports = clean;
 
 function clean(path,silent){
-	
+
+	var absPath = join(APP_ROOT,path);
 	return (silent ? Promise.resolve : areYouSure)(path)
 	.then(function(){
-		return fs.emptyDirAsync(path);
+		return fs.emptyDirAsync(absPath);
 	})
 	.then(function(){
 		var msg = "Cleaned directory "+path;

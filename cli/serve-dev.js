@@ -1,20 +1,30 @@
 var Promise = require('bluebird');
-var __dev = require('./constants.js').__dev;
 var nodemon = require('nodemon');
+var APP_ROOT = require('app-root-path').toString();
+var join = require('path').join;
+var CONFIG_PATH = join(APP_ROOT,'./mkapp_config.json');
 
-function startNodemonSync(resolve){
-	var server = __dev+"/server/index.js";
-	var api = __dev+"/server/api";
-	var middleware = __dev+"/server/middleware";
-	var utils = __dev+"/utils";
+function startNodemon(resolve){
+		var DEV_DIR = require(CONFIG_PATH).DEV_DIR;
 
-	var watching = ["",server,api,middleware,utils].join(" --watch ");
-	console.log('nodemon cli');
-	console.log(watching);
-	nodemon(watching+" "+server);
-	resolve();
+		console.log('nodemon cli');
+
+		var watching = [
+			join(DEV_DIR,"/server/index.js"),
+			join(DEV_DIR,"/server/api"),
+			join(DEV_DIR,"/server/middleware"),
+			join(DEV_DIR,"/utils")
+		]
+		.map(function(path){
+			console.log('watching '+ path);
+			return "--watch " + join(APP_ROOT,path);
+		})
+		.join(" ");
+
+		nodemon(watching+" "+ join(APP_ROOT,DEV_DIR,"/server/index.js"));
+		resolve();
 }
 
 module.exports = function serveAsync(){
-	return new Promise(startNodemonSync);
+	return new Promise(startNodemon);
 };

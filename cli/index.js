@@ -5,7 +5,7 @@ var resolve = require('resolve');
 var mkapp = require('commander');
 
 var init = require('./init');
-var go = require('./go');
+var dev = require('./go');
 var clean = require('./clean');
 var transpile = require('./transpile');
 var bundler = require('./bundler');
@@ -59,11 +59,11 @@ mkapp
 	});
 
 mkapp
-	.command('go')
-	.alias('dev')
+	.command('dev')
+	.alias('go')
 	.description('Build app and run in a local dev environment at http://localhost:<PORT>, where PORT is defined in mkapp_config.json')
 	.action(function(){
-		go()
+		dev()
 		.catch(function(err){
 			console.log(clc.red.bold('Zoiks, something went horribly wrong. Better fetch a bucket...'));
 			console.log(clc.red(err));
