@@ -21,7 +21,7 @@ var server = app.listen(port,hostname,() => {
 });
 
 if(process.env.NODE_ENV !== 'production'){
-	var exts = ['js','jsx','css','png','jpg'];
+	var exts = ['js','jsx','css','png','jpg','html'];
 	var livereload = require('livereload');
 	var publicDevServer = livereload.createServer({
 		exts: exts,

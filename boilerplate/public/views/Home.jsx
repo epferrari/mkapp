@@ -22,7 +22,8 @@ var buttonStyle = {
 	display: "block",
 	marginLeft: "auto",
 	marginRight: "auto",
-	padding: 3
+	padding: 3,
+	marginTop:5
 };
 
 var innerButtonStyle = {
@@ -100,7 +101,7 @@ var Home = React.createClass({
 				onExit={() => {if(this.state.openDrawer === 5) this.setState({openDrawer: null});}}>
 				<FlatTouchButton
 					style={innerButtonStyle}
-					onClick={() => this.open(3)}>Close NotifyBar</FlatTouchButton>
+					onClick={() => this.open(5)}>Close NotifyBar</FlatTouchButton>
 			</NotifyBarTop>,
 
 			<NotifyBarBottom
@@ -109,7 +110,7 @@ var Home = React.createClass({
 				onExit={() => {if(this.state.openDrawer === 6) this.setState({openDrawer: null});}}>
 				<FlatTouchButton
 					style={innerButtonStyle}
-					onClick={() => this.open(3)}>Close NotifyBar</FlatTouchButton>
+					onClick={() => this.open(6)}>Close NotifyBar</FlatTouchButton>
 			</NotifyBarBottom>,
 		];
 	},
