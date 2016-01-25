@@ -3,7 +3,6 @@ var fs = require('fs');
 var clc = require('cli-color');
 var join = require('path').join;
 var APP_ROOT = require('app-root-path').toString();
-var config = require(APP_ROOT + '/mkapp_config.json');
 
 Promise.promisifyAll(fs);
 
