@@ -7,14 +7,13 @@ var watchify = require('watchify');
 var babelify = require('babelify');
 var envify = require('envify');
 var APP_ROOT = require('app-root-path').toString();
-var config = require(APP_ROOT+'/mkapp_config.json');
+
 
 Promise.promisifyAll(fs,{context: fs});
 
 var lint = require('./lint');
 
-var DEV_DIR = config.DEV_DIR;
-var SRC_DIR = config.SRC_DIR;
+
 
 module.exports = bundler;
 
@@ -25,6 +24,10 @@ module.exports = bundler;
 */
 function bundler(context,onUpdate){
 	if(["admin","public"].indexOf(context) === -1) return contextError;
+
+	var config = require(APP_ROOT+'/mkapp_config.json');
+	var DEV_DIR = config.DEV_DIR;
+	var SRC_DIR = config.SRC_DIR;
 
 	var outfile = join(APP_ROOT,DEV_DIR,context,"/bundle.js");
 	var opts = {

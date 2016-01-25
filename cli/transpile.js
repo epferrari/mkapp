@@ -6,11 +6,7 @@ var fs = require('fs-extra');
 var clc = require('cli-color');
 var join = require('path').join;
 var APP_ROOT = require('app-root-path').toString();
-var config = require(APP_ROOT + '/mkapp_config.json');
 
-var SRC_DIR = config.SRC_DIR;
-var DEV_DIR = config.DEV_DIR;
-var DIST_DIR = config.DIST_DIR;
 
 var globAsync = Promise.promisify(glob);
 Promise.promisifyAll(fs,{context:fs});
@@ -33,6 +29,11 @@ module.exports = transpile;
 * @returns {Promise}
 */
 function transpile(context){
+
+	var config = require(APP_ROOT + '/mkapp_config.json');
+	var SRC_DIR = config.SRC_DIR;
+	var DEV_DIR = config.DEV_DIR;
+	var DIST_DIR = config.DIST_DIR;
 
 	if(context === 'dev'){
 		targetDir = DEV_DIR;
