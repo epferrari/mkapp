@@ -36,7 +36,7 @@ var NotifyBarBottom = React.createClass({
 		return (
 			<Overlay
 				focusOnEnter={false}
-				closeButton={true}
+				closeButton={false}
 				{...this.props}
 				style={this.prepareStyles()}
 				position="bottom">

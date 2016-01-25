@@ -35,7 +35,7 @@ const Overlay = React.createClass({
 			position: 'top',
 			onExit: function(){ return true; },
 			focusOnEnter: true,
-			closeButton: true
+			closeButton: false
 		};
 	},
 
