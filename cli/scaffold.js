@@ -9,11 +9,6 @@ Promise.promisifyAll(fs);
 var clean = require('./clean');
 
 var dirs = [
-	"admin",
-	"admin/assets",
-	"admin/assets/fonts",
-	"admin/assets/img",
-	"admin/assets/styles",
 	"condux",
 	"condux/admin",
 	"condux/admin/frequencies",
@@ -34,15 +29,26 @@ var dirs = [
 	"utils"
 ];
 
+var adminDirs = [
+	"admin",
+	"admin/assets",
+	"admin/assets/fonts",
+	"admin/assets/img",
+	"admin/assets/styles"
+];
 
-module.exports = function scaffold(dest){
-	return clean(dest,true)
+
+module.exports = function scaffold(destDir,createAdmin){
+
+	var _dirs = dirs.concat(createAdmin ? adminDirs : []);
+
+	return clean(destDir,true)
 	.then(function(){
-		return Promise.mapSeries(dirs,function(dirname){
-			return fs.mkdirAsync(join(APP_ROOT,dest,dirname));
+		return Promise.mapSeries(_dirs,function(dirname){
+			return fs.mkdirAsync(join(APP_ROOT,destDir,dirname));
 		});
 	})
 	.then(function(){
-		console.log(clc.green('Successfully scaffolded '+dest));
+		console.log(clc.green('Successfully scaffolded '+destDir));
 	})
 }
