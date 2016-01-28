@@ -52,7 +52,9 @@ module.exports = function configure(){
 		PORT: 3030,
 		SRC_DIR: './src',
 		DEV_DIR: './dev',
-		DIST_DIR: './dist'
+		DIST_DIR: './dist',
+		CREATE_ADMIN_APP: true,
+		COMPRESS_DIST_CSS: true
 	};
 
 	return promptConfigOverwrite()
@@ -79,47 +81,73 @@ module.exports = function configure(){
 					name: 'SRC_DIR',
 					description: 'Directory for source files',
 					type: 'string',
-					pattern: /^\.\/.*[^\/]$/,
-					message: 'Directory name must begin with `./` and should not end with `/`',
+					pattern: /^\.\/[^\/]+$/,
+					message: 'Directory name must begin with `./` and be in the root directory',
 					default: config.SRC_DIR,
 					required: true
 				},{
 					name: 'DEV_DIR',
 					description: 'Development directory',
 					type: 'string',
-					pattern: /^\.\/.*[^\/]$/,
-					message: 'Directory name must begin with `./` and should not end with `/`',
+					pattern: /^\.\/[^\/]+$/,
+					message: 'Directory name must begin with `./` and be in the root directory',
 					default: config.DEV_DIR,
 					required: true
 				},{
 					name: 'DIST_DIR',
 					description: 'Distribution directory',
 					type: 'string',
-					pattern: /^\.\/.*[^\/]$/,
-					message: 'Directory name must begin with `./` and should not end with `/`',
+					pattern: /^\.\/[^\/]+$/,
+					message: 'Directory name must begin with `./` and be in the root directory',
 					default: config.DIST_DIR,
 					required: true
 				},{
 					name: 'CONDUX_SERVER',
 					description: "Host for Condux Server",
 					type: 'string',
-					pattern: '^.*$',
+					pattern: /^.+$/,
 					default: config.CONDUX_SERVER,
-					required: true
+					required: true,
+					before: function(value){
+						return value.toLowerCase();
+					}
 				},{
 					name: 'API_SERVER',
 					description: "Host for API server",
 					type: 'string',
-					pattern: '^.*$',
+					pattern: /^.+$/,
 					default: config.API_SERVER,
-					required: true
+					required: true,
+					before: function(value){
+						return value.toLowerCase();
+					}
 				},{
 					name: 'PORT',
 					description: "Port",
 					type: 'number',
-					pattern: '^\d*$',
+					pattern: /^\d{4,6}$/,
 					default: config.PORT,
 					required: true
+				},{
+					name: 'CREATE_ADMIN_APP',
+					description: "Build admin app from <source directory>/admin ?",
+					type: 'string',
+					pattern: /^[yn]/i,
+					default: (config.CREATE_ADMIN_APP ? "y" : "n").toUpperCase(),
+					required: true,
+					before: function(value){
+						return (value.toLowerCase() === 'y')
+					}
+				},{
+					name: 'COMPRESS_DIST_CSS',
+					description: "Minify css for production?",
+					type: 'string',
+					pattern: /^[yn]/i,
+					default: (config.COMPRESS_DIST_CSS ? "y" : "n").toUpperCase(),
+					required: true,
+					before: function(value){
+						return (value.toLowerCase() === 'y')
+					}
 				}
 			])
 		})
