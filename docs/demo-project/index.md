@@ -31,10 +31,16 @@ will be prompted to define some configuration keys. They are as follows:
 - **Host for API Server:** url where the API server can be reached. Default is `localhost`.
 - **Port:** Port for the condux server and files. Default is 3030
 
-Next `mkapp` will scaffold and install a boilerplate project in the Source directory you specified in the configuration. This will be the basis for our project.
+Next `mkapp` will scaffold and install a boilerplate project in the *source* directory you specified in the configuration step. This will be the basis for our project.
 Assuming you've cloned the project already, checkout a new branch pointing to our progress so far with `git checkout -b 1_setup 1_setup`.
 
-### 2. What's Included
+### 2. The Boilerplate - What's Included
+
+So you've got mkapp installed and configured, it's time to spin up the development environment. But before you do, let's browse through the `src` directory and see what's included in the project by default. Mkapp is built around the idea that your app should allow reactive, real-time communication between public client apps, admin apps, and the business logic on your server. It relies on websockets for this, but because we're using a reactive, uni-directional data-flow model, we don't directly code to the websocket API. Instead, we'll be using a library called [Condux](http://www.npmjs.org/package/condux). Condux, and its complementary client-side library [Condux-Client](https://www.npmjs.org/packag/condux-client), provide a way to send data from client to server datastores with actions, and react to updates from the server in real time via read-only streams called frequencies. If you're at all familiar with the flux pattern, Condux will quickly make sense. It's actually built around the popular flux-type library [reflux](https://www.npmjs.com/package/reflux). If you're not familiar with the flux pattern, [Facebook's flux documentation](https://facebook.github.io/flux/docs/overview.html) is a good place to start. The next chapter provides a deep dive into using Condux and Condux-Client, so for now just take note of its location in the directory structure.
+
+
+
+
 
 ### 3. Introduction to Condux
 
