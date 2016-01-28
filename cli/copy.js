@@ -3,31 +3,36 @@ var join = require('path').join;
 var Promise = require('bluebird');
 var clc = require('cli-color');
 var APP_ROOT = require('app-root-path').toString();
-var config = require(APP_ROOT + '/mkapp_config.json');
-
-var SRC_DIR = config.SRC_DIR;
-var DIST_DIR = config.DIST_DIR;
-var DEV_DIR = config.DEV_DIR;
 
 Promise.promisifyAll(fs);
 
-module.exports = function copy(){
-	var targetDir = (process.env.NODE_ENV === 'production') ? DIST_DIR : DEV_DIR;
+module.exports = function copy(context){
 
-	console.log('copying static files to '+targetDir);
+	var config = require('./parse-config')();
+	var SRC_DIR = config.SRC_DIR;
+	var DEV_DIR = config.DEV_DIR;
+	var DIST_DIR = config.DIST_DIR;
 
-	console.log('copying admin files...');
-	return fs.copyAsync(join(APP_ROOT,SRC_DIR,'admin/index.html'),join(APP_ROOT,targetDir,'admin/index.html'))
-	.then(function(){
-		return fs.copyAsync(join(APP_ROOT,SRC_DIR,'admin/assets'),join(APP_ROOT,targetDir,'admin/assets'));
-	})
-	.then(function(){
-		console.log('copying public files...');
-		return fs.copyAsync(join(APP_ROOT,SRC_DIR,'public/index.html'),join(APP_ROOT,targetDir,'public/index.html'));
-	})
-	.then(function(){
-		return fs.copyAsync(join(APP_ROOT,SRC_DIR,'public/assets'),join(APP_ROOT,targetDir,'public/assets'));
-	})
+	if(context === 'dev'){
+		targetDir = DEV_DIR;
+	} else if(context === 'dist'){
+		targetDir = DIST_DIR;
+	} else {
+		return contextError();
+	}
+
+	function copyFiles(scope){
+		console.log('copying '+scope+' static files to '+targetDir);
+		return Promise.all([
+			fs.copyAsync(join(APP_ROOT,SRC_DIR,scope,'index.html'),join(APP_ROOT,targetDir,scope,'index.html')),
+			fs.copyAsync(join(APP_ROOT,SRC_DIR,scope,'assets'),join(APP_ROOT,targetDir,scope,'assets'))
+		]);
+	}
+
+	return Promise.all([
+		copyFiles('public'),
+		(config.CREATE_ADMIN_APP ? copyFiles('admin') : Promise.resolve())
+	])
 	.then(function(){
 		console.log(clc.green('Successfully copied static assets'));
 	})
@@ -36,4 +41,8 @@ module.exports = function copy(){
 		console.log(clc.red(msg));
 		return Promise.reject(err);
 	});
+}
+
+function contextError(){
+	return Promise.reject('Error: Invalid context argument passed to `copy`. Valid arguments are are "dev" and "dist"');
 }
