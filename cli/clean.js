@@ -4,24 +4,36 @@ var clc = require('cli-color');
 var yesOrNo = require('./promptAsync').yesOrNo;
 var APP_ROOT = require('app-root-path').toString();
 var join = require('path').join;
+var shell = require('shelljs');
 
 Promise.promisifyAll(fs);
 
 module.exports = clean;
 
 function clean(path,silent){
-
 	var absPath = join(APP_ROOT,path);
-	return (silent ? Promise.resolve : areYouSure)(path)
+	var $home = shell.exec('echo ~/').output.replace('\n','');
+
+	if(path == $home || absPath == $home){
+		return Promise.reject('Poor life decision. mkapp wants no part of this madness');
+	}
+	if(!path || !path.length || ['./','.','/'].indexOf(path) !== -1){
+		return Promise.reject('mkapp will not delete your project root');
+	}
+	if(/^\.{2}\/?.*/.test(path)){
+		return Promise.reject('mkapp will not delete files outside your project');
+	}
+
+	return (silent ? Promise.resolve : areYouSure)(absPath)
 	.then(function(){
 		return fs.emptyDirAsync(absPath);
 	})
 	.then(function(){
-		var msg = "Cleaned directory "+path;
+		var msg = "Cleaned directory "+absPath;
 		logSuccess(msg);
 	})
 	.catch(function(err){
-		var msg = "Could not clean directory: "+path;
+		var msg = "Could not clean directory: "+absPath;
 		var reason = "Error: "+err;
 		logError(msg);
 		return Promise.reject(reason);
