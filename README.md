@@ -98,7 +98,7 @@ see the [MkappTheme Documentation](https://github.com/epferrari/mkapp/blob/maste
 		|-- admin/
 			* See Below
 		|-- modules/
-			(code packages tightly coupled around a single concern with files for public, admin, and server)
+			(empty by default, a place for code packages tightly coupled around a single concern with files to be imported public, admin, and server)
 
 
 ###### /public and /admin directory structure
@@ -110,23 +110,20 @@ see the [MkappTheme Documentation](https://github.com/epferrari/mkapp/blob/maste
 	|-- assets/
 		|-- img/
 		|-- fonts/
-			|-- Roboto fonts
-			|-- Font-Awesome fonts
+			* Roboto fonts
+			* Font-Awesome fonts
 	|-- components/ (ex. ComponentA.jsx, ComponentB.jsx)
-	|-- constants/
-		|-- appConstants.js
 	|-- contexts/
 		|-- appContext.jsx
 	|-- datastores/
 		|-- AppState.js
-	|-- styles/
-		|-- styles.less
-		|-- mkapp-theme.js
-		|-- component-styles/ (ex. ComponentA.less, ComponentB.less)
+	|-- less/
+		|-- main.less
+		|-- components/ (ex. ComponentA.less, ComponentB.less)
 		|-- lib/
 			|-- fonts.less
-			|-- global.less
+			|-- app.less
 			|-- material-ui-fonts.less
-		|-- css-transition-groups/
+		|-- react-css-transition-groups/
 	|-- views/
 		|-- Home.jsx		
