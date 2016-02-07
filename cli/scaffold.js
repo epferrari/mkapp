@@ -9,6 +9,9 @@ Promise.promisifyAll(fs);
 var clean = require('./clean');
 
 var dirs = [
+	"assets",
+	"assets/fonts",
+	"assets/img",
 	"condux",
 	"condux/admin",
 	"condux/admin/frequencies",
@@ -20,7 +23,7 @@ var dirs = [
 	"public/assets",
 	"public/assets/fonts",
 	"public/assets/img",
-	"public/assets/styles",
+	"public/assets/css",
 	"server",
 	"server/api",
 	"server/api/v1.0",
@@ -34,7 +37,7 @@ var adminDirs = [
 	"admin/assets",
 	"admin/assets/fonts",
 	"admin/assets/img",
-	"admin/assets/styles"
+	"admin/assets/css"
 ];
 
 

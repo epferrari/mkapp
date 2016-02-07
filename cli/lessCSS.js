@@ -33,16 +33,16 @@ module.exports = function(context){
 };
 
 
-var pathToCssOutput = 'assets/styles/styles.css';
+var pathToCssOutput = 'assets/css/main.css';
 
 
 function compileCSS(scope,targetDir,context){
 	console.log('compiling css for '+scope);
 
-	var pathsToImports = [SRC_DIR+'/public/styles'];
+	var pathsToImports = [SRC_DIR+'/public/less'];
 
 	if(config.CREATE_ADMIN_APP){
-		pathsToImports.push(SRC_DIR+'/admin/styles');
+		pathsToImports.push(SRC_DIR+'/admin/less');
 	}
 
 	var autoprefixer = new Autoprefixer({browsers: ["last 2 versions"]});
@@ -54,13 +54,13 @@ function compileCSS(scope,targetDir,context){
 
 	return fs.ensureFileAsync(join(APP_ROOT,targetDir,scope,pathToCssOutput))
 	.then(function(file){
-		var srcpath = join(APP_ROOT,SRC_DIR,scope,'styles/styles.less');
+		var srcpath = join(APP_ROOT,SRC_DIR,scope,'less/main.less');
 		return fs.readFileAsync(srcpath,{encoding:'utf-8'});
 	})
 	.then(function(data){
 		return new Promise(function(resolve,reject){
 			less.render(data,{
-				filename: path.resolve('./styles.less'),
+				filename: path.resolve('./main.less'),
 				paths: pathsToImports.map(function(p){return path.resolve(p)}),
 				plugins: plugins,
 				relativeUrls: false
