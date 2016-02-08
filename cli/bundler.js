@@ -9,7 +9,7 @@ var envify = require('envify');
 var APP_ROOT = require('app-root-path').toString();
 
 
-Promise.promisifyAll(fs,{context: fs});
+Promise.promisifyAll(fs,{scope: fs});
 
 var lint = require('./lint');
 
@@ -18,20 +18,20 @@ var lint = require('./lint');
 module.exports = bundler;
 
 /**
-* @param {string} context One of ['public','admin']
+* @param {string} scope One of ['public','admin']
 * @param {function} [onUpdate] callback for watchify
 * @returns {function} bundle
 */
-function bundler(context,onUpdate){
-	if(["admin","public"].indexOf(context) === -1) return contextError;
+function bundler(scope,onUpdate){
+	if(["admin","public"].indexOf(scope) === -1) return scopeError;
 
-	var config = require(APP_ROOT+'/mkapp_config.json');
+	var config = require('./parse-config')();
 	var DEV_DIR = config.DEV_DIR;
 	var SRC_DIR = config.SRC_DIR;
 
-	var outfile = join(APP_ROOT,DEV_DIR,context,"/bundle.js");
+	var outfile = join(APP_ROOT,DEV_DIR,scope,"/bundle.js");
 	var opts = {
-		entries:[join(APP_ROOT,SRC_DIR,context,"/index.js")],
+		entries:[join(APP_ROOT,SRC_DIR,scope,"js/index.js")],
 		extensions: ['.js','.jsx'],
 		cache:{},
 		packageCache:{}
@@ -54,20 +54,20 @@ function bundler(context,onUpdate){
 	function _bundle(){
 		return new Promise(function(resolve,reject){
 
-			console.log('bundling javascript files for '+context);
+			console.log('bundling javascript files for '+scope);
 
 			var stream = b.bundle();
 
 			stream.pipe(fs.createWriteStream(outfile));
 
 			stream.on('end',function(){
-				var msg = "created javascript bundle for "+context;
+				var msg = "created javascript bundle for "+scope;
 				console.log(clc.green(msg));
 				resolve();
 			});
 
 			stream.on('error',function(err){
-				var msg = "An error occured bundling "+context;
+				var msg = "An error occured bundling "+scope;
 				console.error(clc.red(msg));
 				reject(err);
 			});
@@ -82,6 +82,6 @@ function bundler(context,onUpdate){
 	return bundle;
 }
 
-function contextError(){
-	return Promise.reject('Error: Invalid context argument passed to `bundler`. Valid arguments are are "admin" and "public"');
+function scopeError(){
+	return Promise.reject('Error: Invalid scope argument passed to `bundler`. Valid scopes are are "admin" and "public"');
 }

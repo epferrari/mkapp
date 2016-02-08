@@ -27,7 +27,10 @@ mkapp
 	.command('clean <dir>')
 	.description('Remove a directory and its contents with rm -rf <dir>')
 	.action(function(dir){
-		clean(dir);
+		clean(dir)
+		.catch(function(err){
+			console.log(clc.red(err));
+		});
 	});
 
 mkapp
@@ -45,10 +48,10 @@ mkapp
 	});
 
 mkapp
-	.command('bundle <context>')
-	.description('create your app\'s javascript bundle in the dev directory. Valid arguments for context are "admin" or "public"')
-	.action(function(context){
-		bundler(context)()
+	.command('bundle <scope>')
+	.description('create your app\'s javascript bundle in the dev directory. Valid arguments for scope are "admin" or "public"')
+	.action(function(scope){
+		bundler(scope)()
 		.then(function(){
 			process.exit(0);
 		})

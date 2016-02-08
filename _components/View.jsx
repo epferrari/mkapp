@@ -3,7 +3,7 @@ import React
 import Container
 	from './gridsystem/Container';
 import {merge,pick}
-  from 'lodash';
+	from 'lodash';
 import MkappThemeMixin
 	from '../theme/mixin';
 import MkappThemeStyleMerger
@@ -64,14 +64,14 @@ const View = React.createClass({
 				width: "100%",
 				overflowX: 'hidden',
 				overflowY: "scroll",
-				minHeight: global.screen.height
+				minHeight: global.innerHeight
 			},
 			container: {
 				overflowX: 'hidden',
 				overflowY: "scroll",
-				paddingTop:20,
+				paddingTop: (this.props.style || {paddingTop: 0}).paddingTop,
 				marginTop: this.props.navbarOffset + offsetTop,
-				minHeight: (global.screen.height - this.props.navbarOffset - offsetTop)
+				minHeight: global.innerHeight - this.props.navbarOffset - offsetTop
 			},
 			content: {
 				WebkitOverflowScrolling: "touch"

@@ -30,7 +30,7 @@ module.exports = transpile;
 */
 function transpile(context){
 
-	var config = require(APP_ROOT + '/mkapp_config.json');
+	var config = require('./parse-config')();
 	var SRC_DIR = config.SRC_DIR;
 	var DEV_DIR = config.DEV_DIR;
 	var DIST_DIR = config.DIST_DIR;
@@ -57,7 +57,7 @@ function transpile(context){
 	.map(function(fileName){
 		var s = SRC_DIR.replace(/^(\.\/)(.*)$/,'$2');
 		var d = targetDir.replace(/^(\.\/)(.*)$/,'$2');
-		var outfile = fileName.replace(s,d); // context filename
+		var outfile = fileName.replace(s,d);
 		var transformed = transformFileAsync(fileName); // babelified file
 		var ensured = fs.ensureFileAsync(outfile);
 

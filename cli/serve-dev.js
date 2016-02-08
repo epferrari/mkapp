@@ -2,10 +2,9 @@ var Promise = require('bluebird');
 var nodemon = require('nodemon');
 var APP_ROOT = require('app-root-path').toString();
 var join = require('path').join;
-var CONFIG_PATH = join(APP_ROOT,'./mkapp_config.json');
 
 function startNodemon(resolve){
-		var DEV_DIR = require(CONFIG_PATH).DEV_DIR;
+		var DEV_DIR = require('./parse-config')().DEV_DIR;
 
 		console.log('nodemon cli');
 

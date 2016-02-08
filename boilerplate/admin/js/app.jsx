@@ -15,13 +15,10 @@ require('react-tap-event-plugin')();
 
 /* Routes and Navigation
 /**************************************************/
-import Router,{Route,History,IndexRoute}
-	from 'react-router';
-
+import Router,{Route,History,IndexRoute} from 'react-router';
 import AppNav from 'mkapp/lib/material/AppNav';
 
-
-/* contexts & state
+/* state
 /**************************************************/
 import AppStateStore from './datastores/AppState.js';
 
@@ -30,7 +27,7 @@ import AppStateStore from './datastores/AppState.js';
 /**************************************************/
 
 
-/* container for credentialed application views */
+// container for application views
 const App = React.createClass({
 	mixins: [Reflux.ListenerMixin],
 	childContextTypes: {

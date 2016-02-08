@@ -18,21 +18,6 @@ var SKIP = 'SKIP';
 var PROMPT = 'PROMPT';
 var ABORT = 'ABORT';
 
-function promptConfigOverwrite(){
-	return new Promise(function(resolve,reject){
-		if(shell.test('-f',CONFIG_PATH)){
-			process.stdout.write('\x07');
-			console.log(clc.yellow('A mkapp_config.json file already exists in your project. Overwrite it?'));
-			yesOrNo('Overwrite mkapp_config.json?'.yellow,'N')
-				.then(resolve)
-				.catch(function(err){
-					return reject('SKIP');
-				});
-		}else{
-			resolve();
-		}
-	});
-}
 
 function promptBoilerplateDownload(){
 	process.stdout.write('\x07');
@@ -128,36 +113,6 @@ module.exports = function downloadBoilerplate(installDir,installedMkappVersion){
 				return continueOrAbort();
 			}
 		})
-		.then(promptConfigOverwrite)
-		.then(function(){
-			var reason;
-			return new Promise(function(resolve,reject){
-				if(!shell.test('-f',tmpdir+'/mkapp-master/mkapp_config.json')){
-					reason = reportIssue('No config file found in downloaded project.')
-					reject(reason);
-					return;
-				}
-				var copied = shell.cp('-f',tmpdir+'/mkapp-master/mkapp_config.json','./');
-				if(copied && copied.code !== 0){
-					reason = reportIssue('could not copy mkapp_config.json to project root.');
-					reject(reason);
-				}else{
-					resolve();
-				}
-			});
-		})
-		/*
-		.finally(function(){
-			if(!shell.test('-f','./mkapp_config.json')){
-				process.stdout.write('\x07');
-				var msg = "Config file not found! You MUST create a mkapp_config.json file in your project root. See documentation for example project structure.";
-				console.log(clc.yellow(msg));
-				console.log('...continuing. Don\'t forget to create this file before developing');
-			}else{
-				console.log('...continuing with present mkapp_config.json');
-			}
-		})
-		*/
 		.finally(function(){
 			shell.test('-d',tmpdir) && shell.rm('-rf',tmpdir);
 			shell.test('-f',tmpfile) && shell.rm(tmpfile);

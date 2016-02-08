@@ -49,10 +49,8 @@ var mkappTheme = new MkappTheme(null,null,getComponentStyles);
 
 /* Components
 /**************************************************/
-
-
 const App = React.createClass({
-	mixins: [AppContext.Mixin,Reflux.ListenerMixin],
+	mixins: [Reflux.ListenerMixin],
 	childContextTypes: {
 		modalContainer: React.PropTypes.object
 	},

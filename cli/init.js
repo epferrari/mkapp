@@ -13,6 +13,7 @@ var downloadBoilerplate = require('./download-boilerplate');
 var copyBoilerplate = require('./copy-boilerplate');
 var scaffold = require('./scaffold.js');
 var yesOrNo = require('./promptAsync.js').yesOrNo;
+var clean = require('./clean.js');
 
 var APP_ROOT = require('app-root-path').toString();
 var CONFIG_PATH = join(APP_ROOT,'./mkapp_config.json');
@@ -52,8 +53,13 @@ module.exports = function mkappInit(version){
 		return promptSrcOverwrite(config.SRC_DIR);
 	})
 	.then(function(){
-		return scaffold(config.SRC_DIR);
+		return clean(config.SRC_DIR,true)
 	})
+	/*
+	.then(function(){
+		return scaffold(config.SRC_DIR,config.CREATE_ADMIN_APP);
+	})
+	*/
 	.then(function(){
 		var getBoilerplate;
 		try{
@@ -62,7 +68,8 @@ module.exports = function mkappInit(version){
 			getBoilerplate = copyBoilerplate;
 		}catch(err){
 			console.log('no local mkapp?)');
-			// no local node_modules/mkapp, download boilerplate from github and check version matches globally installed mkapp
+			// mkapp should be installed locally to work correctly
+			// no local node_modules/mkapp, download boilerplate from github and check version matches global installed mkapp
 			getBoilerplate = downloadBoilerplate;
 		}
 		return getBoilerplate(config.SRC_DIR,version);
@@ -72,7 +79,7 @@ module.exports = function mkappInit(version){
 	})
 	.then(function(){
 		logSuccess('App setup complete!');
-		console.log(clc.green('Review the mkapp_config.json file, then type ') + clc.white.bgGreen(' mkapp go '))
+		console.log(clc.green('Review the mkapp_config.json file, then type ') + clc.white.bgGreen(' mkapp dev '))
 	})
 	.catch(function(err){
 		if(err === 'ABORT'){
