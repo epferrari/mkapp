@@ -4,7 +4,7 @@ import ConduxClient
 	from 'condux-client';
 
 import {SET_CONNECTION_STATUS}
-	from '../../admin/actions';
+	from '../../../admin/actions';
 
 import {CONDUX_SERVER,PORT}
 	from '../../../mkapp_config.json';

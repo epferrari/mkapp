@@ -15,7 +15,9 @@ var DrawerLeft = React.createClass({
 	propTypes: {
 		open: React.PropTypes.bool,
 		style: React.PropTypes.object,
-		onExit: React.PropTypes.func
+		willExit: React.PropTypes.func,
+		didExit: React.PropTypes.func,
+		didEnter: React.PropTypes.func
 	},
 	prepareStyles(){
 		var defaultStyles = {
