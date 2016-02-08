@@ -101,20 +101,20 @@ var NavMenuItem = React.createClass({
 		);
 	},
 
-	componentDidUpdate(){
+	componentDidMount(){
 		let ts = transitions;
 		let el = this.refs.menuItem;
-		if(this.props.shouldAnimate){
-			Velocity(el,ts.componentDidEnter,{
-				delay: this.props.animationDelay,
-				progress: function(elements){
-					// hackosaurus rex for keeping the fixed position during transformation
-					elements.forEach(el => el.style.transform = "");
-				}
-			});
-		}else{
-			Velocity(el,ts.componentWillEnter,{duration:0});
-		}
+		let _this = this;
+		Velocity(el,ts.componentDidEnter,{
+			delay: this.props.animationDelay,
+			progress: function(elements){
+				// hackosaurus rex for keeping the fixed position during transformation
+				elements.forEach(el => el.style.transform = "");
+			},
+			complete: function(){
+				_this.setState({didAnimate: true});
+			}
+		});
 	},
 
 	prepareStyles(){
@@ -123,6 +123,11 @@ var NavMenuItem = React.createClass({
 			styles.menuItem_LINK = merge({},styles.menuItem_LINK,{
 				color: (this.props.activeTextColor || this.getThemePalette().accent1Color)
 			});
+		}
+		if(this.state.didAnimate){
+			styles.menuItem = merge({},styles.menuItem,transitions.componentDidEnter);
+		}else{
+			styles.menuItem = merge({},styles.menuItem,transitions.componentWillEnter);
 		}
 		return styles;
 	},

@@ -40,7 +40,7 @@ var NavMenu = React.createClass({
 		};
 	},
 
-	renderNavItems(shouldAnimate){
+	renderNavItems(){
 		return map(this.props.menuItems, (route,idx) => {
 
 			let onSelection;
@@ -59,7 +59,6 @@ var NavMenu = React.createClass({
 			return (
 				React.cloneElement(this.props.itemRenderer,{
 					key: idx,
-					shouldAnimate: shouldAnimate,
 					animationDelay: (300 + idx * 50),
 					title: route.title,
 					path: route.path,
@@ -75,7 +74,7 @@ var NavMenu = React.createClass({
 		return (
 			<OverlayComponent {...this.props}>
 				<div style={styles.menu_INNER}>
-					{this.renderNavItems(this.props.open)}
+					{this.renderNavItems()}
 					{this.props.children}
 				</div>
 			</OverlayComponent>

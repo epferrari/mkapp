@@ -75,11 +75,13 @@ const Overlay = React.createClass({
 			.then(() => {
 				// hook for parent components
 				this.props.didEnter();
-				this.setState({
-					shouldAnimate: false,
-					didAnimate: true,
-					active: true
-				});
+				if(this.isMounted()){
+					this.setState({
+						shouldAnimate: false,
+						didAnimate: true,
+						active: true
+					});
+				}
 			});
 		} else {
 			return this.currentAnimation;
@@ -106,11 +108,13 @@ const Overlay = React.createClass({
 					this.isAnimating = false;
 					// hook for parent components
 					this.props.didExit();
-					this.setState({
-						shouldAnimate: false,
-						didAnimate: true,
-						active: false
-					});
+					if(this.isMounted()){
+							this.setState({
+							shouldAnimate: false,
+							didAnimate: true,
+							active: false
+						});
+					}
 				});
 			});
 		} else {
