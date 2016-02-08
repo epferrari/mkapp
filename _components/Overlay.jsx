@@ -109,7 +109,7 @@ const Overlay = React.createClass({
 					// hook for parent components
 					this.props.didExit();
 					if(this.isMounted()){
-							this.setState({
+						this.setState({
 							shouldAnimate: false,
 							didAnimate: true,
 							active: false

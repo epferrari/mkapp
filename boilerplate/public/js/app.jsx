@@ -26,7 +26,7 @@ const menuItems = [
 	{title:"View 1",path:"/view1"},
 	{title:"View 2",path:"/view2"},
 	{title:"View 3",path:"/view3"},
-	{title:"Custom Action",onSelection: function(){ console.log('selected custom route!'); } }
+	{title:"Custom Action",onSelection: function(){ alert('Selected custom route!'); } }
 ];
 
 
