@@ -5,7 +5,7 @@ import {typeOf} from '@epferrari/js-utils';
 import State from '@epferrari/immutable-state';
 
 import ConduxClient from 'condux-client';
-import conduxService from '../../condux/public';
+import conduxService from '../../../condux/public';
 
 var initialState = {
 	currentPath: 'home',
@@ -44,16 +44,13 @@ var stateStore = Reflux.createStore({
 			if(!conduxService.connected && !conduxService.connecting) conduxService.reconnect();
 
 			let newState = app.setState({
-				//currentPath: payload.path,
-				viewTitle: payload.viewTitle
+				currentPath: payload.path,
+				viewTitle: payload.viewTitle,
+				backButtonLink: payload.backButtonLink
 			});
 
 			this.trigger(newState);
 		}
-	},
-
-	onTOGGLE_NAVBAR_TYPE(){
-		this.trigger( app.setState({materialNav: !app.state.materialNav}) );
 	},
 
 	onENTER_LOADING_STATE(){
@@ -73,14 +70,6 @@ var stateStore = Reflux.createStore({
 		if(app.state.navbarColor !== color){
 			this.trigger( app.setState({navbarColor: color}) );
 		}
-	},
-
-	onSHOW_NAVBAR_TITLE(){
-		if(!app.state.showNavbarTitle) this.trigger( app.setState({showNavbarTitle: true}) );
-	},
-
-	onHIDE_NAVBAR_TITLE(){
-		if(app.state.showNavbarTitle) this.trigger( app.setState({showNavbarTitle: false}) );
 	},
 
 	getState(){

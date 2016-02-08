@@ -5,8 +5,8 @@ import View from '../components/View.jsx';
 import {chain} from 'lodash';
 
 import {ReactConnectMixin} from 'condux-client';
-import conduxActions from '../../condux/admin/actions.js';
-import demoHz from '../../condux/admin/frequencies/demo.js';
+import conduxActions from '../../../condux/admin/actions.js';
+import demoHz from '../../../condux/admin/frequencies/demo.js';
 
 var ActionTrigger = React.createClass({
 	handleClick(){

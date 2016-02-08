@@ -31,7 +31,7 @@ function bundler(scope,onUpdate){
 
 	var outfile = join(APP_ROOT,DEV_DIR,scope,"/bundle.js");
 	var opts = {
-		entries:[join(APP_ROOT,SRC_DIR,scope,"/index.jsx")],
+		entries:[join(APP_ROOT,SRC_DIR,scope,"js/index.jsx")],
 		extensions: ['.js','.jsx'],
 		cache:{},
 		packageCache:{}
