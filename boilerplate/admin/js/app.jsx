@@ -1,60 +1,35 @@
 /* core stuff
 /*************************************************/
-import React
-	from "react";
-
+import React from "react";
 import ReactDOM from 'react-dom';
+import Reflux from 'reflux';
+import Promise from 'bluebird';
 
-import Reflux
-	from 'reflux';
-
-import Promise
-	from 'bluebird';
-
-/* ensure Promise implementation for Velocity animate on Android*/
+/* ensure Promise implementation for Velocity animate on Android */
 global.Promise = Promise;
-
-
-/* try like hell to get something to work for fast touch events
-/*************************************************/
-//require('react-fastclick');
-require('react-tap-event-plugin')();
-//React.initializeTouchEvents(true);
-
 
 /* utilities
 /*************************************************/
-import {merge}
-	from 'lodash';
-
-//import './lib/google-analytics.js';
-
-
+import {merge}from 'lodash';
+require('react-tap-event-plugin')();
 
 /* Routes and Navigation
 /**************************************************/
-import Router,{Route,History,IndexRoute}
-	from 'react-router';
-
+import Router,{Route,History,IndexRoute} from 'react-router';
 import AppNav from 'mkapp/lib/material/AppNav';
 
-
-/* contexts & state
+/* state
 /**************************************************/
-import AppContext
-	from './contexts/appContext.jsx';
-
-import AppStateStore
-	from './datastores/AppState.js';
+import AppStateStore from './datastores/AppState.js';
 
 
 /* Components
 /**************************************************/
 
 
-/* container for credentialed application views */
+// container for application views
 const App = React.createClass({
-	mixins: [AppContext.Mixin,Reflux.ListenerMixin],
+	mixins: [Reflux.ListenerMixin],
 	childContextTypes: {
 		modalContainer: React.PropTypes.object
 	},

@@ -1,28 +1,21 @@
 /* core stuff
 /*************************************************/
-import React
-	from "react";
-import ReactDOM
-	from 'react-dom';
-import Reflux
-	from 'reflux';
-import Promise
-	from 'bluebird';
+import React from "react";
+import ReactDOM from 'react-dom';
+import Reflux from 'reflux';
+import Promise from 'bluebird';
 
 /* ensure Promise implementation for Velocity animate on Android*/
 global.Promise = Promise;
 
-/*************************************************/
-require('react-tap-event-plugin')();
-
 /* utilities
 /*************************************************/
 import {merge} from 'lodash';
+require('react-tap-event-plugin')();
 
 /* Routes and Navigation
 /**************************************************/
-import Router,{Route,History,IndexRoute}
-	from 'react-router';
+import Router,{Route,History,IndexRoute} from 'react-router';
 
 import ThemeProvider from 'mkapp/lib/ThemeProvider';
 import HybridNav from 'mkapp/lib/hybrid/AppNav';
@@ -36,9 +29,8 @@ const menuItems = [
 ];
 
 
-/* contexts & state
+/* state
 /**************************************************/
-import AppContext from './contexts/appContext.jsx';
 import AppStateStore from './datastores/AppState.js';
 
 import MkappTheme from 'mkapp/theme';
@@ -56,10 +48,8 @@ var mkappTheme = new MkappTheme(null,null,getComponentStyles);
 
 /* Components
 /**************************************************/
-
-
 const App = React.createClass({
-	mixins: [AppContext.Mixin,Reflux.ListenerMixin],
+	mixins: [Reflux.ListenerMixin],
 	childContextTypes: {
 		modalContainer: React.PropTypes.object
 	},

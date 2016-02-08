@@ -8,13 +8,12 @@ import DrawerBottom from 'mkapp/lib/DrawerBottom';
 import Curtain from 'mkapp/lib/Curtain';
 import NotifyBarTop from 'mkapp/lib/NotifyBarTop';
 import NotifyBarBottom from 'mkapp/lib/NotifyBarBottom';
-import {FlatButton} from 'material-ui';
 import Touchable from 'mkapp/lib/Touchable';
 
 
-var FlatTouchButton = React.createClass({
+var TouchButton = React.createClass({
 	render(){
-		return <Touchable component={FlatButton} {...this.props}/>;
+		return <Touchable component="div" {...this.props}/>
 	}
 });
 
@@ -23,7 +22,14 @@ var buttonStyle = {
 	marginLeft: "auto",
 	marginRight: "auto",
 	padding: 3,
-	marginTop:5
+	cursor: "pointer",
+	width: '100%',
+	backgroundColor: '#fff',
+	marginTop: 1,
+	minHeight: 30,
+	textAlign: 'center',
+	float:"left",
+	paddingTop: 12
 };
 
 var innerButtonStyle = {
@@ -31,7 +37,10 @@ var innerButtonStyle = {
 	marginLeft: "auto",
 	marginRight: "auto",
 	padding: 3,
-	marginTop: 50
+	marginTop: 10,
+	cursor: "pointer",
+	minHeight: 20,
+	textAlign: 'center'
 }
 
 var Home = React.createClass({
@@ -72,85 +81,85 @@ var Home = React.createClass({
 				key={2}
 				open={this.state.openDrawer === 2}
 				onExit={() => {if(this.state.openDrawer === 2) this.setState({openDrawer: null});}}>
-				<FlatTouchButton
+				<TouchButton
 					style={innerButtonStyle}
-					onClick={() => this.open(2)}>Close Drawer</FlatTouchButton>
+					onClick={() => this.open(2)}>Close Drawer</TouchButton>
 			</DrawerTop>,
 
 			<DrawerBottom
 				key={3}
 				open={this.state.openDrawer === 3}
 				onExit={() => {if(this.state.openDrawer === 3) this.setState({openDrawer: null});}}>
-				<FlatTouchButton
+				<TouchButton
 					style={innerButtonStyle}
-					onClick={() => this.open(3)}>Close Drawer</FlatTouchButton>
+					onClick={() => this.open(3)}>Close Drawer</TouchButton>
 			</DrawerBottom>,
 
 			<Curtain
 				key={4}
 				open={this.state.openDrawer === 4}
 				onExit={() => {if(this.state.openDrawer === 4) this.setState({openDrawer: null});}}>
-				<FlatTouchButton
+				<TouchButton
 					style={innerButtonStyle}
-					onClick={() => this.open(4)}>Close Curtain</FlatTouchButton>
+					onClick={() => this.open(4)}>Close Curtain</TouchButton>
 			</Curtain>,
 
 			<NotifyBarTop
 				key={5}
 				open={this.state.openDrawer === 5}
 				onExit={() => {if(this.state.openDrawer === 5) this.setState({openDrawer: null});}}>
-				<FlatTouchButton
+				<TouchButton
 					style={innerButtonStyle}
-					onClick={() => this.open(5)}>Close NotifyBar</FlatTouchButton>
+					onClick={() => this.open(5)}>Close NotifyBar</TouchButton>
 			</NotifyBarTop>,
 
 			<NotifyBarBottom
 				key={6}
 				open={this.state.openDrawer === 6}
 				onExit={() => {if(this.state.openDrawer === 6) this.setState({openDrawer: null});}}>
-				<FlatTouchButton
+				<TouchButton
 					style={innerButtonStyle}
-					onClick={() => this.open(6)}>Close NotifyBar</FlatTouchButton>
+					onClick={() => this.open(6)}>Close NotifyBar</TouchButton>
 			</NotifyBarBottom>,
 		];
 	},
 	render(){
 		return (
 			<View title="Mkapp" navbarColor="transparent" static={this.renderStatic()} style={{backgroundColor:"rgb(101, 188, 207)"}}>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
 					onClick={() => {
 						this.context.mkappTheme.setOptions({preferMaterial: !this.context.mkappTheme.options.preferMaterial });
 					}
-					}>Toggle Menu</FlatTouchButton>
+					}>Toggle Menu</TouchButton>
 				<br/>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
-					onClick={() => this.open(0)} >Left Drawer</FlatTouchButton>
+					onClick={() => this.open(0)} >Left Drawer</TouchButton>
 				<br/>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
-					onClick={() => this.open(1)} >Right Drawer</FlatTouchButton>
+					onClick={() => this.open(1)} >Right Drawer</TouchButton>
 				<br/>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
-					onClick={() => this.open(2)} >Top Drawer</FlatTouchButton>
+					onClick={() => this.open(2)} >Top Drawer</TouchButton>
 				<br/>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
-					onClick={() => this.open(3)} >Bottom Drawer</FlatTouchButton>
+					onClick={() => this.open(3)} >Bottom Drawer</TouchButton>
 				<br/>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
-					onClick={() => this.open(4)}>Curtain</FlatTouchButton>
+					onClick={() => this.open(4)}>Curtain</TouchButton>
 				<br/>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
-					onClick={() => this.open(5)}>Notify Bar Top</FlatTouchButton>
+					onClick={() => this.open(5)}>Notify Bar Top</TouchButton>
 				<br/>
-				<FlatTouchButton
+				<TouchButton
 					style={buttonStyle}
-					onClick={() => this.open(6)}>Notify Bar Bottom</FlatTouchButton>
+					onClick={() => this.open(6)}>Notify Bar Bottom</TouchButton>
 			</View>
 		);
 	}

@@ -35,7 +35,7 @@ const AppView = React.createClass({
 
 	render(){
 		return (
-			<View style={{paddingTop:15}} {...this.props}/>
+			<View style={{paddingTop:0}} {...this.props}/>
 		);
 	}
 });
