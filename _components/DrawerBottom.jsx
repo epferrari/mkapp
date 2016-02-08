@@ -15,9 +15,7 @@ var DrawerBottom = React.createClass({
 	propTypes: {
 		open: React.PropTypes.bool,
 		style: React.PropTypes.object,
-		willExit: React.PropTypes.func,
-		didExit: React.PropTypes.func,
-		didEnter: React.PropTypes.func
+		onExit: React.PropTypes.func
 	},
 	prepareStyles(){
 		var defaultStyles = {

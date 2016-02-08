@@ -37,7 +37,7 @@ var NavMenuItem = React.createClass({
 		activeTextColor: React.PropTypes.string,
 		onSelection: React.PropTypes.func.isRequired,
 		path: React.PropTypes.string,
-		title: React.PropTypes.string,
+		name: React.PropTypes.string,
 		alignment: React.PropTypes.oneOf(['left','right']),
 		renderIcon: React.PropTypes.bool
 	},
@@ -57,9 +57,6 @@ var NavMenuItem = React.createClass({
 		return {active: false};
 	},
 
-	/**
-	* set the NavItem's state to active if the route matches the pathname
-	*/
 	componentWillReceiveProps(nextProps){
 		this.setState({
 			active: (this.context.location.pathname === nextProps.path)
@@ -77,10 +74,10 @@ var NavMenuItem = React.createClass({
 		}
 	},
 
-	handleClick(e){
+	setNextRoute(e){
 		e.preventDefault();
 		e.stopPropagation();
-		if(this.props.onSelection) this.props.onSelection(this.props.path || null);
+		if(this.props.onSelection) this.props.onSelection(this.props.path);
 	},
 
 	render(){
@@ -91,9 +88,9 @@ var NavMenuItem = React.createClass({
 					ref="menuItem"
 					style={styles.menuItem}>
 					<Touchable
-						onClick={this.handleClick}
+						onClick={this.setNextRoute}
 						style={styles.menuItem_LINK}>
-						<span style={{verticalAlign: "middle", marginRight: 4}}>{this.props.title}</span>
+						<span style={{verticalAlign: "middle", marginRight: 4}}>{this.props.name}</span>
 						{this.renderIcon()}
 					</Touchable>
 				</div>

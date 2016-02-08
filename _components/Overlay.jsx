@@ -15,11 +15,7 @@ import Touchable
 import MuiIcon
 	from './MuiIcon';
 
-var noop = (function(){
-	return function(){
-		return true;
-	};
-})();
+
 
 const Overlay = React.createClass({
 	mixins: [MkappThemeMixin],
@@ -27,9 +23,7 @@ const Overlay = React.createClass({
 		open: React.PropTypes.bool,
 		position: React.PropTypes.oneOf(['top','left','right','bottom']),
 		style: React.PropTypes.object,
-		willExit: React.PropTypes.func,
-		didExit: React.PropTypes.func,
-		didEnter: React.PropTypes.func,
+		onExit: React.PropTypes.func,
 		focusOnEnter: React.PropTypes.bool,
 		closeButton: React.PropTypes.bool,
 		closeButtonStyles: React.PropTypes.object
@@ -39,9 +33,7 @@ const Overlay = React.createClass({
 		return {
 			open: false,
 			position: 'top',
-			willExit: noop,
-			didExit: noop,
-			didEnter: noop,
+			onExit: function(){ return true; },
 			focusOnEnter: true,
 			closeButton: false
 		};
@@ -73,8 +65,6 @@ const Overlay = React.createClass({
 				});
 			})
 			.then(() => {
-				// hook for parent components
-				this.props.didEnter();
 				this.setState({
 					shouldAnimate: false,
 					didAnimate: true,
@@ -91,8 +81,6 @@ const Overlay = React.createClass({
 		let node = this.refs.overlay;
 
 		if(state.shouldAnimate && !this.isAnimating){
-			// call the hook here to alert parent components if the Overlay is managing its own closed state with a close button
-			this.props.willExit();
 			return new Promise((resolve,reject) => {
 				Velocity(node,this.getInitialStyle(),{
 					duration:300,
@@ -104,8 +92,7 @@ const Overlay = React.createClass({
 				})
 				.then(() => {
 					this.isAnimating = false;
-					// hook for parent components
-					this.props.didExit();
+					this.props.onExit();
 					this.setState({
 						shouldAnimate: false,
 						didAnimate: true,
