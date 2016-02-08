@@ -38,3 +38,7 @@ Apps upgrading from 0.7.x can update with minimal refactoring by changing any `o
 
 - by default, all overlay and drawer components except the curtain now render *without* a close button. Set `closeButton=true` to add one.
 - UI changes in boilerplate
+
+## 0.7.2
+
+Do not use, upgrade to 0.8.0.
