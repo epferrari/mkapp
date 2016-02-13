@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.8.1
+
+### Bug Fixes
+
+- fixed error where a newly scaffolded project wouldn't have an assets directory at the react-bootstrap
+
+### Deprecations
+
+- `mkapp go` has been deprecated and will be removed for version 1.0. Use `mkapp dev` instead.
+
+### Misc
+
+- refactored paths and filenames in CLI directory to be more semantically accurate. No functionality changes
+
 ## 0.8.0
 
 ### Breaking changes
