@@ -28,10 +28,7 @@ mkapp
 	.command('clean <dir>')
 	.description('Remove a directory and its contents with rm -rf <dir>')
 	.action(function(dir){
-		clean(dir)
-		.catch(function(err){
-			console.log(clc.red(err));
-		});
+		clean(dir).catch(handleError);
 	});
 
 mkapp
@@ -42,10 +39,7 @@ mkapp
 		.then(function(){
 			process.exit(0);
 		})
-		.catch(function(err){
-			console.log(clc.red(err));
-			process.exit(1);
-		});
+		.catch(handleError);
 	});
 
 mkapp
@@ -56,24 +50,24 @@ mkapp
 		.then(function(){
 			process.exit(0);
 		})
-		.catch(function(err){
-			console.log(clc.red(err));
-			process.exit(1);
-		});
+		.catch(handleError);
 	});
 
 mkapp
 	.command('dev')
-	.alias('go')
 	.alias('develop')
 	.description('Build app and run in a local dev environment at http://localhost:<PORT>, where PORT is defined in mkapp_config.json')
 	.action(function(){
-		dev()
-		.catch(function(err){
-			console.log(clc.red.bold('Zoiks, something went horribly wrong. Better fetch a bucket...'));
-			console.log(clc.red(err));
-			process.exit(1);
-		});
+		dev().catch(handleError);
+	});
+
+mkapp
+	.command('go')
+	.description('DEPRECATED! Will be removed in v1.0. Use the `mkapp dev` instead.')
+	.action(function(){
+		process.stdout.write('\x07');
+		console.log(clc.yellow('DEPRECATED! `mkapp go` will be removed in v1.0.0. Use the `mkapp dev` instead.'));
+		dev().catch(handleError);
 	});
 
 mkapp
@@ -98,3 +92,9 @@ mkapp
 	});
 
 module.exports = mkapp;
+
+
+function handleError(err){
+	console.log(clc.red(err));
+	process.exit(1);
+}

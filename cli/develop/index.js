@@ -34,5 +34,10 @@ module.exports = function dev(){
 		.then(transpileDev)
 		.then(watch)
 		.then(serveDev)
-		.then(openBrowser);
+		.then(openBrowser)
+		.catch(function(err){
+			// hook for fun
+			console.log(clc.red.bold('Zoiks, something went horribly wrong. Better fetch a bucket...'));
+			return Promise.reject(err);
+		});
 };
