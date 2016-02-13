@@ -25,7 +25,7 @@ module.exports = createBundler;
 function createBundler(scope,onfilechange){
 	if(["admin","public"].indexOf(scope) === -1) return scopeError;
 
-	var config = require('./parse-config')();
+	var config = require('../utilities/parse-config')();
 	var DEV_DIR = config.DEV_DIR;
 	var SRC_DIR = config.SRC_DIR;
 

@@ -12,8 +12,8 @@ var configure = require('./configure');
 var downloadBoilerplate = require('./download-boilerplate');
 var copyBoilerplate = require('./copy-boilerplate');
 var scaffoldSrc = require('./scaffold-src');
-var yesOrNo = require('../promptAsync.js').yesOrNo;
-var clean = require('../clean.js');
+var yesOrNo = require('../utilities/promptAsync.js').yesOrNo;
+var clean = require('../tasks/clean.js');
 
 var APP_ROOT = require('app-root-path').toString();
 var CONFIG_PATH = join(APP_ROOT,'./mkapp_config.json');

@@ -3,10 +3,10 @@ var Promise = require('bluebird');
 var join = require('path').join;
 
 var APP_ROOT = require('app-root-path').toString();
-var transpileDev = require('../../transpile').bind(Object.create(null),'dev');
+var transpileDev = require('../../tasks/transpile').bind(Object.create(null),'dev');
 
 module.exports = function watchServer(){
-	var SRC_DIR = require('../../parse-config')().SRC_DIR;
+	var SRC_DIR = require('../../utilities/parse-config')().SRC_DIR;
 
 	return new Promise(function(resolve){
 		var appServer = join(APP_ROOT,SRC_DIR,'/server');

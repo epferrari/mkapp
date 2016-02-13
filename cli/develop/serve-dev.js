@@ -4,7 +4,7 @@ var APP_ROOT = require('app-root-path').toString();
 var join = require('path').join;
 
 function startNodemon(resolve){
-		var DEV_DIR = require('../parse-config')().DEV_DIR;
+		var DEV_DIR = require('../utilities/parse-config')().DEV_DIR;
 
 		console.log('nodemon cli');
 

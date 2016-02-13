@@ -4,11 +4,11 @@ var resolve = require('resolve');
 
 var mkapp = require('commander');
 
-var create = require('./create');
-var dev = require('./dev');
-var clean = require('./clean');
-var transpile = require('./transpile');
-var createBundler = require('./create-bundler');
+var init = require('./init');
+var dev = require('./develop');
+var clean = require('./tasks/clean');
+var transpile = require('./tasks/transpile');
+var createBundler = require('./tasks/create-bundler');
 var pkg = require('../package.json');
 
 
@@ -20,7 +20,7 @@ mkapp
 	.command('new')
 	.description('Create a new application with a directory scaffold, download boilerplate project, and install dependencies.')
 	.action(function(){
-		create(pkg.version);
+		init(pkg.version);
 	});
 
 mkapp
@@ -64,6 +64,7 @@ mkapp
 mkapp
 	.command('dev')
 	.alias('go')
+	.alias('develop')
 	.description('Build app and run in a local dev environment at http://localhost:<PORT>, where PORT is defined in mkapp_config.json')
 	.action(function(){
 		dev()
@@ -83,6 +84,7 @@ mkapp
 
 mkapp
 	.command('dist <message> [branch]')
+	.alias('distribute')
 	.description('build, commit, and push your app to <branch> '+
 		'of your repository. If <branch> is left blank, the bundle '+
 		'will be commited to `origin development`')

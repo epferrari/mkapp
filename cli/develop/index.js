@@ -12,13 +12,13 @@ Promise.promisifyAll(fs);
 
 module.exports = function dev(){
 
-	var config = require('../parse-config')();
+	var config = require('../utilities/parse-config')();
 
-	var lint = require('../lint');
+	var lint = require('../tasks/lint');
 	var scaffoldDev = require('./scaffold-dev');
-	var lessDev = require('../lessCSS').bind(nullO,DEV_CONTEXT);
-	var copyDev = require('../copy').bind(nullO,DEV_CONTEXT);
-	var transpileDev = require('../transpile').bind(nullO,DEV_CONTEXT);
+	var lessDev = require('../tasks/compile-less').bind(nullO,DEV_CONTEXT);
+	var copyDev = require('../tasks/copy').bind(nullO,DEV_CONTEXT);
+	var transpileDev = require('../tasks/transpile').bind(nullO,DEV_CONTEXT);
 	var watch = require('./watch');
 	var serveDev = require('./serve-dev');
 
