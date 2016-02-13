@@ -18,6 +18,7 @@ mkapp.version(pkg.version);
 
 mkapp
 	.command('new')
+	.alias('init')
 	.description('Create a new application with a directory scaffold, download boilerplate project, and install dependencies.')
 	.action(function(){
 		init(pkg.version);
