@@ -9,7 +9,7 @@ Promise.promisifyAll(fs);
 
 module.exports = function copy(context){
 
-	var $$ = require('./parse-config')();
+	var $$ = require('../utilities/parse-config')();
 	var SRC_DIR = $$.SRC_DIR;
 	var DEV_DIR = $$.DEV_DIR;
 	var DIST_DIR = $$.DIST_DIR;

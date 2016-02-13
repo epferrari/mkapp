@@ -30,7 +30,7 @@ module.exports = transpile;
 */
 function transpile(context){
 
-	var config = require('./parse-config')();
+	var config = require('../utilities/parse-config')();
 	var SRC_DIR = config.SRC_DIR;
 	var DEV_DIR = config.DEV_DIR;
 	var DIST_DIR = config.DIST_DIR;

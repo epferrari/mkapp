@@ -3,7 +3,7 @@ var clc = require('cli-color');
 var ghd = require('github-download');
 var AdmZip = require('adm-zip');
 var shell = require('shelljs');
-var yesOrNo = require('./promptAsync.js').yesOrNo;
+var yesOrNo = require('../utilities/promptAsync.js').yesOrNo;
 var join = require('path').join;
 var APP_ROOT = require('app-root-path').toString();
 var CONFIG_PATH = join(APP_ROOT,'/mkapp_config.json');
@@ -14,9 +14,8 @@ var remote = 'https://github.com/epferrari/mkapp.git';
 var tmpfile = join(APP_ROOT,'./tmp.zip');
 var tmpdir = join(APP_ROOT,'./tmp');
 
-var SKIP = 'SKIP';
-var PROMPT = 'PROMPT';
-var ABORT = 'ABORT';
+// constants to pass through the promise chain on errors
+var passthru = require('./constants.json');
 
 
 function promptBoilerplateDownload(){
@@ -40,7 +39,7 @@ function ghdAsync(url,outdir){
 function continueOrAbort(){
 	return yesOrNo('Continue?','N')
 	.catch(function(err){
-		return Promise.reject(ABORT);
+		return Promise.reject(passthru.ABORT);
 	});
 }
 
@@ -61,7 +60,7 @@ module.exports = function downloadBoilerplate(installDir,installedMkappVersion){
 		})
 		.catch(function(){
 			console.log('...skipping download');
-			return Promise.reject(SKIP);
+			return Promise.reject(passthru.SKIP);
 		})
 		.then(function(){
 			console.log('downloading boilerplate files from remote...');
@@ -83,8 +82,8 @@ module.exports = function downloadBoilerplate(installDir,installedMkappVersion){
 			console.log(clc.green("Download complete"));
 		})
 		.catch(function(err){
-			if(err === SKIP){
-				return Promise.reject(SKIP);
+			if(err === passthru.SKIP){
+				return Promise.reject(passthru.SKIP);
 			} else {
 				var msg = "An error occured downloading files. "+ err;
 				return Promise.reject(msg);
@@ -99,13 +98,13 @@ module.exports = function downloadBoilerplate(installDir,installedMkappVersion){
 		})
 		.then(function(version){
 			if(version !== installedMkappVersion){
-				return Promise.reject(PROMPT);
+				return Promise.reject(passthru.PROMPT);
 			}
 		})
 		.catch(function(err){
-			if(err === SKIP){
-				return Promise.reject(SKIP);
-			}else if(err === PROMPT){
+			if(err === passthru.SKIP){
+				return Promise.reject(passthru.SKIP);
+			}else if(err === passthru.PROMPT){
 				console.warn('Your version of mkapp may be out of date. You should exit and run npm update mkapp -g');
 				return continueOrAbort();
 			}else{
