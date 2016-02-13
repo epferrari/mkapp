@@ -4,7 +4,7 @@ var resolve = require('resolve');
 
 var mkapp = require('commander');
 
-var init = require('./init');
+var create = require('./create');
 var dev = require('./dev');
 var clean = require('./clean');
 var transpile = require('./transpile');
@@ -20,7 +20,7 @@ mkapp
 	.command('new')
 	.description('Create a new application with a directory scaffold, download boilerplate project, and install dependencies.')
 	.action(function(){
-		init(pkg.version);
+		create(pkg.version);
 	});
 
 mkapp
