@@ -15,14 +15,14 @@ var lint = require('./lint');
 
 
 
-module.exports = bundler;
+module.exports = createBundler;
 
 /**
 * @param {string} scope One of ['public','admin']
-* @param {function} [onUpdate] callback for watchify
+* @param {function} [onfilechange] callback for watchify
 * @returns {function} bundle
 */
-function bundler(scope,onUpdate){
+function createBundler(scope,onfilechange){
 	if(["admin","public"].indexOf(scope) === -1) return scopeError;
 
 	var config = require('./parse-config')();
@@ -30,6 +30,7 @@ function bundler(scope,onUpdate){
 	var SRC_DIR = config.SRC_DIR;
 
 	var outfile = join(APP_ROOT,DEV_DIR,scope,"/bundle.js");
+
 	var opts = {
 		entries:[join(APP_ROOT,SRC_DIR,scope,"js/index.js")],
 		extensions: ['.js','.jsx'],
@@ -49,9 +50,9 @@ function bundler(scope,onUpdate){
 	b.transform(envify);
 	b.plugin(watchify);
 
-	if(onUpdate) b.on('update',onUpdate);
+	if(onfilechange) b.on('update',onfilechange);
 
-	function _bundle(){
+	function bundleAsync(){
 		return new Promise(function(resolve,reject){
 
 			console.log('bundling javascript files for '+scope);
@@ -76,7 +77,7 @@ function bundler(scope,onUpdate){
 
 	function bundle(){
 		return fs.ensureFileAsync(outfile)
-		.then(_bundle);
+		.then(bundleAsync);
 	}
 
 	return bundle;
