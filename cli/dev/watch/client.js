@@ -1,6 +1,6 @@
 var join = require('path').join;
-var bundler = require('../bundler');
-var lint = require('../lint');
+var createBundler = require('../../create-bundler');
+var lint = require('../../lint');
 var APP_ROOT = require('app-root-path').toString();
 
 
@@ -13,9 +13,9 @@ module.exports = watchClient;
 */
 function watchClient(scope){
 
-	var SRC_DIR = require('../parse-config')().SRC_DIR;
+	var SRC_DIR = require('../../parse-config')().SRC_DIR;
 	// create a bundler function with destination scope and rebundle on update
-	var bundle = bundler(scope,rebundle);
+	var bundle = createBundler(scope,rebundle);
 
 	// run linting again before re-bundling files
 	function rebundle(){

@@ -5,10 +5,10 @@ var resolve = require('resolve');
 var mkapp = require('commander');
 
 var init = require('./init');
-var dev = require('./go');
+var dev = require('./dev');
 var clean = require('./clean');
 var transpile = require('./transpile');
-var bundler = require('./bundler');
+var createBundler = require('./create-bundler');
 var pkg = require('../package.json');
 
 
@@ -51,7 +51,7 @@ mkapp
 	.command('bundle <scope>')
 	.description('create your app\'s javascript bundle in the dev directory. Valid arguments for scope are "admin" or "public"')
 	.action(function(scope){
-		bundler(scope)()
+		createBundler(scope)()
 		.then(function(){
 			process.exit(0);
 		})

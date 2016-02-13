@@ -12,19 +12,13 @@ Promise.promisifyAll(fs);
 
 module.exports = function dev(){
 
-	var config = require('./parse-config')();
+	var config = require('../parse-config')();
 
-	var scaffoldOptions = {
-		dest: config.DEV_DIR,
-		createAdmin: config.CREATE_ADMIN_APP
-	};
-
-
-	var lint = require('./lint');
-	var scaffoldDev = require('./scaffold/build').bind(nullO,scaffoldOptions);
-	var lessDev = require('./lessCSS').bind(nullO,DEV_CONTEXT);
-	var copyDev = require('./copy').bind(nullO,DEV_CONTEXT);
-	var transpileDev = require('./transpile').bind(nullO,DEV_CONTEXT);
+	var lint = require('../lint');
+	var scaffoldDev = require('./scaffold-dev');
+	var lessDev = require('../lessCSS').bind(nullO,DEV_CONTEXT);
+	var copyDev = require('../copy').bind(nullO,DEV_CONTEXT);
+	var transpileDev = require('../transpile').bind(nullO,DEV_CONTEXT);
 	var watch = require('./watch');
 	var serveDev = require('./serve-dev');
 
