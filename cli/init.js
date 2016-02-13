@@ -11,13 +11,12 @@ Promise.promisifyAll(fs);
 var configure = require('./configure');
 var downloadBoilerplate = require('./download-boilerplate');
 var copyBoilerplate = require('./copy-boilerplate');
-var scaffold = require('./scaffold.js');
+var scaffoldSrc = require('./scaffold/source.js');
 var yesOrNo = require('./promptAsync.js').yesOrNo;
 var clean = require('./clean.js');
 
 var APP_ROOT = require('app-root-path').toString();
 var CONFIG_PATH = join(APP_ROOT,'./mkapp_config.json');
-
 
 
 function promptSrcOverwrite(srcDirectory){
@@ -44,6 +43,7 @@ module.exports = function mkappInit(version){
 
 	return configure()
 	.then(function(){
+		// path to LOCAL mkapp_config.json
 		return fs.readFileAsync(CONFIG_PATH,'utf-8');
 	})
 	.then(function(data){
@@ -55,11 +55,12 @@ module.exports = function mkappInit(version){
 	.then(function(){
 		return clean(config.SRC_DIR,true)
 	})
-	/*
 	.then(function(){
-		return scaffold(config.SRC_DIR,config.CREATE_ADMIN_APP);
+		return scaffoldSrc({
+			dest: config.SRC_DIR,
+			createAdmin: config.CREATE_ADMIN_APP
+		});
 	})
-	*/
 	.then(function(){
 		var getBoilerplate;
 		try{
