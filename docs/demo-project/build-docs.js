@@ -36,12 +36,10 @@ function constructPage(filename,header,footer){
 function getFooter(prev,next,n){
 	var output = ['\n\n','# ','\n\n'];
 
-	output.push('<a href="#top" style="display:inline-block; padding:0 8px; text-align:left; float:left;">Top</a>');
-
 	if(prev){
 		output.push('<a href="./'+prev+'#content" style="display:inline-block; padding:0 8px; text-align:left; float:left;" > << Previous </a>');
 	}
-	
+
 	if(next){
 		output.push('<a href="./'+next+'#content" style="display:inline-block; padding:0 8px; text-align:right; float:left;" > Next >> </a>');
 	}
