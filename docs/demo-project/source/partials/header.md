@@ -26,6 +26,6 @@ Part 2: Building the App
 - [Advanced Theming 1](./2.6-advanced-theming-1.md#content)
 - [Advanced Theming 2](./2.7-advanced-theming-2.md#content)
 
-#
+# 
 
 <a name="content"></a>
