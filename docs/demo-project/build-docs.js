@@ -33,23 +33,26 @@ function constructPage(filename,header,footer){
 	});
 }
 
-function getFooter(prev,next){
-	var output = ['\n\n'];
-	if(prev){
-		output.push('[Previous Page](./'+prev+')');
-	}
-	if(next){
-		output.push('[Next Page](./'+next+')');
-	}
+function getFooter(prev,next,n){
+	var output = ['\n\n','# ','\n\n'];
+
 	output.push('[Top](#top)');
-	return output.join('\n\n');
+
+	if(next){
+		output.push('<a href="./'+next+'#content" style="display:inline-block; padding:0 5px; text-align:right; float:right;" >Next -></a>');
+	}
+	if(prev){
+		output.push('<a href="./'+prev+'#content" style="display:inline-block; padding:0 5px; text-align:left; float:right;" > <- Previous</a>');
+	}
+	output.push('\n\n');
+	return output.join('');
 }
 
 function constructPages(){
 	return Promise.join(getHeader,getFilenames,function(header,filenames){
 		return Promise.map(filenames,function(filename,i){
 
-			var footer = getFooter(filenames[i-1],filenames[i+1]);
+			var footer = getFooter(filenames[i-1],filenames[i+1],i);
 			return constructPage(filename,header,footer);
 		});
 	})
