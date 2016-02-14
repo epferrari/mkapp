@@ -1,0 +1,19 @@
+# mkapp Example Project
+
+### Overview
+
+In this tutorial we'll build a simple mkapp project that uses a color picker and some input fields to change the look and feel of our application dynamically. The tutorial is broken into two sections. The first covers the mkapp build system, in the second we'll build the actual app. By the end of the tutorial, you should have a fairly good understanding of mkapp components, themes, the Condux websocket API, and building your own components into mkapp. Clone the code from the [demo project repo](https://github.com/epferrari/mkapp-demo.git) and follow along by checking out tags as we progress.
+
+Part 1: Mkapp Basics
+
+- [Setup](#setup)
+- [Boilerplate](./1.2-boilerplate.md)
+- [Condux](#condux)
+- [App State](#app-state)
+- [Mkapp Components](#mkapp-components)
+- [Building on Mkapp Components](#compositing-components)
+- [Hybrid Components](#hybrid-components)
+- [Mkapp Theme](#mkapp-theme)
+- [Configuration](#mkapp-config)
+
+Part 2: Building the App

@@ -12,7 +12,8 @@
 		"lint": "eslint ./_components/* --ext ,js,.jsx",
 		"prebuild": "npm run lint",
 		"postbuild": "npm run docs",
-		"docs": "jsdoc2md --partial dmd_partials/scope.hbs dmd_partials/params-table.hbs dmd_partials/separator.hbs -t docs/mkapp-theme.hbs lib/ThemeProvider.js theme/index.js > docs/mkapp-theme.md;"
+		"docs": "jsdoc2md --partial dmd_partials/scope.hbs dmd_partials/params-table.hbs dmd_partials/separator.hbs -t docs/mkapp-theme.hbs lib/ThemeProvider.js theme/index.js > docs/mkapp-theme.md;",
+		"docs:demo":"node ./docs/demo-project/build-docs"
 	},
 	"babel": {
 		"plugins": [
@@ -72,6 +73,7 @@
 		"livereload": "^0.4.0",
 		"livereload-js": "^2.2.2",
 		"lodash": "^3.10.1",
+		"marked-engine": "^0.1.0",
 		"material-ui": "^0.13.1",
 		"ncp": "^2.0.0",
 		"nodemon": "^1.8.1",
