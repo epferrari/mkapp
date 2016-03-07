@@ -4,7 +4,10 @@
 
 ### Bug Fixes
 
-- fixed error where a newly scaffolded project wouldn't have an assets directory at the react-bootstrap
+- fixed error where a newly scaffolded project wouldn't have an assets directory at its root
+- fixed an error where MkappTheme would not be able to find a typekit if a theme wasn't defined on context
+- fix for unexpected behavior when calling `<MkappTheme>.setOptions` with both a platform and a preferMaterial key. Explicitly declaring the `preferMaterial` key will override the platform setting `preferMaterial`.
+- fix for new mkappTheme not being set on ThemeProvider's state when a new theme is passed via props
 
 ### Deprecations
 
