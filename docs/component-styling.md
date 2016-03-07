@@ -12,11 +12,11 @@ That is to say, if you are utilizing a theme and define styles for your componen
 The `mkappTheme` does not attempt to anticipate application states or attempt to control how application states may change a component style; instead `mkapp` components allow for React's declarative approach to styling states: passing style via props.
 
 ### Setting component styles
-Since `mkapp` components are complex and composited from many smaller React components, simply passing an object as a `style` prop would not produce desired results. Each component merges its props styles, theme styles, and default styles into specific nested components during the component's render. Therefore, both the theme and component props provide specific hooks to alter styles in a declarative way. 
+Since `mkapp` components are complex and composited from many smaller React components, simply passing an object as a `style` prop would not produce desired results. Each component merges its props styles, theme styles, and default styles into specific nested components during the component's render. Therefore, both the theme and component props provide specific hooks to alter styles in a declarative way.
 
 What follows are the alterable styles in each component in mkapp, and how to hook into them either with the theme, using `<MkappTheme>.setComponentStyles()`, or by passing props directly to the component.
 
-# 
+#
 
 ## AppNav
 
@@ -33,23 +33,23 @@ What follows are the alterable styles in each component in mkapp, and how to hoo
 
 Each is a key of the theme's internal `componentStyles` object. Set these using your theme instance's `.setComponentStyles()` method. See [mkappTheme](https://github.com/epferrari/mkapp/blob/master/docs/mkapp-theme.md).
 
-- **appNav** 
+- **appNav**
 	- bgColor/backgroundColor
 	- textColor
 - **appNavMenu** - styling for the menu overlay
-	- bgColor/backgroundColor 
+	- bgColor/backgroundColor
 	- bgImage
 	- bgRepeat
 	- bgPosition
 
-# 
+#
 
 ## Overlay
 
 
 - **open** `boolean` - should the overlay be rendered open
 - **position** one of `top`,`left`,`bottom`,`right` - where the overlay animates to/from
-- **onExit** `function` *REQUIRED* - a callback to execute when the overlay completes its exit animation. Since the overlay can
+- **didExit** `function` *REQUIRED* - a callback to execute when the overlay completes its exit animation. Since the overlay can
 	internally handle closing itself, handle parent state changes here, see example below.
 - **focusOnEnter** `boolean` - should the background app be darkened while the overlay is onscreen
 - **closeButton** `boolean` - should the component render a close button
@@ -66,30 +66,30 @@ Each is a key of the theme's internal `componentStyles` object. Set these using 
 	- `visibility`
 	- `opacity`
 	- `zIndex`
-	- `display`	
+	- `display`
 
 ### Example
-	
+
 	/* Your component's render method */
-	
+
 	render(){
 		let overlay = (
-		<Overlay 
+		<Overlay
 			position="top"
 			open={this.state.overlayOpen}
 			closeButton={true}
 			style={{height:200}}
-			onExit={() => this.setState({overlayOpen: false})}/>
+			didExit={() => this.setState({overlayOpen: false})}/>
 		);
-		
+
 		return (
 			<View fixed={overlay}>
 				<button onClick={() => this.setState({overlayOpen: true])}>Show Overlay</button>
 			</View>
 		);
 	}
-	
-# 
+
+#
 
 ## DrawerLeft, DrawerRight
 
@@ -104,14 +104,14 @@ Each is a key of the theme's internal `componentStyles` object. Set these using 
 	- color/textColor
 	- width
 	- maxWidth
-	
+
 - **drawerLeft**
 	- bgColor/backgroundColor
 	- color/textColor
 	- width
 	- maxWidth
-	
-# 
+
+#
 
 ## DrawerTop, DrawerBottom
 
@@ -126,13 +126,11 @@ Each is a key of the theme's internal `componentStyles` object. Set these using 
 	- color/textColor
 	- height
 	- minHeight
-	
+
 - **drawerLeft**
 	- bgColor/backgroundColor
 	- color/textColor
 	- height
 	- minHeight
-	
-# 
-	
 
+#

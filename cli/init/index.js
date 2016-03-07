@@ -11,13 +11,14 @@ Promise.promisifyAll(fs);
 var configure = require('./configure');
 var downloadBoilerplate = require('./download-boilerplate');
 var copyBoilerplate = require('./copy-boilerplate');
-var scaffold = require('./scaffold.js');
-var yesOrNo = require('./promptAsync.js').yesOrNo;
-var clean = require('./clean.js');
+var scaffoldSrc = require('./scaffold-src');
+var yesOrNo = require('../utilities/promptAsync.js').yesOrNo;
+var clean = require('../tasks/clean.js');
 
 var APP_ROOT = require('app-root-path').toString();
 var CONFIG_PATH = join(APP_ROOT,'./mkapp_config.json');
 
+var passthru = require('./constants.json');
 
 
 function promptSrcOverwrite(srcDirectory){
@@ -28,7 +29,7 @@ function promptSrcOverwrite(srcDirectory){
 			return yesOrNo('Overwrite?'.yellow,'N')
 			.then(resolve)
 			.catch(function(){
-				reject('SKIP');
+				reject(passthru.SKIP);
 			});
 		} else {
 			resolve();
@@ -44,6 +45,7 @@ module.exports = function mkappInit(version){
 
 	return configure()
 	.then(function(){
+		// path to LOCAL mkapp_config.json
 		return fs.readFileAsync(CONFIG_PATH,'utf-8');
 	})
 	.then(function(data){
@@ -53,13 +55,11 @@ module.exports = function mkappInit(version){
 		return promptSrcOverwrite(config.SRC_DIR);
 	})
 	.then(function(){
-		return clean(config.SRC_DIR,true)
+		return scaffoldSrc({
+			dest: config.SRC_DIR,
+			createAdmin: config.CREATE_ADMIN_APP
+		});
 	})
-	/*
-	.then(function(){
-		return scaffold(config.SRC_DIR,config.CREATE_ADMIN_APP);
-	})
-	*/
 	.then(function(){
 		var getBoilerplate;
 		try{
@@ -75,14 +75,14 @@ module.exports = function mkappInit(version){
 		return getBoilerplate(config.SRC_DIR,version);
 	})
 	.catch(function(err){
-		if(err !== 'SKIP') return Promise.reject(err);
+		if(err !== passthru.SKIP) return Promise.reject(err);
 	})
 	.then(function(){
 		logSuccess('App setup complete!');
 		console.log(clc.green('Review the mkapp_config.json file, then type ') + clc.white.bgGreen(' mkapp dev '))
 	})
 	.catch(function(err){
-		if(err === 'ABORT'){
+		if(err === passthru.ABORT){
 			console.log('Setup Canceled');
 		}else{
 			logError(err);

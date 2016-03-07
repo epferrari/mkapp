@@ -1,0 +1,56 @@
+{
+	"core":[
+		"assets",
+		"assets/fonts",
+		"assets/img",
+		"server",
+		"server/api",
+		"server/api/v1.0",
+		"server/middleware",
+		"modules",
+		"utils"
+	],
+	"public":{
+		"core":[
+			"public",
+			"public/assets",
+			"public/assets/fonts",
+			"public/assets/img"
+		],
+		"src":[
+			"public/less",
+			"public/less/components",
+			"public/less/lib",
+			"public/less/react-css-transition-groups"
+		],
+		"build":[ "public/assets/css" ]
+	},
+	"admin":{
+		"core": [
+			"admin",
+			"admin/assets",
+			"admin/assets/fonts",
+			"admin/assets/img"
+		],
+		"src": [
+			"admin/less",
+			"admin/less/components",
+			"admin/less/lib",
+			"admin/less/react-css-transition-groups"
+		],
+		"build":[ "admin/assets/css" ]
+	},
+	"condux":{
+		"core":[
+			"condux",
+			"condux/public",
+			"condux/public/frequencies",
+			"condux/server",
+			"condux/server/channels"
+		],
+		"admin":[
+			"condux/admin",
+			"condux/admin/frequencies"
+		]
+	}
+}

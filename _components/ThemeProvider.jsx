@@ -74,7 +74,7 @@ var ThemeProvider = React.createClass({
 
 	componentWillReceiveProps(nextProps){
 		// reset theme-update listener when new theme is passed via props
-		let {nextTheme} = nextProps;
+		let nextTheme = nextProps.mkappTheme;
 		let currentTheme = this.state.mkappTheme;
 		if(nextTheme && nextTheme._id !== currentTheme._id){
 			// update the state theme with new theme passed from props

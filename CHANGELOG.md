@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.1
+
+### Bug Fixes
+
+- fixed error where a newly scaffolded project wouldn't have an assets directory at its root
+- fixed an error where MkappTheme would not be able to find a typekit if a theme wasn't defined on context
+- fix for unexpected behavior when calling `<MkappTheme>.setOptions` with both a platform and a preferMaterial key. Explicitly declaring the `preferMaterial` key will override the platform setting `preferMaterial`.
+- fix for new mkappTheme not being set on ThemeProvider's state when a new theme is passed via props
+
+### Deprecations
+
+- `mkapp go` has been deprecated and will be removed for version 1.0. Use `mkapp dev` instead.
+
+### Misc
+
+- refactored paths and filenames in CLI directory to be more semantically accurate. No functionality changes
+
 ## 0.8.0
 
 ### Breaking changes

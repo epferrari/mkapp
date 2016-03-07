@@ -6,7 +6,7 @@ module.exports = watch;
 
 function watch(){
 
-	var config = require('../parse-config')();
+	var config = require('../../utilities/parse-config')();
 
 	return Promise.all([
 		(config.CREATE_ADMIN_APP ? watchClient('admin') : Promise.resolve()),

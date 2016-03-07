@@ -7,7 +7,7 @@ var clc = require('cli-color');
 var path = require('path');
 var join = path.join;
 var APP_ROOT = require('app-root-path').toString();
-var config = require('./parse-config')();
+var config = require('../utilities/parse-config')();
 
 var SRC_DIR = config.SRC_DIR;
 var DEV_DIR = config.DEV_DIR;
