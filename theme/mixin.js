@@ -16,7 +16,7 @@ var ThemeMixin = {
 	},
 	getThemeTypekit: function getThemeTypekit(){
 		var mkappTheme = this.context.mkappTheme || new MkappTheme();
-		return this.context.mkappTheme.getTypekit();
+		return mkappTheme.getTypekit();
 	},
 
 	contextTypes:{
