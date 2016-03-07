@@ -326,7 +326,13 @@ function MkappTheme(palette,typekit,getComponentStyles){
 		var lastOptions = themeOptions;
 		var configurableOptions = ['preferMaterial','onDevice','expectStatusBar','platform'];
 
-		if(newOptions.platform === 'Android') newOptions.preferMaterial = true;
+		var platform = (newOptions.platform || '').toLowerCase();
+		// explicitly passing `preferMaterial` at the same time as platform will override platform's setting the option
+		if(typeof newOptions.preferMaterial !== 'boolean'){
+			if(platform === 'android') newOptions.preferMaterial = true;
+			if(platform === 'ios') newOptions.preferMaterial = false;
+		}
+
 		themeOptions = merge({},themeOptions,pick(newOptions,configurableOptions));
 
 		if(!isEqual(lastOptions,themeOptions)){
