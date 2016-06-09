@@ -64,7 +64,8 @@ const View = React.createClass({
 				width: "100%",
 				overflowX: 'hidden',
 				overflowY: "scroll",
-				minHeight: global.innerHeight
+				minHeight: global.innerHeight,
+				WebkitOverflowScrolling: "touch"
 			},
 			container: {
 				overflowX: 'hidden',
@@ -74,7 +75,6 @@ const View = React.createClass({
 				minHeight: global.innerHeight - this.props.navbarOffset - offsetTop
 			},
 			content: {
-				WebkitOverflowScrolling: "touch"
 			}
 		});
 	}
