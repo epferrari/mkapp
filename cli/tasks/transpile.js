@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var babel = require('babel-core');
 var glob = require('glob');
 var flatten = require('lodash').flatten;
+var pull = require('lodash').pull;
 var fs = require('fs-extra');
 var clc = require('cli-color');
 var join = require('path').join;
@@ -17,7 +18,7 @@ function transformFileAsync(file){
 		presets: ['es2015'],
 		plugins: ['transform-es2015-modules-commonjs']
 	};
-	return Promise.promisify(babel.transformFile,{context:babel})(file,babelOptions);
+	return Promise.promisify(babel.transformFile, {context:babel})(file, babelOptions);
 }
 
 
@@ -46,36 +47,38 @@ function transpile(context){
 	console.log('transpiling server javascript for %s into %s',context,targetDir);
 
 	return Promise.all([
-		globAsync( join(APP_ROOT,SRC_DIR,'/server/api/**/*.js') ),
+		globAsync( join(APP_ROOT,SRC_DIR,'/server/**/*.js') ),
 		globAsync( join(APP_ROOT,SRC_DIR,'/condux/**/*.js') ),
 		globAsync( join(APP_ROOT,SRC_DIR,'/middleware/**/*.js') ),
 		globAsync( join(APP_ROOT,SRC_DIR,'/utils/**/*.js') )
 	])
 	.then(function(files){
-		return flatten(files,true);
+		files = flatten(files, true);
+		pull(files, join(APP_ROOT,SRC_DIR,'/server/index.js'))
+		return files;
 	})
 	.map(function(fileName){
-		var s = SRC_DIR.replace(/^(\.\/)(.*)$/,'$2');
-		var d = targetDir.replace(/^(\.\/)(.*)$/,'$2');
-		var outfile = fileName.replace(s,d);
-		var transformed = transformFileAsync(fileName); // babelified file
+		var s = SRC_DIR.replace(/^(\.\/)(.*)$/, '$2');
+		var d = targetDir.replace(/^(\.\/)(.*)$/, '$2');
+		var outfile = fileName.replace(s, d);
+		var babelified = transformFileAsync(fileName);
 		var ensured = fs.ensureFileAsync(outfile);
 
-		return Promise.join(outfile,transformed,ensured,function(outfile,transformed){
+		return Promise.join(outfile, babelified, ensured, function(o, b){
 			return {
-				dest: outfile,
-				contents: transformed.code
+				dest: o,
+				contents: b.code
 			};
 		});
 	})
 	.map(function(file){
-		return fs.writeFileAsync(file.dest,file.contents);
+		return fs.writeFileAsync(file.dest, file.contents);
 	})
 	.then(function(){
-		return transformFileAsync( join(APP_ROOT,SRC_DIR,'/server/index.js') );
+		return transformFileAsync( join(APP_ROOT, SRC_DIR, '/server/index.js') );
 	})
 	.then(function(result){
-		return fs.writeFileAsync(join(APP_ROOT,targetDir,"/server/index.js"),result.code);
+		return fs.writeFileAsync(join(APP_ROOT, targetDir, "/server/index.js"), result.code);
 	})
 	.then(function(){
 		var msg = 'transpilation complete!';
