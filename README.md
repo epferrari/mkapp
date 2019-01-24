@@ -1,5 +1,7 @@
 # mkapp
 
+# THIS PROJECT IS NO LONGER MAINTAINED
+
 ## A CLI build tool for React + Condux
 
 ### Installation
